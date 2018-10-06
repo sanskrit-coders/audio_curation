@@ -1,3 +1,6 @@
+import glob
+
+import git
 import itertools
 import logging
 import os
@@ -39,9 +42,11 @@ def update_normalized_mp3s(mp3_files):
 
 
 class AudioRepo(object):
-    def __init__(self, base_mp3_file_paths, archive_id):
-        logging.info("Got %d files" % (len(base_mp3_file_paths)))
-        self.base_mp3_file_paths = base_mp3_file_paths
+    def __init__(self, git_repo_paths, archive_id):
+        self.git_repo_paths = git_repo_paths
+        self.git_repos = [git.Repo(repo_path) for repo_path in git_repo_paths]
+        self.base_mp3_file_paths = sorted([glob.glob(os.path.join(repo_path, "mp3", "*.mp3")) for repo_path in git_repo_paths])
+        logging.info("Got %d files" % (len(self.base_mp3_file_paths)))
         self.base_mp3_files = list(
             map(lambda fpath: mp3_utility.Mp3File(file_path=fpath, load_tags_from_file=True), base_mp3_file_paths))
         self.archive_item = archive_utility.ArchiveAudioItem(archive_id=archive_id)
@@ -101,8 +106,16 @@ class AudioRepo(object):
     
         """
         self.update_metadata(mp3_files=mp3_files)
+        self.update_git()
         update_normalized_mp3s(mp3_files=mp3_files)
         self.update_archive_item(mp3_files_in=mp3_files, overwrite_all=True, start_at=None)
 
 
-
+    def update_git(self):
+        for git_repo in self.git_repos:
+            untracked_files = git_repo.untracked_files()
+            assert(not set(map(lambda file: file.endswith(".mp3"), untracked_files).contains(False)))
+            git_repo.index.add(untracked_files)
+            git_repo.index.commit(message="Added %d mp3-s" % len(untracked_files))
+            git_repo.remote("origin").push()
+            # git_repo.commit()
