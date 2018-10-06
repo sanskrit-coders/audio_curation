@@ -8,7 +8,7 @@ for handler in logging.root.handlers[:]:
     logging.root.removeHandler(handler)
 logging.basicConfig(
     level=logging.DEBUG,
-    format="%(levelname)s:%(asctime)s:%(module)s:%(filename)s:%(lineno)d %(message)s"
+    format="%(levelname)s:%(asctime)s:%(module)s:%(lineno)d %(message)s"
 )
 
 # logging.warning("Logging.warning functional!")
@@ -45,7 +45,7 @@ class Mp3Metadata(object):
                 audiofile.tag.album != self.album) or (audiofile.tag.album_artist != self.album_artist)
 
         if local_tag_update_needed:
-            logging.info("***Updating %s locally." % self.basename)
+            logging.info("***Updating %s locally." % file_path)
             audiofile.tag.artist = self.artist
             audiofile.tag.title = self.title
             audiofile.tag.album = self.album
@@ -57,18 +57,18 @@ class Mp3File(object):
     """
 
     """
-    def __init__(self, file_path, mp3_metadata=None, load_tags_from_file=False):
+    def __init__(self, file_path, mp3_metadata=None, load_tags_from_file=False, normalized_file_path=None):
         self.file_path = file_path
         self.directory = os.path.dirname(file_path)
         self.basename = os.path.basename(file_path)
         self.metadata = mp3_metadata if mp3_metadata is not None else Mp3Metadata()
         if load_tags_from_file:
-            self.metadata.set_from_file()
+            self.metadata.get_from_file(self.file_path)
 
         # Linter complains if instance variables are defined outside __init__, so defining here despite calling set_normalized_file():
         self.normalized_file_path = None
         self.normalized_file = None
-        self.set_normalized_file()
+        self.set_normalized_file(normalized_file_path=normalized_file_path)
 
     def __str__(self):
         return "Mp3File(%s)" % self.file_path
@@ -93,7 +93,7 @@ class Mp3File(object):
         if self.is_file_normalized():
             return
         if os.path.isfile(self.normalized_file_path) and os.access(self.normalized_file_path, os.R_OK):
-            self.normalized_file = Mp3File(self.normalized_file_path, artist=self.artist)
+            self.normalized_file = Mp3File(self.normalized_file_path, mp3_metadata=self.metadata)
         else:
             self.normalized_file = None
 
@@ -116,7 +116,7 @@ class Mp3File(object):
         sound = AudioSegment.from_mp3(self.file_path)
         return sound.dBFS
 
-    def save_normalized(self, normalized_mp3_path=None, overwrite=False):
+    def save_normalized(self, overwrite=False):
         """
 
         :param overwrite: 
@@ -134,9 +134,9 @@ class Mp3File(object):
         # Eventually we would want to use LUFS. One would need to switch libraries or await resolution of https://github.com/jiaaro/pydub/issues/321 .
         normalized_sound = normalized_sound.apply_gain(-16 - sound.dBFS)
         logging.info(normalized_sound.dBFS)
-        os.makedirs(os.path.dirname(normalized_mp3_path), exist_ok=True)
-        self.set_tags_from_file()
-        normalized_sound.export(normalized_mp3_path, format="mp3", tags={
+        os.makedirs(os.path.dirname(self.normalized_file_path), exist_ok=True)
+        self.metadata.get_from_file(self.file_path)
+        normalized_sound.export(self.normalized_file_path, format="mp3", tags={
             "artist": self.metadata.artist, "album_artist": self.metadata.album_artist, "title": self.metadata.title, "album": self.metadata.album
         })
         self.set_normalized_file()

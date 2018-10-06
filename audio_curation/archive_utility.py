@@ -11,7 +11,7 @@ for handler in logging.root.handlers[:]:
     logging.root.removeHandler(handler)
 logging.basicConfig(
     level=logging.DEBUG,
-    format="%(levelname)s:%(asctime)s:%(module)s:%(filename)s:%(lineno)d %(message)s"
+    format="%(levelname)s:%(asctime)s:%(module)s:%(lineno)d %(message)s"
 )
 
 # logging.getLogger('internetarchive').setLevel(logging.INFO)
@@ -50,39 +50,38 @@ class ArchiveAudioItem(object):
         :param mp3_files: 
         :param overwrite_all: 
         """
-        local_mp3_file_basenames = list(map(lambda file: file.basename, mp3_files))
-        repo_df = pandas.DataFrame(columns={"basename": local_mp3_file_basenames, "file": mp3_files})
-        repo_df.set_index("basename")
-    
         logging.info("************************* Now uploading")
-        upload_locus_to_local_file_map = dict(
+        local_mp3_file_basenames = list(map(lambda file: file.basename, mp3_files))
+        basename_to_file = dict(zip(local_mp3_file_basenames, mp3_files))
+        basename_to_file_path = dict(
             zip(local_mp3_file_basenames, list(map(lambda file: file.file_path, mp3_files))))
         if overwrite_all:
-            responses = self.archive_item.upload(upload_locus_to_local_file_map, verbose=False, checksum=False, verify=False)
+            responses = self.archive_item.upload(basename_to_file_path, verbose=False, checksum=False, verify=False)
             # checksum=True seems to not avoid frequent reuploads. Archive item mp3 checksum end up varying because of metadata changes? 
-            logging.info(pprint.pformat(dict(zip(upload_locus_to_local_file_map.keys(), responses))))
-            for mp3_file_name in upload_locus_to_local_file_map.values():
-                self.update_metadata(mp3_metadata=repo_df[mp3_file_name])
+            logging.info(pprint.pformat(dict(zip(basename_to_file_path.keys(), responses))))
+            for basename in basename_to_file_path.keys():
+                self.update_metadata(mp3_file=basename_to_file[basename])
         else:
-            filtered_upload_locus_to_local_file_map = dict(
-                filter(lambda item: item[0] not in self.original_item_file_names, upload_locus_to_local_file_map.items()))
-            logging.info(pprint.pformat(filtered_upload_locus_to_local_file_map.items()))
-            if len(filtered_upload_locus_to_local_file_map) > 0:
-                responses = self.archive_item.upload(filtered_upload_locus_to_local_file_map, verbose=False, checksum=False,
+            basename_to_filepath_filtered = dict(
+                filter(lambda item: item[0] not in self.original_item_file_names, basename_to_file_path.items()))
+            logging.info(pprint.pformat(basename_to_filepath_filtered.items()))
+            if len(basename_to_filepath_filtered) > 0:
+                responses = self.archive_item.upload(basename_to_filepath_filtered, verbose=False, checksum=False,
                                                 verify=False)
-                logging.info(pprint.pformat(dict(zip(filtered_upload_locus_to_local_file_map.keys(), responses))))
-                for mp3_file_name in filtered_upload_locus_to_local_file_map.values():
-                    self.update_metadata(mp3_metadata=repo_df[mp3_file_name])
+                logging.info(pprint.pformat(dict(zip(basename_to_filepath_filtered.keys(), responses))))
+                for basename in basename_to_filepath_filtered.keys():
+                    self.update_metadata(mp3_file=basename_to_file[basename])
             else:
                 logging.warning("Found nothing to update!")
     
     
-    def update_metadata(self, mp3_metadata):
+    def update_metadata(self, mp3_file):
         """
     
-        :param mp3_metadata: 
+        :param mp3_file: 
         """
-        archive_item_file_details = self.item_files_dict.get(mp3_metadata.basename, None)
+        archive_item_file_details = self.item_files_dict.get(mp3_file.basename, None)
+        mp3_metadata = mp3_file.metadata
         if archive_item_file_details is None:
             logging.warning("The file does not exist! Skipping.")
         else:
@@ -93,9 +92,11 @@ class ArchiveAudioItem(object):
                                                archive_item_file_details.get("album_artist",
                                                                              "") != mp3_metadata.album_artist)
             if remote_tag_update_needed:
-                logging.info("***Updating %s in archive item." % mp3_metadata.basename)
-                logging.info(internetarchive.modify_metadata(self.archive_id,
-                                                             metadata=dict(title=mp3_metadata.title, album=mp3_metadata.album,
-                                                                           album_artist=mp3_metadata.album_artist,
-                                                                           artist=mp3_metadata.artist, creator=mp3_metadata.artist),
-                                                             target=mp3_metadata.basename))
+                logging.info("***Updating %s in archive item." % mp3_file.basename)
+                logging.info(
+                    internetarchive.modify_metadata(
+                        self.archive_id,
+                        metadata=dict(title=mp3_metadata.title, album=mp3_metadata.album,
+                            album_artist=mp3_metadata.album_artist,
+                            artist=mp3_metadata.artist, creator=mp3_metadata.artist),
+                        target=mp3_file.basename))
