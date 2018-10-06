@@ -1,7 +1,5 @@
 """
-A package for curating audio file collections, with ability to sync with archive.org audio items.
+A package for curating audio file collections, with ability to sync with archive.org audio items and github repos.
 
-Example usage: `Mahabharata audio project`_.
-
-.. _Mahabharata audio project: https://sanskrit.github.io/projects/mbh-audio/
+Example usage: see curation_projects module in our github repo.
 """

@@ -20,8 +20,15 @@ logging.getLogger('oauth2client').setLevel(logging.INFO)
 
 
 def get_sheet(spreadhsheet_id, worksheet_name, google_key):
-    SCOPES = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
-    creds = ServiceAccountCredentials.from_json_keyfile_name(google_key, SCOPES)
+    """
+
+    :param spreadhsheet_id: 
+    :param worksheet_name: 
+    :param google_key: 
+    :return: 
+    """
+    scopes = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
+    creds = ServiceAccountCredentials.from_json_keyfile_name(google_key, scopes)
 
     client = gspread.authorize(creds)
     logging.debug(pprint.pformat(client.list_spreadsheet_files()))
@@ -30,6 +37,9 @@ def get_sheet(spreadhsheet_id, worksheet_name, google_key):
     return sheet_book.worksheet(worksheet_name)
 
 class EpisodeData(object):
+    """
+    Represents episode data stored in a Google spreadsheet.
+    """
     def __init__(self, spreadhsheet_id, worksheet_name, google_key,
                  episode_id_column, recorder_column):
         """
@@ -43,20 +53,21 @@ class EpisodeData(object):
         self.episode_df = None
         self.set_episode_df()
 
-    def set_episode_df(self):
+    def _set_episode_df(self):
         """
-    
+        
         :return: 
         """
         episode_sheet_values = self.data_sheet.get_all_values()
         episode_df = pandas.DataFrame(episode_sheet_values[1:], columns=episode_sheet_values.pop(0))
-        episode_df = episode_df.set_index(self.episode_name_column)
+        episode_df = episode_df.set_index(self.episode_id_column)
         self.episode_df = episode_df
 
     def get_recorder(self, episode_id):
         """
+        Read the name of the person who recorded this episode.
     
-        :param parva_adhyaaya_id: 
+        :param episode_id: 
         :return: 
         """
         artist_devanaagarii = self.episode_df.loc[episode_id, self.recorder_column]
