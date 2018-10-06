@@ -14,6 +14,9 @@ Submodules
 
 	audio_curation_archive_utility
 	audio_curation_mp3_utility
+	audio_curation_audio_repo
+	audio_curation_episode_data
+
 
 Indices and tables
 ====================
