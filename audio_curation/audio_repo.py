@@ -113,7 +113,7 @@ class AudioRepo(object):
 
     def update_git(self, collapse_history=False):
         def add_untracked(git_repo):
-            untracked_files = git_repo.untracked_files
+            untracked_files = git_repo.untracked_files.copy()
             assert(False not in set(map(lambda file: file.endswith(".mp3"), untracked_files)))
             git_repo.index.add(untracked_files)
             git_repo.index.commit(message="Added %d mp3-s" % len(untracked_files))
