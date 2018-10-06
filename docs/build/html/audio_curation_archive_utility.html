@@ -1,0 +1,205 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>audio_curation.mp3_utility &#8212; audio_curation 0.0.2 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="audio_curation.archive_utility" href="audio_curation_mp3_utility.html" />
+    <link rel="prev" title="audio_curation’s documentation" href="audio_curation.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-audio_curation.mp3_utility">
+<span id="audio-curation-mp3-utility"></span><h1>audio_curation.mp3_utility<a class="headerlink" href="#module-audio_curation.mp3_utility" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="audio_curation.mp3_utility.Mp3File">
+<em class="property">class </em><code class="descclassname">audio_curation.mp3_utility.</code><code class="descname">Mp3File</code><span class="sig-paren">(</span><em>file_path</em>, <em>mp3_metadata=None</em>, <em>load_tags_from_file=False</em>, <em>normalized_file_path=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/audio_curation/mp3_utility.html#Mp3File"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#audio_curation.mp3_utility.Mp3File" title="Permalink to this definition">¶</a></dt>
+<dd><p>Represents an mp3 file, together with its metadata and associated normalized-sound file.</p>
+<dl class="method">
+<dt id="audio_curation.mp3_utility.Mp3File.check_loudness">
+<code class="descname">check_loudness</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/audio_curation/mp3_utility.html#Mp3File.check_loudness"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#audio_curation.mp3_utility.Mp3File.check_loudness" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get some loudness metric.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="audio_curation.mp3_utility.Mp3File.is_file_normalized">
+<code class="descname">is_file_normalized</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/audio_curation/mp3_utility.html#Mp3File.is_file_normalized"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#audio_curation.mp3_utility.Mp3File.is_file_normalized" title="Permalink to this definition">¶</a></dt>
+<dd><p>Does the file_path indicate that this file is normalized?</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="audio_curation.mp3_utility.Mp3File.is_normalized_file_outdated">
+<code class="descname">is_normalized_file_outdated</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/audio_curation/mp3_utility.html#Mp3File.is_normalized_file_outdated"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#audio_curation.mp3_utility.Mp3File.is_normalized_file_outdated" title="Permalink to this definition">¶</a></dt>
+<dd><p>Is the normalized file corresponding to this file outdated?</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="audio_curation.mp3_utility.Mp3File.save_metadata">
+<code class="descname">save_metadata</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/audio_curation/mp3_utility.html#Mp3File.save_metadata"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#audio_curation.mp3_utility.Mp3File.save_metadata" title="Permalink to this definition">¶</a></dt>
+<dd><p>Saves metadata in the corresponding file on disk.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="audio_curation.mp3_utility.Mp3File.save_normalized">
+<code class="descname">save_normalized</code><span class="sig-paren">(</span><em>overwrite=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/audio_curation/mp3_utility.html#Mp3File.save_normalized"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#audio_curation.mp3_utility.Mp3File.save_normalized" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save the sound-normalized version of this file.</p>
+<p>Currently the normalzied file produced will be mono-channel, around -16dbFS loud, have the same metadata as the original file.
+:param overwrite: 
+:return:</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="audio_curation.mp3_utility.Mp3File.set_normalized_file">
+<code class="descname">set_normalized_file</code><span class="sig-paren">(</span><em>normalized_file_path=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/audio_curation/mp3_utility.html#Mp3File.set_normalized_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#audio_curation.mp3_utility.Mp3File.set_normalized_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set details about the normalized file corresponding to this base file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="audio_curation.mp3_utility.Mp3Metadata">
+<em class="property">class </em><code class="descclassname">audio_curation.mp3_utility.</code><code class="descname">Mp3Metadata</code><span class="sig-paren">(</span><em>title=None</em>, <em>artist=None</em>, <em>album=None</em>, <em>album_artist=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/audio_curation/mp3_utility.html#Mp3Metadata"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#audio_curation.mp3_utility.Mp3Metadata" title="Permalink to this definition">¶</a></dt>
+<dd><p>Models the metadata in an mp3 file.</p>
+<dl class="method">
+<dt id="audio_curation.mp3_utility.Mp3Metadata.get_from_file">
+<code class="descname">get_from_file</code><span class="sig-paren">(</span><em>file_path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/audio_curation/mp3_utility.html#Mp3Metadata.get_from_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#audio_curation.mp3_utility.Mp3Metadata.get_from_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="audio_curation.mp3_utility.Mp3Metadata.set_in_file">
+<code class="descname">set_in_file</code><span class="sig-paren">(</span><em>file_path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/audio_curation/mp3_utility.html#Mp3Metadata.set_in_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#audio_curation.mp3_utility.Mp3Metadata.set_in_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="audio_curation.html">audio_curation</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">audio_curation.mp3_utility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="audio_curation_mp3_utility.html">audio_curation.archive_utility</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="audio_curation.html">Documentation overview</a><ul>
+      <li>Previous: <a href="audio_curation.html" title="previous chapter">audio_curation’s documentation</a></li>
+      <li>Next: <a href="audio_curation_mp3_utility.html" title="next chapter">audio_curation.archive_utility</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, sanskrit-programmers.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/audio_curation_archive_utility.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
