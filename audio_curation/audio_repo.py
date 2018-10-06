@@ -45,10 +45,10 @@ class AudioRepo(object):
     def __init__(self, git_repo_paths, archive_id):
         self.git_repo_paths = git_repo_paths
         self.git_repos = [git.Repo(repo_path) for repo_path in git_repo_paths]
-        self.base_mp3_file_paths = sorted([glob.glob(os.path.join(repo_path, "mp3", "*.mp3")) for repo_path in git_repo_paths])
+        self.base_mp3_file_paths = [item for sublist in [sorted(glob.glob(os.path.join(repo_path, "mp3", "*.mp3"))) for repo_path in git_repo_paths] for item in sublist]
         logging.info("Got %d files" % (len(self.base_mp3_file_paths)))
         self.base_mp3_files = list(
-            map(lambda fpath: mp3_utility.Mp3File(file_path=fpath, load_tags_from_file=True), base_mp3_file_paths))
+            map(lambda fpath: mp3_utility.Mp3File(file_path=fpath, load_tags_from_file=True), self.base_mp3_file_paths))
         self.archive_item = archive_utility.ArchiveAudioItem(archive_id=archive_id)
 
 
@@ -111,11 +111,23 @@ class AudioRepo(object):
         self.update_archive_item(mp3_files_in=mp3_files, overwrite_all=True, start_at=None)
 
 
-    def update_git(self):
-        for git_repo in self.git_repos:
-            untracked_files = git_repo.untracked_files()
-            assert(not set(map(lambda file: file.endswith(".mp3"), untracked_files).contains(False)))
+    def update_git(self, collapse_history=False):
+        def add_untracked(git_repo):
+            untracked_files = git_repo.untracked_files
+            assert(False not in set(map(lambda file: file.endswith(".mp3"), untracked_files)))
             git_repo.index.add(untracked_files)
             git_repo.index.commit(message="Added %d mp3-s" % len(untracked_files))
-            git_repo.remote("origin").push()
+
+        # In case of collapse_history:
+        # Following tip from https://stackoverflow.com/questions/13716658/how-to-delete-all-commit-history-in-github
+        for git_repo in self.git_repos:
+            if collapse_history:
+                logging.info(git_repo.git.checkout("--orphan", "branch_for_collapsing"))
+            add_untracked(git_repo)
+            if collapse_history:
+                logging.info(git_repo.git.branch("-D", "master"))
+                logging.info(git_repo.git.branch("-m", "master"))
+                logging.info(git_repo.git.push("-f", "origin", "master"))
+            else:
+                git_repo.remote("origin").push()
             # git_repo.commit()
