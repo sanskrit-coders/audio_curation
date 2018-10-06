@@ -73,6 +73,9 @@ class Mp3File(object):
     def __str__(self):
         return "Mp3File(%s)" % self.file_path
 
+    def save_metadata(self):
+        self.metadata.set_in_file(file_path=self.file_path)
+    
     def is_file_normalized(self):
         """
 
