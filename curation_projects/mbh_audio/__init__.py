@@ -1,7 +1,7 @@
 """
 `Mahabharata audio project`_.
 
-.. _Mahabharata audio project: https://sanskrit.github.io/projects/mbh-audio/
+.. _Mahabharata audio project: https://sanskrit.github.io/projects/audio/mbh-audio/
 """
 
 import glob

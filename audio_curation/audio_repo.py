@@ -57,9 +57,20 @@ class AudioRepo(object):
         - periodically collapse git history (using update_git()) so as to avoid wasted space. 
     """
 
-    def __init__(self, git_repo_paths, archive_id):
+    def __init__(self, git_repo_paths, archive_id, git_remote_origin_basepath=None):
         self.git_repo_paths = git_repo_paths
-        self.git_repos = [git.Repo(repo_path) for repo_path in git_repo_paths]
+        try:
+            self.git_repos = [git.Repo(repo_path) for repo_path in git_repo_paths]
+        except git.InvalidGitRepositoryError:
+            self.git_repos = []
+            assert git_remote_origin_basepath is not None, "Pass valid git repos, or specify git_remote_origin_basepath so that we may initialize repos for you."
+            for repo_path in self.git_repo_paths:
+                repo = git.Repo.init(repo_path)
+                remote_origin_path = "%s/%s" % (git_remote_origin_basepath, os.path.basename(repo_path))
+                remote_origin_path = remote_origin_path.replace("//", "/")
+                repo.create_remote("origin", remote_origin_path)
+                self.git_repos.append(repo)
+            
         self.base_mp3_file_paths = [item for sublist in
                                     [sorted(glob.glob(os.path.join(repo_path, "mp3", "*.mp3"))) for repo_path in
                                      git_repo_paths] for item in sublist]
