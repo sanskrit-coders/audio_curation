@@ -1,0 +1,622 @@
+t = 0;
+for (let w of document.getElementsByClassName('views-field views-field-nothing-1')) {
+  if(w.tagName == 'TH') continue;
+  console.log(w.children[0].textContent);
+  setTimeout(() => { w.parentNode.querySelector('a[type]').click()}, t);
+  t += 800;
+}
+
+mv ../*.mp3 . | wc -l
+zmv -W '* Sarga YK - *' 'Kanda.6.YK-*-*'
+mv Kanda.6.YK-* Kanda.6
+
+001 Sarga BK - Samksheparamayanam by Vedic Scholars
+002 Sarga BK - vAlmIki gets divine guidance to compile the epic(part-a) by v sriram ghana paati others
+003 Sarga BK - vAlmIki gets divine guidance to compile the epic(part-b) by v sriram ghana paati others
+004 Sarga BK - Lava and Kusha assigned to sing the epic & rAma listents to it by v sriram ghana paati others
+005 Sarga BK - City ayodhya detailed by v sriram ghana paati others
+006 Sarga BK - Splendour of ayodhya city described by v sriram ghana paati others
+007 Sarga BK -  Estimable nature of king dasharatha's ministers by v sriram ghana paati others
+008 Sarga BK - King dasharatha proposes Vedic ritual for progeny by v sriram ghana paati others
+009 Sarga BK - Rajaa - Legend of Sage Rishyasringa by v sriram ghana paati others
+
+010 Sarga BK- Rishyasringa enticed and brought from woods by v sriram ghana paati others
+011 Sarga BK - dasaratha brings Rishyasringa to ayodhya by v sriram ghana paati others
+012 Sarga BK - dasaratha readies to perform asvamedha ritual by v sriram ghana paati others
+013 Sarga BK - ashva-medha begun; sage vashiSTa's arrangements by v sriram ghana paati others
+014 Sarga BK -  ashvamedha commenced as preamble to putrakAmeShTi ritual by v sriram ghana paati others
+015 Sarga BK - Putrakaamesti - Rishyashringa officiates putrakAmeShTi ritual for dasharatha by v sriram ghana paati others
+016 Sarga BK - yajna purusha presents divine dessert as fruit of ritual by v sriram ghana paati others
+017 Sarga BK - brahma orders gods to spawn forest-rangers,vAnarA-s by v sriram ghana paati others
+018 Sarga BK - Rama, Bharata, Lakshmana and Shatrughna took births by v sriram ghana paati others
+019 Sarga BK - Sage vishvamitra's arrival to take rAma along with him to guard ritual by v sriram ghana paati others
+
+020 Sarga BK - dasharatha's dissent to spare rAma's servicees by v sriram ghana paati others
+021 Sarga BK -  Ire of sage vishvamitra; vashiShTha appeases dasharatha by v sriram ghana paati others
+022 Sarga BK -  rAma, lakshmaNa travel with vishvamitra to his ritual place by v sriram ghana paati others
+023 Sarga BK - Their sojourn at the confluence of the rivers ganga and sarayu by v sriram ghana paati others
+024 Sarga BK - The legend of deomoness tATaka by v sriram ghana paati others
+025 Sarga BK - The legend of deomoness tATaka - contd by v sriram ghana paati others
+026 Sarga BK - Elimination of demoness tATaka by v sriram ghana paati others
+027 Sarga BK - vishvAmitra endows rAma with supernatural missiles by v sriram ghana paati others
+028 Sarga BK - vishvAmitra teaches rAma about annulment of missiles by v sriram ghana paati others
+029 Sarga BK - Legend of vAmana narrated by v sriram ghana paati others
+
+030 Sarga BK - Legend of siddha Ashrama by v sriram ghana paati others
+031 Sarga BK -  rAma safeguards vishvAmitra's vedic ritual by v sriram ghana paati others
+032 Sarga BK - rAma'savel to mithila city by v sriram ghana paati others
+033 Sarga BK - Legend of brahmadatta by v sriram ghana paati others
+034 Sarga BK - Legend of vishvamitra's ancestry by v sriram ghana paati others
+035 Sarga BK - Legend of River Ganga by v sriram ghana paati others
+036 Sarga BK - Legend of Uma and her curse by v sriram ghana paati others
+037 Sarga BK  - Legend of kaartikeya by v sriram ghana paati others
+038 Sarga BK - Legend of emperor sagara by v sriram ghana paati others
+039 Sarga BK - sagara's sons dig earth in search of ritual hose by v sriram ghana paati others
+
+040 Sarga BK - Sage kapila burns the sons of sagara by v sriram ghana paati others
+041 Sarga BK - sagara's grandson amshuman's search for the horse by v sriram ghana paati others
+042 Sarga BK - king bhageeratha's effort to bring river ganga ion to the earth by v sriram ghana paati others
+043 Sarga BK - River ganga's descent onto earth by v sriram ghana paati others
+044 Sarga BK - brahma commends bhageeratha by v sriram ghana paati others
+045 Sarga BK - The legend of churning Milk Ocean by v sriram ghana paati others
+046 Sarga BK - Lady diti seeks for a son to kill Indra by v sriram ghana paati others
+047 Sarga BK - The legend of Seven-maruts, wind-gods by v sriram ghana paati others
+048 Sarga BK -   The legend of ahalya by v sriram ghana paati others
+049 Sarga BK -  Redemption of ahalya from her curse(part-a) by v sriram ghana paati others
+
+050 Sarga BK - Redemption of ahalya from her curse(part-b) by v sriram ghana paati others
+051 Sarga BK - The legend of vishvamitra(part-a) by v sriram ghana paati others
+052 Sarga BK -  The legend of vishvamitra(part-b) by v sriram ghana paati others
+053 Sarga BK -  vishvamitra tries to gain kaamadhenu by v sriram ghana paati others
+054 Sarga BK - Sacred-Cow creates forces to fightback by v sriram ghana paati others
+055 Sarga BK - vishvamitra ruins vashiSTHa's hermitage by v sriram ghana paati others
+056 Sarga BK - vashiSTa nullifies Vishvamitra's missiles by v sriram ghana paati others
+057 Sarga BK - The Legend of trishanku by v sriram ghana paati others
+058 Sarga BK - trishanku seeks shelter of vishvamitra by v sriram ghana paati others
+059 Sarga BK - trishanku  undertakes Vedic ritual by v sriram ghana paati others
+
+060 Sarga BK - trishanku's ascension to heaven by v sriram ghana paati others
+061 Sarga BK - Lend of shunashshepa(part-a) by v sriram ghana paati others
+062 Sarga BK - Legend of shunashshepa(part-b) by v sriram ghana paati others
+063 Sarga BK - Legend of vishvamitra [part-a ] by v sriram ghana paati others
+064 Sarga BK - Legend of vishvamitra [part-b] by v sriram ghana paati others
+065 Sarga BK - Legend of vishvamitra [part-c] by v sriram ghana paati others
+066 Sarga BK - Legend of shiva's bow by v sriram ghana paati others
+067 Sarga BK - rAma breaks shiva's bow by v sriram ghana paati others
+068 Sarga BK - janaka sends message to ayodhya by v sriram ghana paati others
+069 Sarga BK - dasharatha arrives at mithila by v sriram ghana paati others
+
+070 Sarga BK -  ikshvaaku's lineage detailed by v sriram ghana paati others
+071 Sarga BK - janaka's lineage detailed by v sriram ghana paati others
+072 Sarga BK - Marriage alliance to bharata, shatrughna by v sriram ghana paati others
+073 Sarga BK - sItha's marriage with rAma by v sriram ghana paati others
+074 Sarga BK - parashu rAma's arrival by v sriram ghana paati others
+075 Sarga BK -  Legends of shiva and vishnu bows by v sriram ghana paati others
+076 Sarga BK - parashu rAma's pride is hurt by v sriram ghana paati others
+077 Sarga BK - Happy days after marriage by v sriram ghana paati others
+
+
+http://www.pravachanam.com/albumfilesbrowselist/297/230
+
+001 Sarga AYK - Rama, The Hero by v sriram ghana paati others
+002 Sarga AYK - Dasaratha's Desire by v sriram ghana paati others
+003 Sarga AYK - Preparing for the Ceremony by v sriram ghana paati others
+004 Sarga AYK - Dasaratha's Premonition by v sriram ghana paati others
+005 Sarga AYK - Festivities in Ayodhya by v sriram ghana paati others
+006 Sarga AYK - Joy of a city by v sriram ghana paati others
+007 Sarga AYK - The wicked Manthara by v sriram ghana paati others
+008 Sarga AYK - Manthara's sinful words by v sriram ghana paati others
+009 Sarga AYK - Manthara's success in poisoning Kaikeyi's mind by v sriram ghana paati others
+010 Sarga AYK - Kaikeyi enters the house of wrath by v sriram ghana paati others
+
+011 Sarga AYK - Kaikeyi's evil boons by v sriram ghana paati others
+012 Sarga AYK - Dasaratha's reaction and Kaikeyi's adamant nature by v sriram ghana paati others
+013 Sarga AYK - Dasaratha's grief and anguish by v sriram ghana paati others
+014 Sarga AYK - The night passes by v sriram ghana paati others
+015 Sarga AYK - Sumantra arrives at Sri Rama's chambers by v sriram ghana paati others
+016 Sarga AYK - Jubilant city of Ayodhya by v sriram ghana paati others
+017 Sarga AYK - Rama's arrival at royal court by v sriram ghana paati others
+018 Sarga AYK - Kaikeyi's harsh words by v sriram ghana paati others
+019 Sarga AYK - Rama decides to leave for forest by v sriram ghana paati others
+020 Sarga AYK -  Kausalya's grief by v sriram ghana paati others
+
+021 Sarga AYK - Rama consoles angry Lakshmana by v sriram ghana paati others
+022 Sarga AYK - Rama tries to pacify Lakshmana further by v sriram ghana paati others
+023 Sarga AYK - Lakshmana's angry words by v sriram ghana paati others
+024 Sarga AYK - Rama obtains Kausalya's permission by v sriram ghana paati others
+025 Sarga AYK - Kausalya bids farewell to Rama by v sriram ghana paati others
+026 Sarga AYK - Rama lets Seetha know of King's wish by v sriram ghana paati others
+027 Sarga AYK - Seetha's wish to go to forest along with Rama by v sriram ghana paati others
+028 Sarga AYK - Rama warns Seetha of difficulties of staying in forest by v sriram ghana paati others
+029 Sarga AYK - Seetha's insistence on going to the forest by v sriram ghana paati others
+030 Sarga AYK - Rama agrees to take Seetha to the forest by v sriram ghana paati others
+
+031 Sarga AYK - Lakshmana too is permitted to go to the forest by v sriram ghana paati others
+032 Sarga AYK - Rama distributes his wealth to Rishis by v sriram ghana paati others
+033 Sarga AYK - Pithur Dharshanaartham Gamanam.mp3 by Vedic Scholars
+034 Sarga AYK - Dasharatha Murchchaa.mp3 by Vedic Scholars
+035 Sarga AYK - Sumanthrakrutham Kaikeyee Garhanam .mp3 by Vedic Scholars
+036 Sarga AYK - Sidhdhardasya Kaikeyyupadeshaha.mp3 by Vedic Scholars
+037 Sarga AYK - Chira Paridhanam.mp3 by Vedic Scholars
+038 Sarga AYK -  Ramena Dashratha Prathana.mp3 by Vedic Scholars
+039 Sarga AYK - Vana Prastanam.mp3 by Vedic Scholars
+040 Sarga AYK - Jana Kroshaha.mp3 by Vedic Scholars
+
+041 Sarga AYK - Praja Shoka Varnanam.mp3 by Vedic Scholars
+042 Sarga AYK - Dashratha Vilapaha.mp3 by Vedic Scholars
+043 Sarga AYK - Kousalya Kroshaha.mp3 by Vedic Scholars
+044 Sarga AYK - Kousalya Santhvanam.mp3 by Vedic Scholars
+045 Sarga AYK - Thamasa Theera Gamanam.mp3 by Vedic Scholars
+046 Sarga AYK - Pouran Vihaya Ramadeenam Gamanam .mp3 by Vedic Scholars
+047 Sarga AYK - Pouranam Prathya Gamanam.mp3 by Vedic Scholars
+048 Sarga AYK - Shokamagnaa Ayodhya.mp3 by Vedic Scholars
+049 Sarga AYK - Gomathyadi Naditharanam.mp3 by Vedic Scholars
+050 Sarga AYK - Gangatheere Guhasamagamaha.mp3 by Vedic Scholars
+
+051 Sarga AYK - Guha Lakshmana Samvadhaha.mp3 by Vedic Scholars
+052 Sarga AYK - Gangaa Tharanam Sumantra Visarjanam cha.mp3 by Vedic Scholars
+053 Sarga AYK - Rama Lakshmana Samvadhaha.mp3 by Vedic Scholars
+054 Sarga AYK - Bharadvaja Shramagamanam.mp3 by Vedic Scholars
+055 Sarga AYK - Yamuna Tharanam.mp3 by Vedic Scholars
+056 Sarga AYK - Chitrakoota Darshanam.mp3 by Vedic Scholars
+057 Sarga AYK - Sumantrasya Yodhya Gamanam.mp3 by Vedic Scholars
+058 Sarga AYK - Rama Sandesha Nivedanam.mp3 by Vedic Scholars
+059 Sarga AYK - Dasharatha Vilapaha.mp3 by Vedic Scholars
+060 Sarga AYK - Sumanthra Krutha Kousalya Santvanam.mp3 by Vedic Scholars
+
+061 Sarga AYK - Kousalya Krutha Dahsratha Nindaa.mp3 by Vedic Scholars
+062 Sarga AYK - Kousalya Krutha Dashratha Santhvanam.mp3 by Vedic Scholars
+063 Sarga AYK - Dashrathena Poorvakrutha Balavadha Kathanam.mp3 by Vedic Scholars
+064 Sarga AYK - Dashratha Mruthihi.mp3 by Vedic Scholars
+065 Sarga AYK - Anthaha Purashokaha.mp3 by Vedic Scholars
+066 Sarga AYK - Raja Sharirasya Thailakata Hanikshepaha.mp3 by Vedic Scholars
+067 Sarga AYK - Arajaka Desha Varnanam.mp3 by Vedic Scholars
+068 Sarga AYK - Bharathaya dutha Preshanam.mp3 by Vedic Scholars
+069 Sarga AYK - Bharathena Duswapna Darshanam.mp3 by Vedic Scholars
+070 Sarga AYK - Bharathasya Nishakramanam.mp3 by Vedic Scholars
+
+071 Sarga AYK - Ayodhyaa Gamanam.mp3 by Vedic Scholars
+072 Sarga AYK - Bharatha Vilapaha.mp3 by Vedic Scholars
+073 Sarga AYK - Kaikeyee Nirbhartha Sanam.mp3 by Vedic Scholars
+074 Sarga AYK - Kaikeyee Garhanam.mp3 by Vedic Scholars
+075 Sarga AYK - Bharatha Kousalya Samvadaha.mp3 by Vedic Scholars
+076 Sarga AYK - Dasharathasya Auordhva Dehikam .mp3 by Vedic Scholars
+077 Sarga AYK - Bharatha Shatrugna Vilapaha.mp3 by Vedic Scholars
+078 Sarga AYK - Mandhara Shasanam.mp3 by Vedic Scholars
+079 Sarga AYK - Bharatham Prathi Mantri Mantrana.mp3 by Vedic Scholars
+080 Sarga AYK - Marga Nirmanam.mp3 by Vedic Scholars
+
+081 Sarga AYK - Raja Sabhaa Gamanam.mp3 by Vedic Scholars
+082 Sarga AYK - Ramanayanaaya Bharatha Prasthanam.mp3 by Vedic Scholars
+083 Sarga AYK - Shrungi Berapure Bharathaa Vasaha.mp3 by Vedic Scholars
+084 Sarga AYK - Guha Bharatha Samvadaha.mp3 by Vedic Scholars
+085 Sarga AYK - Guha Krutham Marga Darshanam.mp3 by Vedic Scholars
+086 Sarga AYK - Guhena Rama Vruththantha Kathanam.mp3 by Vedic Scholars
+087 Sarga AYK - Rama Charitha Prasthavaha.mp3 by Vedic Scholars
+088 Sarga AYK - Bharatha Prathignaa.mp3 by Vedic Scholars
+089 Sarga AYK - Bharathaa Deenam Prayaga Vanagamanam.mp3 by Vedic Scholars
+090 Sarga AYK - Bharadwaja Darshanam.mp3 by Vedic Scholars
+
+091 Sarga AYK - Bharadwajakrutha Maathidyam.mp3 by Vedic Scholars
+092 Sarga AYK - Bharatha Prasthanam.mp3 by Vedic Scholars
+093 Sarga AYK - Rama Shrama Darshanam.mp3 by Vedic Scholars
+094 Sarga AYK - Chitra Kute Rama Sita Samvadaha.mp3 by Vedic Scholars
+095 Sarga AYK - Mandakini Soundaryam Adhika Pataha.mp3 by Vedic Scholars
+096 Sarga AYK - Bharatham Prathi Lakshmana Vikalpaha.mp3 by Vedic Scholars
+097 Sarga AYK - Lakshmana Pari Santvanam.mp3 by Vedic Scholars
+098 Sarga AYK - Rama Shrama Gamanam.mp3 by Vedic Scholars
+099 Sarga AYK - Sri Rama Darshanam.mp3 by Vedic Scholars
+100 Sarga AYK - Ramasya Kushala Prashnaha.mp3 by Vedic Scholars
+
+101 Sarga AYK - Dasharatha Niryana Kathanam .mp3 by Vedic Scholars
+102 Sarga AYK - Nivapanjanali Daanam.mp3 by Vedic Scholars
+103 Sarga AYK - Rama Deenam Shokaha.mp3 by Vedic Scholars
+104 Sarga AYK - Rama Kousalya Deenam Sambhashanam .mp3 by Vedic Scholars
+105 Sarga AYK - Ramam Prathi Bharathasya Pradhanaa.mp3 by Vedic Scholars
+106 Sarga AYK - Raajya Sweekaarardham Punaryaachana.mp3 by Vedic Scholars
+107 Sarga AYK - Ramasya Pitragnaa Palana Kathanam.mp3 by Vedic Scholars
+108 Sarga AYK - Jabalehe Rajaneethihi.mp3 by Vedic Scholars
+109 Sarga AYK - Jabali Matha Nirakaranam.mp3 by Vedic Scholars
+110 Sarga AYK - Vasista Soochanam .mp3 by Vedic Scholars
+
+111 Sarga AYK - Rama Bharatha Samvadaha.mp3 by Vedic Scholars
+112 Sarga AYK - Padukaa Pradaanam.mp3 by Vedic Scholars
+113 Sarga AYK - Bharathasya Prathi Nivartham.mp3 by Vedic Scholars
+114 Sarga AYK - Ayodhyaa Praveshaha.mp3 by Vedic Scholars
+115 Sarga AYK - Nandigrama Nivasaha.mp3 by Vedic Scholars
+116 Sarga AYK - Chitrakoote Rushi Rama Samvadaha .mp3 by Vedic Scholars
+117 Sarga AYK - Athryaa Shrama Gamanam.mp3 by Vedic Scholars
+118 Sarga AYK - Anasuyayaa AAbharana Daanam.mp3 by Vedic Scholars
+119 Sarga AYK - Ramasya Dandakaranya Praveshaha.mp3 by Vedic Scholars
+120 Sarga AYK - Mangala Shasanam .mp3 by Vedic Scholars
+
+
+http://www.pravachanam.com/albumfilesbrowselist/298/230
+
+001 Sarga ARK - Rusheenam Abhaya Prathanam.mp3 by Vedic Scholars
+002 Sarga ARK - Viradhena Sita Apaharanam.mp3 by Vedic Scholars
+003 Sarga ARK - Rama Viradha Yudhdham.mp3 by Vedic Scholars
+004 Sarga ARK - Viradha Vadhaha.mp3 by Vedic Scholars
+005 Sarga ARK - Sharabhangasya Agni Praveshaha.mp3 by Vedic Scholars
+006 Sarga ARK - Ramasya Rakshovadha Prathignaa.mp3 by Vedic Scholars
+007 Sarga ARK - Rama - Sutheekshnana Samvadaha.mp3 by Vedic Scholars
+008 Sarga ARK - Dandakavana Nishkramanam.mp3 by Vedic Scholars
+009 Sarga ARK - Sitaya Aayudhanyasa Pradhana.mp3 by Vedic Scholars
+010 Sarga ARK - Ramena Kshatra Dharma Nirupanam.mp3 by Vedic Scholars
+
+011 Sarga ARK - Agastya Mahathyam.mp3 by Vedic Scholars
+012 Sarga ARK - Agastya Darshanam.mp3 by Vedic Scholars
+013 Sarga ARK - Agastya Rama Samvadaha.mp3 by Vedic Scholars
+014 Sarga ARK - Jatayusho Vruthanthaha.mp3 by Vedic Scholars
+015 Sarga ARK - Panchavatyam Parnashala Nirmanam.mp3 by Vedic Scholars
+016 Sarga ARK - Hemantharthu Varnanam.mp3 by Vedic Scholars
+017 Sarga ARK - Shoorpanakha Aagamanam by Vedic Scholars
+018 Sarga ARK - Shoorpanakha Shasanam .mp3 by Vedic Scholars
+019 Sarga ARK - Kharaya Angavairupya Kathanam.mp3 by Vedic Scholars
+020 Sarga ARK - Chaturdhasha Rakshasa Samharaha.mp3 by Vedic Scholars
+
+021 Sarga ARK - Kharamthike Shoorpanakaa Shokaha .mp3 by Vedic Scholars
+022 Sarga ARK - Kharasya Yudhdha Sidhathaa.mp3 by Vedic Scholars
+023 Sarga ARK - Kharena Utpatha Darshanam .mp3 by Vedic Scholars
+024 Sarga ARK - Ramasya Yudhdhodhyogaha.mp3 by Vedic Scholars
+025 Sarga ARK - Ramena Kharasainya Samharaha.mp3 by Vedic Scholars
+026 Sarga ARK - Dooshana Vadhaha.mp3 by Vedic Scholars
+027 Sarga ARK - Thrishiro Vadhaha.mp3 by Vedic Scholars
+028 Sarga ARK - Rama Khara Yuddham.mp3 by Vedic Scholars
+029 Sarga ARK - Khara Nribhartha Sanam.mp3 by Vedic Scholars
+030 Sarga ARK - Kharasya Vadhaha.mp3 by Vedic Scholars
+
+031 Sarga ARK - Ravana Maaricha Samvadhaha.mp3 by Vedic Scholars
+032 Sarga ARK - Shoorpanakakrutha Ravana Bala Stuthi.mp3 by Vedic Scholars
+033 Sarga ARK - Ravana Nirbhartha Sanaa.mp3 by Vedic Scholars
+034 Sarga ARK - Sita Apaharane Ravanoththe Janam.mp3 by Vedic Scholars
+035 Sarga ARK - Maaricham Prathi Punaha Ravana Agamanam.mp3 by Vedic Scholars
+036 Sarga ARK - Sahayyartham Ravana Prathana.mp3 by Vedic Scholars
+037 Sarga ARK - Maarichakruthaha Ravana Bodhaha.mp3 by Vedic Scholars
+038 Sarga ARK - RamaGuna Varnanam.mp3 by Vedic Scholars
+039 Sarga ARK - Sahayya Karana Nirakaranam.mp3 by Vedic Scholars
+040 Sarga ARK - RavanaKrutham Maarivha Nirbhartha Sanam.mp3 by Vedic Scholars
+
+041 Sarga ARK - Maaricho Upadeshaha.mp3 by Vedic Scholars
+042 Sarga ARK - Suvarna Mruga Rupadharanam.mp3 by Vedic Scholars
+043 Sarga ARK - Swarna Mruga Grahanaardham Rama Agamanam.mp3 by Vedic Scholars
+044 Sarga ARK - Maaricha Vadhaha.mp3 by Vedic Scholars
+045 Sarga ARK - Sitaa Durvachanath Lakshamana Nirgamanam.mp3 by Vedic Scholars
+046 Sarga ARK - Thapasvi Roopena Ravana Agamanam.mp3 by Vedic Scholars
+047 Sarga ARK - Ravanena Swaishwarya Kathanam.mp3 by Vedic Scholars
+048 Sarga ARK - Ravanena Sita Nirbhartha Sanam.mp3 by Vedic Scholars
+049 Sarga ARK - Sitaa Apaharnam.mp3 by Vedic Scholars
+050 Sarga ARK - Jataayu Krutha Ravana Nirodhaha.mp3 by Vedic Scholars
+
+051 Sarga ARK - Jataayu Ravana Yudhdham.mp3 by Vedic Scholars
+052 Sarga ARK - Sitaa Vilapaha.mp3 by Vedic Scholars
+053 Sarga ARK - Ravana Nindaa.mp3 by Vedic Scholars
+054 Sarga ARK - Bhushana Prekshepanam Lankaa Praveshanam Cha.mp3 by Vedic Scholars
+055 Sarga ARK - Sitaam Prathi Ravana Darpookthihi.mp3 by Vedic Scholars
+056 Sarga ARK - Sitaaya Rama Parakrama Varnanam.mp3 by Vedic Scholars
+057 Sarga ARK - Ramena Durnimiththa Darshanam.mp3 by Vedic Scholars
+058 Sarga ARK - Rama Shokaha.mp3 by Vedic Scholars
+059 Sarga ARK - Lakshmana Nindaa.mp3 by Vedic Scholars
+060 Sarga ARK - Rama Lakshmanayoho Parnashala Agamanam.mp3 by Vedic Scholars
+
+061 Sarga ARK - Sitaa Anveshanam.mp3 by Vedic Scholars
+062 Sarga ARK - Rama Vilapaha.mp3 by Vedic Scholars
+063 Sarga ARK - Lakshmanena Rama Samthvanam.mp3 by Vedic Scholars
+064 Sarga ARK - Rama Santhapaha.mp3 by Vedic Scholars
+065 Sarga ARK - Lakshmana Krodho Upashamanam.mp3 by Vedic Scholars
+066 Sarga ARK - Rama Sama Shwasanam.mp3 by Vedic Scholars
+067 Sarga ARK - Jataayuvaa Sitaa Vruthantha Kathanam.mp3 by Vedic Scholars
+068 Sarga ARK - Rama Jataayu Samvadaha.mp3 by Vedic Scholars
+069 Sarga ARK - Ayomukyhaha Karnaadi Chchedaha.mp3 by Vedic Scholars
+070 Sarga ARK - Kabandhena Saha Yudhdham.mp3 by Vedic Scholars
+
+071 Sarga ARK - Kabandhena Swa Vruththantha Kathanam.mp3 by Vedic Scholars
+072 Sarga ARK - Sitaa Prapthyupaya Kathanam.mp3 by Vedic Scholars
+073 Sarga ARK - Sugreeva Stana Marga Darshanam.mp3 by Vedic Scholars
+074 Sarga ARK - Shabari Swargathihi.mp3 by Vedic Scholars
+075 Sarga ARK - Rama Lakshmanayoho Pampaa Darshanam.mp3 by Vedic Scholars
+
+
+http://www.pravachanam.com/albumfilesbrowselist/299/230
+
+001 dhyana slokas 2.mp3 by Vedic Scholars
+001 Sarga KSK Sri Rama at Pampa Lake lamenting for Seetha
+002 Sarga KSK The fearless Hanuma by v sriram ghana paati others
+003 Sarga KSK Hanuma meets Sri Rama
+004 Sarga KSK Lakshmanas narration to Hanuma
+005 Sarga KSK Oath of friendship
+006 Sarga KSK Sugreevas narration of the abduction
+007 Sarga KSK Friendly discourse
+008 Sarga KSK The tale of enmity between Vali and Sugreeva
+009 Sarga KSK The strength of Vali
+
+010 Sarga KSK Banishment of Sugreeva by Vali
+011 Sarga KSK The incident of Dundubhi
+012 Sarga KSK The initial challenge
+013 Sarga KSK Saptajana hermitage
+014 Sarga KSK The second challenge
+015 Sarga KSK Taras advice
+016 Sarga KSK Sugreevas second fight and Valis falling down
+017 Sarga KSK Valis questioning Ramas propriety
+018 Sarga KSK Ramas elucidation of dharma to vali
+019 Sarga KSK Taras arrival at Vali in battlefield
+
+020 Sarga KSK Taras lamentation for Valis death
+021 Sarga KSK Hanuma consoles Tara
+022 Sarga KSK Valis death-time advises
+023 Sarga KSK Taras lament for death of Vali
+024 Sarga KSK Tara Sugreevas resolve to die with Valii
+025 Sarga KSK Valis funeral ritual
+026 Sarga KSK Sugreevas coronation
+027 Sarga KSK Rama at Mt. Prasavana
+028 Sarga KSK Eulogy on Rainy Season
+029 Sarga KSK Hanumas advise to Sugreeva
+
+030 Sarga KSK Autumn [Sharad Ritu] eulogised
+031 Sarga KSK Lakshmanas fury
+032 Sarga KSK Hanumas advise to Sugreeva
+033 Sarga KSK Lakshmanas fury and Taras pacifying
+034 Sarga KSK Lakshmana upbraids Sugreeva
+035 Sarga KSK Tara appeases Lakshmana
+036 Sarga KSK Sugreevas apology pacifies Lakshmana
+037 Sarga KSK Monkey chiefs go round the earth
+038 Sarga KSK Sugreeva approaches Rama
+039 Sarga KSK Rama mildly admonishes Sugreeva
+
+040 Sarga KSK Sugreeva orders Eastside search
+041 Sarga KSK Sugreeva sends Vanara-s to Southward
+042 Sarga KSK Sugreeva sends troops to west side
+043 Sarga KSK Sugreeva sends troops to north
+044 Sarga KSK Rama gives ring to Hanuma
+045 Sarga KSK The war cries of monkey soldiers
+046 Sarga KSK Sugreevas knowledge of physical world
+047 Sarga KSK Search for Seetha failed in east north and west
+048 Sarga KSK Hanumas search for Seetha
+049 Sarga KSK Angada encourages all of the monkeys
+
+050 Sarga KSK Search of Vanaras in Riksha cavity
+051 Sarga KSK The legend of Black Cave
+052 Sarga KSK Vanaras deliverance from black hole
+053 Sarga KSK Angada proposes fast unto death
+054 Sarga KSK Hanuma advises Angada
+055 Sarga KSK Monkeys decide to fast unto death
+056 Sarga KSK Sampaati hears of Jataayus death
+057 Sarga KSK Angada informs their plight to Sampaati
+058 Sarga KSK Sampaati informs Angada about Seetha
+059 Sarga KSK Sampaati details Angada about Seetha
+
+060 Sarga KSK Sampaati narrates his legend
+061 Sarga KSK Sampaatis legend [contd.to next sarga]
+062 Sarga KSK Sampaatis legend [contd.to next sarga]
+063 Sarga KSK Sampaati gets new wings and flew away
+064 Sarga KSK Monkeys arrive at seashore
+065 Sarga KSK Monkeys fear to jump the ocean
+066 Sarga KSK Legend of Hanumas birth
+067 Sarga KSK Hanuma asserts his capabilities to leap the ocean
+
+
+http://www.pravachanam.com/albumfilesbrowselist/300/230
+
+000 Sarga SK - Dhyana sloka.mp3 by v sriram ghana paati others
+001 Sarga SK - Hanuma's Flight over Ocean.mp3 by v sriram ghana paati others
+002 Sarga SK - The city of Lanka.mp3 by v sriram ghana paati others
+003 Sarga SK - Hanuma conquers Lanka.mp3 by v sriram ghana paati others
+004 Sarga SK - Hanuma enters the city of Lanka.mp3 by v sriram ghana paati others
+005 Sarga SK - Ravana's palace.mp3 by v sriram ghana paati others
+006 Sarga SK - Inside the palace.mp3 by v sriram ghana paati others
+007 Sarga SK - Hanuma sees Pushpaka in Ravana's inner city.mp3 by v sriram ghana paati others
+008 Sarga SK - Description of the Pushpaka.mp3 by v sriram ghana paati others
+009 Sarga SK - The inner buildings of Ravana's house.mp3 by v sriram ghana paati others
+
+010 Sarga SK - Hanuma enters Ravana's house.mp3 by v sriram ghana paati others
+011 Sarga SK - Hanuma continues search for Seetha.mp3 by v sriram ghana paati others
+012 Sarga SK - Hanuma's depression.mp3 by v sriram ghana paati others
+013 Sarga SK - Hanuma starts to search in Ashoka garden.mp3 by v sriram ghana paati others
+014 Sarga SK - Hanuma enters the Ashoka garden.mp3 by v sriram ghana paati others
+015 Sarga SK - Hanuma sees Seetha.mp3 by v sriram ghana paati others
+016 Sarga SK - Hanuma's grief at the plight of Seetha.mp3 by v sriram ghana paati others
+017 Sarga SK - Hanuma sees Seetha with ogresses.mp3 by v sriram ghana paati others
+018 Sarga SK - Ravana comes to Seetha .mp3 by v sriram ghana paati others
+019 Sarga SK - Seetha in Ashoka garden.mp3 by v sriram ghana paati others
+
+020 Sarga SK - Ravana talks to Seetha.mp3 by v sriram ghana paati others
+021 Sarga SK - Seetha's reply.mp3 by v sriram ghana paati others
+022 Sarga SK - Ravana gives deadline.mp3 by v sriram ghana paati others
+023 Sarga SK - Ogres frighten Seetha.mp3 by v sriram ghana paati others
+024 Sarga SK - Seetha's reply to Ogres.mp3 by v sriram ghana paati others
+025 Sarga SK - Seetha bursts into a wail.mp3 by v sriram ghana paati others
+026 Sarga SK - Seetha decides to give up life.mp3 by v sriram ghana paati others
+027 Sarga SK - Trijata's dream.mp3 by v sriram ghana paati others
+028 Sarga SK - Seetha recollects the time limit.mp3 by v sriram ghana paati others
+029 Sarga SK - Seetha experiences some good omens.mp3 by v sriram ghana paati others
+
+030 Sarga SK - Hanuma falls in dilemma.mp3 by v sriram ghana paati others
+031 Sarga SK - Hanuma began to narrate story of to Seetha.mp3 by v sriram ghana paati others
+032 Sarga SK - Seetha is shocked to see Hanuma.mp3 by v sriram ghana paati others
+033 Sarga SK - Seetha antecedents to Hanuma.mp3 by v sriram ghana paati others
+034 Sarga SK - Hanuma reveals himself to be a messenger of.mp3 by v sriram ghana paati others
+035 Sarga SK - Seetha asks Hanuma to describe the characteristics.mp3 by v sriram ghana paati others
+036 Sarga SK - Hanuma gives Seetha, the signet ring sent by.mp3 by v sriram ghana paati others
+037 Sarga SK - Seetha was both delighted and depressed.mp3 by v sriram ghana paati others
+038 Sarga SK - Hanuma asks Seetha to give him a token of remembrance.mp3 by v sriram ghana paati others
+039 Sarga SK - To urge and Lakshmana.mp3 by v sriram ghana paati others
+
+040 Sarga SK - Hanuma consoles Seetha and travels northward.mp3 by v sriram ghana paati others
+041 Sarga SK - Hanuma thinks to meet Ravana.mp3 by v sriram ghana paati others
+042 Sarga SK - Female-demons enquires Seetha about Hanuma.mp3 by v sriram ghana paati others
+043 Sarga SK - Hanuma thinks of destroying a sacred sanctuary of demons.mp3 by v sriram ghana paati others
+044 Sarga SK - Ravana sends Jambumali.mp3 by v sriram ghana paati others
+045 Sarga SK - Hanuma kills Prahasta's seven sons.mp3 by v sriram ghana paati others
+046 Sarga SK - Ravana sends five army-generals.mp3 by v sriram ghana paati others
+047 Sarga SK - Ravana sends his son Aksha.mp3 by v sriram ghana paati others
+048 Sarga SK - Ravana sends his son Indrajit.mp3 by v sriram ghana paati others
+049 Sarga SK - Hanuma sees well-adorned Ravana.mp3 by v sriram ghana paati others
+
+050 Sarga SK - Hanuma declares himself to be a messenger of.mp3 by v sriram ghana paati others
+051 Sarga SK - Hanuma narrates the story of.mp3 by v sriram ghana paati others
+052 Sarga SK - Ravana orders Hanuma to be killed.mp3 by v sriram ghana paati others
+053 Sarga SK - Later Ravana orders to set fire to his tail.mp3 by v sriram ghana paati others
+054 Sarga SK - Hanuma makes up his mind to set fire the city of Lanka.mp3 by v sriram ghana paati others
+055 Sarga SK - Hanuma doubts whether Seetha dies in the fire.mp3 by v sriram ghana paati others
+056 Sarga SK - Hanuma again visits Ashoka garden and sees Seetha.mp3 by v sriram ghana paati others
+057 Sarga SK - Hanuma leaps from Lanka and touches Mount Mainaka.mp3 by v sriram ghana paati others
+058 Sarga SK - Jambavan requests Hanuma to narrate clearly the happenings.mp3 by v sriram ghana paati others
+059 Sarga SK - Hanuma describes the plight of Seetha to his fellow monkeys.mp3 by v sriram ghana paati others
+
+060 Sarga SK - Jambavan's wise guidelines.mp3 by v sriram ghana paati others
+061 Sarga SK - Monkeys took halt at Madhuvana.mp3 by v sriram ghana paati others
+062 Sarga SK - Dadhimukha departs to Kishkindha.mp3 by v sriram ghana paati others
+063 Sarga SK - Dadhimukha reports Madhuvana destruction to Sugreeva.mp3 by v sriram ghana paati others
+064 Sarga SK - Hanuma apprises of the discovery of Seetha.mp3 by v sriram ghana paati others
+065 Sarga SK - Hanuma conveys Seetha's message to .mp3 by v sriram ghana paati others
+066 Sarga SK - urges Hanuma, to repeat the words spoken by Seetha..mp3 by v sriram ghana paati others
+067 Sarga SK - Hanuma narrates an incident connected with a crow.mp3 by v sriram ghana paati others
+068 Sarga SK - Seetha expressed her grave doubt.mp3 by v sriram ghana paati others
+
+
+http://www.pravachanam.com/albumfilesbrowselist/301/230
+
+000 Sarga SK - Dhyana sloka.mp by v sriram ghana paati others
+001 Sarga SK - Rama appreciate by v sriram ghana paati others
+002 Sarga SK - Sugreeva comfor by v sriram ghana paati others
+003 Sarga SK - Rama requests H by v sriram ghana paati others
+004 Sarga SK - Rama fixes an a by v sriram ghana paati others
+005 Sarga SK - Sri Rama recoll by v sriram ghana paati others
+006 Sarga SK - Ravana calls a by v sriram ghana paati others
+007 Sarga SK - The demons insp by v sriram ghana paati others
+008 Sarga SK - All demons eulo by v sriram ghana paati others
+009 Sarga SK - Vibhishana spea by v sriram ghana paati others
+
+010 Sarga SK - Vibhishana advi by v sriram ghana paati others
+011 Sarga SK - Ravana goes aga by v sriram ghana paati others
+012 Sarga SK - Ravana instruct by v sriram ghana paati others
+013 Sarga SK - Mahaparsva's ad by v sriram ghana paati others
+014 Sarga SK - Vibhishana info by v sriram ghana paati others
+015 Sarga SK - Indrajit critic by v sriram ghana paati others
+016 Sarga SK - Ravana refuses by v sriram ghana paati others
+017 Sarga SK - Vibhishana reac by v sriram ghana paati others
+018 Sarga SK - Vibhishana join by v sriram ghana paati others
+019 Sarga SK - Vibhishana seek by v sriram ghana paati others
+
+020 Sarga SK - Ravana sends Sh by v sriram ghana paati others
+021 Sarga SK - Rama becomes an by v sriram ghana paati others
+022 Sarga SK - Sea-god advices by v sriram ghana paati others
+023 Sarga SK - Rama explains t by v sriram ghana paati others
+024 Sarga YK - Rama orders for by v sriram ghana paati others
+025 Sarga YK - Suka explains t by v sriram ghana paati others
+026 Sarga YK - Ravana enquires by v sriram ghana paati others
+027 Sarga YK - Sharana describ by v sriram ghana paati others
+028 Sarga YK - Shuka enumerate by v sriram ghana paati others
+029 Sarga YK - Ravana repriman by v sriram ghana paati others
+
+030 Sarga YK - Ravana dispatch by v sriram ghana paati others
+031 Sarga YK - Rama enters Lan by v sriram ghana paati others
+032 Sarga YK - Seetha sees the by v sriram ghana paati others
+033 Sarga YK - Sarama restores by v sriram ghana paati others
+034 Sarga YK - Sarama consoles by v sriram ghana paati others
+035 Sarga YK - Seetha asks Sar by v sriram ghana paati others
+036 Sarga YK - Ravana abuses M by v sriram ghana paati others
+037 Sarga YK - Vibhishana send by v sriram ghana paati others
+038 Sarga YK - Rama decides to by v sriram ghana paati others
+039 Sarga YK - Rama and others by v sriram ghana paati others
+
+040 Sarga YK - On seeing Ravan by v sriram ghana paati others
+041 Sarga YK - Rama sends Anga by v sriram ghana paati others
+042 Sarga YK - Ravana commands by v sriram ghana paati others
+043 Sarga YK - The duels arose by v sriram ghana paati others
+044 Sarga YK - Indrajit comes by v sriram ghana paati others
+045 Sarga YK - Two scions of R by v sriram ghana paati others
+046 Sarga YK - Ravana applauds by v sriram ghana paati others
+047 Sarga YK - Seetha's anguis by v sriram ghana paati others
+048 Sarga YK - Trijata reassur by v sriram ghana paati others
+049 Sarga YK - Vibhishana appr by v sriram ghana paati others
+
+050 Sarga YK - Garuda the King by v sriram ghana paati others
+051 Sarga YK - Dhumraksha ente by v sriram ghana paati others
+052 Sarga YK - Dhumraksha alon by v sriram ghana paati others
+053 Sarga YK - Ravana sends Va by v sriram ghana paati others
+054 Sarga YK - Vajradamstra sh by v sriram ghana paati others
+055 Sarga YK - Ravana next sen by v sriram ghana paati others
+056 Sarga YK - Akampana enters by v sriram ghana paati others
+057 Sarga YK - Ravana asks Pra by v sriram ghana paati others
+058 Sarga YK - Vibhishana expl by v sriram ghana paati others
+059 Sarga YK - Ravana himself by v sriram ghana paati others
+
+060 Sarga YK - Ravana sends de by v sriram ghana paati others
+061 Sarga YK - Rama enquires a by v sriram ghana paati others
+062 Sarga YK - Kumbhakarna ent by v sriram ghana paati others
+063 Sarga YK - Kumbhakarna rea by v sriram ghana paati others
+064 Sarga YK - He advises Kumb by v sriram ghana paati others
+065 Sarga YK - Kumbhakarna reb by v sriram ghana paati others
+066 Sarga YK - Angada reassure by v sriram ghana paati others
+067 Sarga YK - Kumbhakarna was by v sriram ghana paati others
+068 Sarga YK - Ravana's grief by v sriram ghana paati others
+069 Sarga YK - Death of Narant by v sriram ghana paati others
+
+070 Sarga YK - Hanuma kills Tr by v sriram ghana paati others
+071 Sarga YK - Lakshmana kills by v sriram ghana paati others
+072 Sarga YK - Ravana's grief by v sriram ghana paati others
+073 Sarga YK - Rama and Lakshm by v sriram ghana paati others
+074 Sarga YK -  Hanuma's journ by v sriram ghana paati others
+075 Sarga YK - The battle resu by v sriram ghana paati others
+076 Sarga YK - Sugreeva kills by v sriram ghana paati others
+077 Sarga YK - Kumbha's brothe by v sriram ghana paati others
+078 Sarga YK - Ravana orders M by v sriram ghana paati others
+079 Sarga YK - Makaraksha chal by v sriram ghana paati others
+
+080 Sarga YK - Ravana instruct by v sriram ghana paati others
+081 Sarga YK - Indrajit places by v sriram ghana paati others
+082 Sarga YK - Hanuma Leads th by v sriram ghana paati others
+083 Sarga YK - Seetha has been by v sriram ghana paati others
+084 Sarga YK - Vibhishana tell by v sriram ghana paati others
+085 Sarga YK - Rama sends Laks by v sriram ghana paati others
+086 Sarga YK - Indrajit enters by v sriram ghana paati others
+087 Sarga YK - Indrajit's hars by v sriram ghana paati others
+088 Sarga YK - A fierce battle by v sriram ghana paati others
+089 Sarga YK - Vibhishana dest by v sriram ghana paati others
+
+090 Sarga YK - Indrajit's hors by v sriram ghana paati others
+091 Sarga YK - Lakshmana and o by v sriram ghana paati others
+092 Sarga YK - Ravana feels di by v sriram ghana paati others
+093 Sarga YK - Rama destroys t by v sriram ghana paati others
+094 Sarga YK - The female-demo by v sriram ghana paati others
+095 Sarga YK - Ravana fights f by v sriram ghana paati others
+096 Sarga YK - Sugreeva kills by v sriram ghana paati others
+097 Sarga YK - Sugreeva kills by v sriram ghana paati others
+098 Sarga YK - Angada kills Ma by v sriram ghana paati others
+099 Sarga YK - The battle betw by v sriram ghana paati others
+
+100 Sarga YK - Ravana runs awa by v sriram ghana paati others
+101 Sarga YK - Hanuma brings m by v sriram ghana paati others
+102 Sarga YK - Ravana gets sev by v sriram ghana paati others
+103 Sarga YK - Ravana's chario by v sriram ghana paati others
+104 Sarga YK - Ravana re-appro by v sriram ghana paati others
+105 Sarga YK - Sage Agastya's by v sriram ghana paati others
+106 Sarga YK - Rama spoke to M by v sriram ghana paati others
+107 Sarga YK - Rama and Ravana by v sriram ghana paati others
+108 Sarga YK - Rama kills Rava by v sriram ghana paati others
+109 Sarga YK - Rama directs Vi by v sriram ghana paati others
+
+110 Sarga YK - All the consort by v sriram ghana paati others
+111 Sarga YK - Mandodari lamen by v sriram ghana paati others
+112 Sarga YK - Vibhishana's in by v sriram ghana paati others
+113 Sarga YK - Hanuma informs by v sriram ghana paati others
+114 Sarga YK - Vibhishana brin by v sriram ghana paati others
+115 Sarga YK - Rama disowns he by v sriram ghana paati others
+116 Sarga YK - Seetha's taunti by v sriram ghana paati others
+117 Sarga YK - Gods reach Lank by v sriram ghana paati others
+118 Sarga YK - The fire-god ap by v sriram ghana paati others
+119 Sarga YK - Lord Shiva info by v sriram ghana paati others
+
+120 Sarga YK - Indra's boon to by v sriram ghana paati others
+121 Sarga YK - Rama prepares t by v sriram ghana paati others
+122 Sarga YK - Rama along with by v sriram ghana paati others
+123 Sarga YK - Rama shows to S by v sriram ghana paati others
+124 Sarga YK - Rama lands at S by v sriram ghana paati others
+125 Sarga YK - Hanuma informs by v sriram ghana paati others
+126 Sarga YK - Hanuma recounts by v sriram ghana paati others
+127 Sarga YK - Bharata command by v sriram ghana paati others
+128 Sarga YK - Sri Rama pattabhishekam by v sriram ghana paati others
+129 Sarga YK - Mangalashasanam by v sriram ghana paati others
+
+Missing: Kanda 6, 125 (125 Sarga YK - Hanuma informs Bharata about Ramaâ€™s return_0.mp3)

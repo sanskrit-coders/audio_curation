@@ -3,6 +3,7 @@ Various utilities to access and manipulate an archive.org audio item.
 """
 
 import logging
+import os
 import pprint
 
 # Reference - https://internetarchive.readthedocs.io/en/latest/api.html
@@ -35,7 +36,7 @@ class ArchiveAudioItem(object):
         self.item_files_dict = dict(zip(self.item_filenames_mp3, self.item_files_mp3))
         self.original_item_files = list(filter(
             lambda x: x["source"] == "original" and not x["name"].startswith(self.archive_item.identifier) and not x[
-                "name"].startswith("_"), self.archive_item.files))
+                "name"].startswith ("_"), self.archive_item.files))
         self.original_item_file_names = sorted(map(lambda x: x["name"], self.original_item_files))
 
     def delete_unaccounted_for_files(self, all_files):
@@ -54,33 +55,34 @@ class ArchiveAudioItem(object):
             internetarchive.delete(self.archive_item.identifier, files=false_original_item_file_names,
                                    cascade_delete=True)
 
-    def update_archive_item(self, mp3_files, overwrite_all=False):
+    def update_archive_item(self, mp3_files, overwrite_all=False, mirror_repo_structure=False, dry_run=False):
         """
         Upload some audio files, set the metadata.
     
-        :param mp3_files: 
-        :param overwrite_all: 
+        :param mp3_files: List of  :py:class:mp3_utility.Mp3File objects.
+        :param overwrite_all: Boolean.
+        :param mirror_repo_structure: In archive item, place each file in a folder mirroring its local location.
+        :param dry_run: Boolean.
         """
         logging.info("************************* Now uploading")
-        local_mp3_file_basenames = list(map(lambda file: file.basename, mp3_files))
-        basename_to_file = dict(zip(local_mp3_file_basenames, mp3_files))
-        basename_to_file_path = dict(
-            zip(local_mp3_file_basenames, list(map(lambda file: file.file_path, mp3_files))))
-        if overwrite_all:
-            responses = self.archive_item.upload(basename_to_file_path, verbose=False, checksum=False, verify=False)
-            # checksum=True seems to not avoid frequent reuploads. Archive item mp3 checksum end up varying because of metadata changes? 
-            logging.info(pprint.pformat(dict(zip(basename_to_file_path.keys(), responses))))
-            for basename in basename_to_file_path.keys():
-                self.update_metadata(mp3_file=basename_to_file[basename])
+        remote_names = list(map(lambda file: os.path.join(os.path.basename(os.path.dirname(file.directory)), file.basename) if mirror_repo_structure else file.basename, mp3_files))
+        basename_to_file = dict(zip(remote_names, mp3_files))
+        remote_name_to_file_path = dict(
+            zip(remote_names, list(map(lambda file: file.file_path, mp3_files))))
+        basename_to_file_path_filtered = remote_name_to_file_path
+        if not overwrite_all:
+            remote_name_to_file_path_filtered = dict(
+                filter(lambda item: item[0] not in self.original_item_file_names, remote_name_to_file_path.items()))
+        logging.info(pprint.pformat(remote_name_to_file_path_filtered.items()))
+        if dry_run:
+            logging.warning("Not doing anything - in dry_run mode")
         else:
-            basename_to_filepath_filtered = dict(
-                filter(lambda item: item[0] not in self.original_item_file_names, basename_to_file_path.items()))
-            logging.info(pprint.pformat(basename_to_filepath_filtered.items()))
-            if len(basename_to_filepath_filtered) > 0:
-                responses = self.archive_item.upload(basename_to_filepath_filtered, verbose=False, checksum=False,
+            if len(remote_name_to_file_path_filtered) > 0:
+                # checksum=True seems to not avoid frequent reuploads. Archive item mp3 checksum end up varying because of metadata changes? 
+                responses = self.archive_item.upload(remote_name_to_file_path_filtered, verbose=False, checksum=False,
                                                      verify=False)
-                logging.info(pprint.pformat(dict(zip(basename_to_filepath_filtered.keys(), responses))))
-                for basename in basename_to_filepath_filtered.keys():
+                logging.info(pprint.pformat(dict(zip(remote_name_to_file_path_filtered.keys(), responses))))
+                for basename in remote_name_to_file_path_filtered.keys():
                     self.update_metadata(mp3_file=basename_to_file[basename])
             else:
                 logging.warning("Found nothing to update!")

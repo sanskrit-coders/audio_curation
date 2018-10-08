@@ -19,7 +19,7 @@ def check_loudness(mp3_files):
     """
     Get some stats about loudness levels among a bunch of mp3 files.
 
-    :param mp3_files: List of Mp3File objects
+    :param mp3_files: List of :py:class:mp3_utility.Mp3File objects
     """
     loudnesses = list(map(lambda mp3_file: mp3_file.check_loudness(), mp3_files))
     local_mp3_file_basenames = list(map(lambda x: x.basename, mp3_files))
@@ -37,7 +37,7 @@ def update_normalized_mp3s(mp3_files):
     """
     Regenerate normalized files corresponding to some mp3_files
 
-    :param mp3_files: List of Mp3File objects
+    :param mp3_files: List of :py:class:mp3_utility.Mp3File objects
     """
     for mp3_file in mp3_files:
         mp3_file.save_normalized(overwrite=True)
@@ -82,7 +82,7 @@ class AudioRepo(object):
     def get_normalized_files(self):
         """ Get all non-outdated normalized-sound files from this repo. 
     
-        :return: List of Mp3File objects
+        :return: List of :py:class:mp3_utility.Mp3File objects
         """
         normalized_files = [file.normalized_file for file in self.base_mp3_files if
                             not file.is_normalized_file_outdated()]
@@ -93,7 +93,7 @@ class AudioRepo(object):
     def get_unnormalized_files(self):
         """ Get all 
     
-        :return: List of Mp3File objects 
+        :return: List of :py:class:mp3_utility.Mp3File objects 
         """
         return [file for file in self.base_mp3_files if file.is_normalized_file_outdated()]
 
@@ -101,14 +101,14 @@ class AudioRepo(object):
         """ Get normalized-sound files corresponding to basename_list.
 
         :param basename_list: A list of file names.
-        :return: List of Mp3File objects
+        :return: List of :py:class:mp3_utility.Mp3File objects
         """
         return [file.normalized_file for file in self.base_mp3_files if file.basename in basename_list]
 
     def update_archive_metadata(self, mp3_files):
         """ Update archive metadata based on mp3 file metadata.
     
-        :param mp3_files: List of Mp3File objects 
+        :param mp3_files: List of :py:class:mp3_utility.Mp3File objects 
         """
         for mp3_file in mp3_files:
             self.archive_item.update_metadata(mp3_file=mp3_file)
@@ -116,21 +116,23 @@ class AudioRepo(object):
     def update_metadata(self, mp3_files):
         """ Update mp3 metadata of a bunch of files. Meant to be overridden.
 
-        :param mp3_files: List of Mp3File objects
+        :param mp3_files: List of :py:class:mp3_utility.Mp3File objects
         """
         pass
 
-    def update_archive_item(self, mp3_files_in, overwrite_all=False, start_at=None):
+    def update_archive_item(self, mp3_files_in, overwrite_all=False, start_at=None, mirror_repo_structure=False, dry_run=False):
         """ Upload a bunch of files to archive.
     
-        :param mp3_files_in: List of Mp3File objects
-        :param overwrite_all: 
-        :param start_at: 
+        :param mp3_files_in: List of :py:class:mp3_utility.Mp3File objects
+        :param overwrite_all: Boolean 
+        :param start_at: String representing the basename of the file to start the uploading with.
+        :param mirror_repo_structure: In archive item, place each file in a folder mirroring its local location.
+        :param dry_run: Boolean
         """
         mp3_files = mp3_files_in[:]
         if start_at is not None:
             mp3_files = list(itertools.dropwhile(lambda file: file.basename != start_at, mp3_files))
-        self.archive_item.update_archive_item(mp3_files=mp3_files, overwrite_all=overwrite_all)
+        self.archive_item.update_archive_item(mp3_files=mp3_files, overwrite_all=overwrite_all, mirror_repo_structure=mirror_repo_structure, dry_run=dry_run)
 
     def reprocess_files(self, mp3_files):
         """ When you add a new file to the repository, use this method to update the metadata, archive and git locations. 
