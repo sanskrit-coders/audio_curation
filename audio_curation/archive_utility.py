@@ -69,7 +69,7 @@ class ArchiveAudioItem(object):
         basename_to_file = dict(zip(remote_names, mp3_files))
         remote_name_to_file_path = dict(
             zip(remote_names, list(map(lambda file: file.file_path, mp3_files))))
-        basename_to_file_path_filtered = remote_name_to_file_path
+        remote_name_to_file_path_filtered = remote_name_to_file_path
         if not overwrite_all:
             remote_name_to_file_path_filtered = dict(
                 filter(lambda item: item[0] not in self.original_item_file_names, remote_name_to_file_path.items()))

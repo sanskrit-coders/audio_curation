@@ -51,7 +51,7 @@ class EpisodeData(object):
         self.episode_id_column = episode_id_column
         self.recorder_column = recorder_column
         self.episode_df = None
-        self.set_episode_df()
+        self._set_episode_df()
 
     def _set_episode_df(self):
         """

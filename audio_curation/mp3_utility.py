@@ -50,6 +50,7 @@ class Mp3Metadata(object):
 
         if local_tag_update_needed:
             logging.info("***Updating %s locally." % file_path)
+            audiofile.initTag()
             audiofile.tag.artist = self.artist
             audiofile.tag.title = self.title
             audiofile.tag.album = self.album

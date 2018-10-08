@@ -171,8 +171,7 @@ class AudioRepo(object):
                 logging.info(git_repo.git.branch("-m", "master"))
                 logging.info(git_repo.git.push("-f", "origin", "master"))
             else:
-                if first_push:
-                    git_repo.git.push("-u", "origin", "master")
-                else:
-                    git_repo.remote("origin").push()
+                logging.info(git_repo.git.push("-u", "origin", "master"))
+                # The below would only work if the remote branch is set.
+                # git_repo.remote("origin").push() 
             # git_repo.commit()
