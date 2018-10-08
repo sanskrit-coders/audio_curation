@@ -101,6 +101,9 @@ class ArchiveAudioItem(object):
             else:
                 logging.warning("Found nothing to update!")
 
+    def update_metadata(self, metadata):
+        self.archive_item.modify_metadata(metadata=metadata)
+
     def update_mp3_metadata(self, mp3_file):
         """
         Update metadata for a given file.
