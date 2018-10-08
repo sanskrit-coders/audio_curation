@@ -26,8 +26,9 @@ repo_paths = sorted(glob.glob(os.path.join(LOCAL_REPO_BASE_PATH, "Kanda*")))
 class RamayanaRepo(audio_repo.AudioRepo):
     pass
 
-
-item_description = """
+metadata = {
+    "title" : "Ramayana-recitation Sriram-ghanapAThi harisItArAmamUrti-ghanapAThi रामायणम्",
+    "description" : """
 यद्ध्वनिमुद्रणं रामायणस्य तस्येदानीं नकोपि प्रतिकृत्यधिकार 
 आरक्ष्यते देहलीस्थसंस्थजनैरिति पाठकयोरन्यतरो हरिसीतारामो ब्रूते । तस्य 
 प्रसारेण लोकप्रयोजनं स्यादिति बुद्ध्याङ्गीक्रीयते तैः । विवरणाय 
@@ -38,10 +39,13 @@ item_description = """
 २. "स्वाध्यायरत्नम्" - ब्रह्मश्री सलक्षणघनपाठी हरिसीताराममूर्तिः
 
 गृहसङ्केतः - Sri Shankara gurukula veda pathashala, Veda Bhavan, Road no.1, Chandragiri colony, Neredmet, Hyderabad - 500056
+
+Tech details- see  https://sanskrit.github.io/projects/audio/ramayana-audio/index.html
 """
+}
 
 repo = RamayanaRepo(git_repo_paths=repo_paths, archive_id="Ramayana-recitation-Sriram-harisItArAmamUrti-Ghanapaati-v2", git_remote_origin_basepath="git@github.com:ramayana-audio")
-repo.update_git(collapse_history=False, first_push=True)
+# repo.update_git(collapse_history=False, first_push=True)
 # exit(1)
-
+# repo.archive_item.archive_item.modify_metadata(metadata=metadata)
 # repo.update_archive_item(mp3_files_in=repo.get_unnormalized_files(), mirror_repo_structure=True, dry_run=False)

@@ -26,7 +26,13 @@ class ArchiveAudioItem(object):
     Represents an archive.org audio item.
     """
 
-    def __init__(self, archive_id):
+    def __init__(self, archive_id, mirrors_repo_structure=False):
+        """
+        
+        :param archive_id: 
+        :param mirror_repo_structure: In archive item, place each file in a folder mirroring its local location.
+        """
+        self.mirrors_repo_structure = mirrors_repo_structure
         self.archive_id = archive_id
         self.archive_item = internetarchive.get_item(archive_id)
         logging.info(self.archive_item.identifier)
@@ -38,6 +44,15 @@ class ArchiveAudioItem(object):
             lambda x: x["source"] == "original" and not x["name"].startswith(self.archive_item.identifier) and not x[
                 "name"].startswith ("_"), self.archive_item.files))
         self.original_item_file_names = sorted(map(lambda x: x["name"], self.original_item_files))
+
+    def get_remote_name(self, file_path):
+        """
+        
+        :param file_path: A path like git_repo_name/mp3/xyz.mp3
+        :return: If self.mirrors_repo_structure : git_repo_name/xyz.mp3, else: xyz.mp3
+        """
+        basename = os.path.basename(file_path)
+        return os.path.join(os.path.basename(os.path.dirname(os.path.dirname(file_path))), basename) if self.mirrors_repo_structure else basename
 
     def delete_unaccounted_for_files(self, all_files):
         """
@@ -55,17 +70,16 @@ class ArchiveAudioItem(object):
             internetarchive.delete(self.archive_item.identifier, files=false_original_item_file_names,
                                    cascade_delete=True)
 
-    def update_archive_item(self, mp3_files, overwrite_all=False, mirror_repo_structure=False, dry_run=False):
+    def update_archive_item(self, mp3_files, overwrite_all=False, dry_run=False):
         """
         Upload some audio files, set the metadata.
     
         :param mp3_files: List of  :py:class:mp3_utility.Mp3File objects.
         :param overwrite_all: Boolean.
-        :param mirror_repo_structure: In archive item, place each file in a folder mirroring its local location.
         :param dry_run: Boolean.
         """
         logging.info("************************* Now uploading")
-        remote_names = list(map(lambda file: os.path.join(os.path.basename(os.path.dirname(file.directory)), file.basename) if mirror_repo_structure else file.basename, mp3_files))
+        remote_names = list(map(lambda file: self.get_remote_name(file.file_path), mp3_files))
         basename_to_file = dict(zip(remote_names, mp3_files))
         remote_name_to_file_path = dict(
             zip(remote_names, list(map(lambda file: file.file_path, mp3_files))))
@@ -83,17 +97,18 @@ class ArchiveAudioItem(object):
                                                      verify=False)
                 logging.info(pprint.pformat(dict(zip(remote_name_to_file_path_filtered.keys(), responses))))
                 for basename in remote_name_to_file_path_filtered.keys():
-                    self.update_metadata(mp3_file=basename_to_file[basename])
+                    self.update_mp3_metadata(mp3_file=basename_to_file[basename])
             else:
                 logging.warning("Found nothing to update!")
 
-    def update_metadata(self, mp3_file):
+    def update_mp3_metadata(self, mp3_file):
         """
         Update metadata for a given file.
     
         :param mp3_file: :py:class:mp3_utility.Mp3File 
         """
-        archive_item_file_details = self.item_files_dict.get(mp3_file.basename, None)
+        remote_name = self.get_remote_name(mp3_file.file_path)
+        archive_item_file_details = self.item_files_dict.get(remote_name, None)
         mp3_metadata = mp3_file.metadata
         if archive_item_file_details is None:
             logging.warning("The file does not exist! Skipping.")
@@ -105,11 +120,11 @@ class ArchiveAudioItem(object):
                                                archive_item_file_details.get("album_artist",
                                                                              "") != mp3_metadata.album_artist)
             if remote_tag_update_needed:
-                logging.info("***Updating %s in archive item." % mp3_file.basename)
+                logging.info("***Updating %s in archive item." % remote_name)
                 logging.info(
                     internetarchive.modify_metadata(
                         self.archive_id,
                         metadata=dict(title=mp3_metadata.title, album=mp3_metadata.album,
                                       album_artist=mp3_metadata.album_artist,
                                       artist=mp3_metadata.artist, creator=mp3_metadata.artist),
-                        target=mp3_file.basename))
+                        target=remote_name))

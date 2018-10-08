@@ -111,7 +111,7 @@ class AudioRepo(object):
         :param mp3_files: List of :py:class:mp3_utility.Mp3File objects 
         """
         for mp3_file in mp3_files:
-            self.archive_item.update_metadata(mp3_file=mp3_file)
+            self.archive_item.update_mp3_metadata(mp3_file=mp3_file)
 
     def update_metadata(self, mp3_files):
         """ Update mp3 metadata of a bunch of files. Meant to be overridden.

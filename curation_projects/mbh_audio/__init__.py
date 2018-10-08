@@ -26,6 +26,15 @@ repo_paths = sorted(glob.glob(os.path.join(LOCAL_REPO_BASE_PATH, "parva*")))
 
 from audio_curation.episode_data import google_sheets_data
 
+metadata = {
+    "title": "महाभारत-पारायणम् Mahabharata recitation (Gita press edition)",
+    "description": """
+     महाभारत-मूल-पठनम्।
+
+     भवद्योगदानं‌ काङ्क्ष्यते - https://sanskrit.github.io/projects/mbh-audio/index.html
+    """
+}
+
 class MbhRepo(audio_repo.AudioRepo):
     
     def update_metadata(self, mp3_files):
@@ -43,6 +52,7 @@ class MbhRepo(audio_repo.AudioRepo):
 repo = MbhRepo(git_repo_paths=repo_paths, archive_id="mahAbhArata-mUla-paThanam-GP")
 # repo.reprocess_files(mp3_files=repo.get_particular_normalized_files(["001-009.mp3", "001-027.mp3", "001-028.mp3", "001-043.mp3", ]))
 # repo.reprocess_files(mp3_files=repo.get_unnormalized_files())
-repo.update_archive_item(mp3_files_in=repo.get_normalized_files())
+# repo.update_archive_item(mp3_files_in=repo.get_normalized_files())
 # repo.update_archive_metadata(mp3_files=repo.get_normalized_files())
 # repo.update_git(collapse_history=False)
+repo.archive_item.archive_item.modify_metadata(metadata=metadata)
