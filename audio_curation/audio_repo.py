@@ -143,10 +143,11 @@ class AudioRepo(object):
         update_normalized_mp3s(mp3_files=mp3_files)
         self.update_archive_item(mp3_files_in=mp3_files, overwrite_all=True, start_at=None)
 
-    def update_git(self, collapse_history=False):
+    def update_git(self, collapse_history=False, first_push=False):
         """ Update git repos associated with this item.
 
-        :param collapse_history: Boolean. Git history involving mp3 files takes up too much space - more than what providers like GitHub offer for free. This option makes this method put up the latest files without any history. 
+        :param collapse_history: Boolean. Git history involving mp3 files takes up too much space - more than what providers like GitHub offer for free. This option makes this method put up the latest files without any history.
+        :param first_push: Boolean. Do  git push --set-upstream origin master in such cases.
         """
 
         def add_untracked(repo_x):
@@ -155,12 +156,12 @@ class AudioRepo(object):
             :param repo_x: Some git repo object.
             """
             untracked_files = git_repo.untracked_files.copy()
-            assert (False not in set(map(lambda file: file.endswith(".mp3"), untracked_files)))
+            assert (False not in set(map(lambda file: file.endswith(".mp3") or file.endswith("md"), untracked_files)))
             git_repo.index.add(untracked_files)
             git_repo.index.commit(message="Added %d mp3-s" % len(untracked_files))
 
-        # In case of collapse_history:
-        # Following tip from https://stackoverflow.com/questions/13716658/how-to-delete-all-commit-history-in-github
+        # In case of collapse_history, we are:
+        # following tip from https://stackoverflow.com/questions/13716658/how-to-delete-all-commit-history-in-github
         for git_repo in self.git_repos:
             if collapse_history:
                 logging.info(git_repo.git.checkout("--orphan", "branch_for_collapsing"))
@@ -170,5 +171,8 @@ class AudioRepo(object):
                 logging.info(git_repo.git.branch("-m", "master"))
                 logging.info(git_repo.git.push("-f", "origin", "master"))
             else:
-                git_repo.remote("origin").push()
+                if first_push:
+                    git_repo.git.push("-u", "origin", "master")
+                else:
+                    git_repo.remote("origin").push()
             # git_repo.commit()

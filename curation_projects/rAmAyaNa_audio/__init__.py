@@ -41,6 +41,7 @@ item_description = """
 """
 
 repo = RamayanaRepo(git_repo_paths=repo_paths, archive_id="Ramayana-recitation-Sriram-harisItArAmamUrti-Ghanapaati-v2", git_remote_origin_basepath="git@github.com:ramayana-audio")
+repo.update_git(collapse_history=False, first_push=True)
 # exit(1)
 
-repo.update_archive_item(mp3_files_in=repo.get_unnormalized_files(), mirror_repo_structure=True, dry_run=False)
+# repo.update_archive_item(mp3_files_in=repo.get_unnormalized_files(), mirror_repo_structure=True, dry_run=False)
