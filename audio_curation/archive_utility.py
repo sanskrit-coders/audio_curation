@@ -127,4 +127,4 @@ class ArchiveAudioItem(object):
                         metadata=dict(title=mp3_metadata.title, album=mp3_metadata.album,
                                       album_artist=mp3_metadata.album_artist,
                                       artist=mp3_metadata.artist, creator=mp3_metadata.artist),
-                        target=remote_name))
+                        target=os.path.join("files", remote_name)))
