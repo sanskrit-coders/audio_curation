@@ -30,4 +30,3 @@ repo = MahaDarshanaRepo(git_repo_paths=repo_paths, archive_id="mahA-darshana-dev
 # exit(1)
 # repo.archive_item.update_metadata(metadata=metadata)
 # repo.archive_item.archive_item.modify_metadata(metadata=metadata)
-# repo.update_archive_item(mp3_files_in=repo.get_unnormalized_
