@@ -70,7 +70,7 @@ class AudioRepo(object):
                 remote_origin_path = remote_origin_path.replace("//", "/")
                 repo.create_remote("origin", remote_origin_path)
                 self.git_repos.append(repo)
-            
+
         self.base_mp3_file_paths = [item for sublist in
                                     [sorted(glob.glob(os.path.join(repo_path, "mp3", "*.mp3"))) for repo_path in
                                      git_repo_paths] for item in sublist]
@@ -120,7 +120,8 @@ class AudioRepo(object):
         """
         pass
 
-    def update_archive_item(self, mp3_files_in, overwrite_all=False, start_at=None, mirror_repo_structure=False, dry_run=False):
+    def update_archive_item(self, mp3_files_in, overwrite_all=False, start_at=None, mirror_repo_structure=False,
+                            dry_run=False):
         """ Upload a bunch of files to archive.
     
         :param mp3_files_in: List of :py:class:mp3_utility.Mp3File objects
@@ -135,13 +136,13 @@ class AudioRepo(object):
         self.archive_item.update_archive_item(mp3_files=mp3_files, overwrite_all=overwrite_all, dry_run=dry_run)
 
     def reprocess_files(self, mp3_files):
-        """ When you add a new file to the repository, use this method to update the metadata, archive and git locations. 
+        """ When you add a new file to the repository, use this method to update the metadata, the local normalized file colleciton, archive and git locations. 
     
         """
         self.update_metadata(mp3_files=mp3_files)
         self.update_git()
         update_normalized_mp3s(mp3_files=mp3_files)
-        self.update_archive_item(mp3_files_in=mp3_files, overwrite_all=True, start_at=None)
+        self.update_archive_item(mp3_files_in=mp3_utility.get_normalized_files(mp3_files=mp3_files, skip_missing=True), overwrite_all=True, start_at=None)
 
     def update_git(self, collapse_history=False, first_push=False):
         """ Update git repos associated with this item.

@@ -1,6 +1,8 @@
 import logging
 
 import os
+import pprint
+
 import eyed3
 
 # Remove all handlers associated with the root logger object.
@@ -100,11 +102,12 @@ class Mp3File(object):
         if normalized_file_path is None:
             self.normalized_file_path = os.path.join(os.path.dirname(self.directory), "normalized_mp3", self.basename)
         if self.is_file_normalized():
-            return
-        if os.path.isfile(self.normalized_file_path) and os.access(self.normalized_file_path, os.R_OK):
-            self.normalized_file = Mp3File(self.normalized_file_path, mp3_metadata=self.metadata)
+            self.normalized_file = self
         else:
-            self.normalized_file = None
+            if os.path.isfile(self.normalized_file_path) and os.access(self.normalized_file_path, os.R_OK):
+                self.normalized_file = Mp3File(self.normalized_file_path, mp3_metadata=self.metadata)
+            else:
+                self.normalized_file = None
 
     def is_normalized_file_outdated(self):
         """ Is the normalized file corresponding to this file outdated?
@@ -150,3 +153,14 @@ class Mp3File(object):
             "album": self.metadata.album
         })
         self.set_normalized_file()
+
+
+def get_normalized_files(mp3_files, skip_missing=True):
+    normalized_files_unfiltered = [mp3_file.normalized_file for mp3_file in mp3_files]
+    if skip_missing:
+        normalized_files_present_only = [mp3_file for mp3_file in normalized_files_unfiltered if mp3_file is not None]
+        skipped_files = [mp3_file for mp3_file in normalized_files_unfiltered if mp3_file not in normalized_files_present_only]
+        logging.warning("Skipping: %s", pprint.pformat(skipped_files))
+        return normalized_files_present_only
+    else:
+        return normalized_files_unfiltered
