@@ -157,7 +157,7 @@ class AudioRepo(object):
             :param repo_x: Some git repo object.
             """
             untracked_files = git_repo.untracked_files.copy()
-            assert (False not in set(map(lambda file: file.endswith(".mp3") or file.endswith("md"), untracked_files)))
+            assert (False not in set(map(lambda file: file.endswith(".mp3") or file.endswith("md") or os.path.basename(file) in [".gitignore"], untracked_files)))
             git_repo.index.add(untracked_files)
             git_repo.index.commit(message="Added %d mp3-s" % len(untracked_files))
 
