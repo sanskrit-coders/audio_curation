@@ -57,7 +57,7 @@ class AudioRepo(object):
         - periodically collapse git history (using update_git()) so as to avoid wasted space. 
     """
 
-    def __init__(self, git_repo_paths, archive_id, git_remote_origin_basepath=None):
+    def __init__(self, git_repo_paths, archive_audio_item=None, git_remote_origin_basepath=None):
         self.git_repo_paths = git_repo_paths
         try:
             self.git_repos = [git.Repo(repo_path) for repo_path in git_repo_paths]
@@ -77,7 +77,7 @@ class AudioRepo(object):
         logging.info("Got %d files" % (len(self.base_mp3_file_paths)))
         self.base_mp3_files = list(
             map(lambda fpath: mp3_utility.Mp3File(file_path=fpath, load_tags_from_file=True), self.base_mp3_file_paths))
-        self.archive_item = archive_utility.ArchiveAudioItem(archive_id=archive_id)
+        self.archive_item = archive_audio_item
 
     def get_normalized_files(self):
         """ Get all non-outdated normalized-sound files from this repo. 

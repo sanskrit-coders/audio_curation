@@ -26,7 +26,7 @@ class ArchiveAudioItem(object):
     Represents an archive.org audio item.
     """
 
-    def __init__(self, archive_id, mirrors_repo_structure=False):
+    def __init__(self, archive_id, config_file_path=None, mirrors_repo_structure=False):
         """
         
         :param archive_id: 
@@ -34,7 +34,7 @@ class ArchiveAudioItem(object):
         """
         self.mirrors_repo_structure = mirrors_repo_structure
         self.archive_id = archive_id
-        self.archive_item = internetarchive.get_item(archive_id)
+        self.archive_item = internetarchive.get_item(archive_id, config_file=config_file_path)
         logging.info(self.archive_item.identifier)
 
         self.item_files_mp3 = list(filter(lambda x: x["name"].endswith("mp3"), self.archive_item.files))

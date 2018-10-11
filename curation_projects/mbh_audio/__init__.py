@@ -9,7 +9,7 @@ import logging
 import os
 
 # noinspection PyPep8
-from audio_curation import audio_repo
+from audio_curation import audio_repo, archive_utility
 
 # Remove all handlers associated with the root logger object.
 from curation_projects.mbh_audio import mbh_book
@@ -48,8 +48,9 @@ class MbhRepo(audio_repo.AudioRepo):
             mp3_file.metadata.artist = episode_data.get_recorder(mbh_book.get_parva_adhyaaya_id(file_path=mp3_file.file_path))
             mp3_file.save_metadata()
 
-
-repo = MbhRepo(git_repo_paths=repo_paths, archive_id="mahAbhArata-mUla-paThanam-GP")
+archive_id="mahAbhArata-mUla-paThanam-GP"
+archive_audio_item = archive_utility.ArchiveAudioItem(archive_id=archive_id) 
+repo = MbhRepo(git_repo_paths=repo_paths, archive_audio_item=archive_audio_item)
 # repo.reprocess_files(mp3_files=repo.get_particular_normalized_files(["001-009.mp3", "001-027.mp3", "001-028.mp3", "001-043.mp3", ]))
 # repo.reprocess_files(mp3_files=repo.get_unnormalized_files())
 repo.update_archive_item(mp3_files_in=repo.get_normalized_files(), overwrite_all=True)

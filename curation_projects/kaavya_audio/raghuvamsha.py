@@ -38,7 +38,7 @@ def set_mp3_metadata(mp3_file):
     # parva_adhyaaya_id = get_parva_adhyaaya_id(file_path=mp3_file.file_path)
     mp3_file.metadata = mp3_utility.Mp3Metadata(
         title=part_id,
-        album = "रघुवंशः raghuvaMsha",
+        album = "रघुवंशम् raghuvaMsha",
         artist = "कालिदासः kAlidAsa and vedabhoomi.org"
     )
 
@@ -54,7 +54,8 @@ class RaghuvamshaRepo(audio_repo.AudioRepo):
             mp3_file.save_metadata()
 
 repo = RaghuvamshaRepo(git_repo_paths=repo_paths, archive_id="Raghuvamsha-mUlam-vedabhoomi.org", git_remote_origin_basepath="git@github.com:kAvya-audio")
-# repo.update_git(collapse_history=False, first_push=False)
+# repo.update_metadata(mp3_files=repo.get_unnormalized_files())
+repo.update_git(collapse_history=True, first_push=False)
 # exit(1)
 # repo.archive_item.update_metadata(metadata=metadata)
 # repo.archive_item.archive_item.modify_metadata(metadata=metadata)
