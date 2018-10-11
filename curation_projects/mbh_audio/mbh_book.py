@@ -14,7 +14,7 @@ def get_parva_adhyaaya_id(file_path):
     return parva_adhyaaya_part_id[0:7]
 
 
-def deduce_mp3_metadata(mp3_file):
+def set_mp3_metadata(mp3_file):
     parva_adhyaaya_part_id = os.path.splitext(mp3_file.basename)[0]
     # parva_adhyaaya_id = get_parva_adhyaaya_id(file_path=mp3_file.file_path)
     parva_id = mp3_file.basename.split("-")[0]

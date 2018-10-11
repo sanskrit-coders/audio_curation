@@ -41,7 +41,7 @@ class EpisodeData(object):
     Represents episode data stored in a Google spreadsheet.
     """
     def __init__(self, spreadhsheet_id, worksheet_name, google_key,
-                 episode_id_column, recorder_column):
+                 episode_id_column, recorder_column, script=xsanscript.DEVANAGARI):
         """
     
         :return: 
@@ -50,6 +50,7 @@ class EpisodeData(object):
         self.data_sheet = get_sheet(spreadhsheet_id=spreadhsheet_id, worksheet_name=worksheet_name, google_key=google_key)
         self.episode_id_column = episode_id_column
         self.recorder_column = recorder_column
+        self.script = script
         self.episode_df = None
         self._set_episode_df()
 
@@ -70,6 +71,9 @@ class EpisodeData(object):
         :param episode_id: 
         :return: 
         """
-        artist_devanaagarii = self.episode_df.loc[episode_id, self.recorder_column]
-        return "%s %s" % (
-        xsanscript.transliterate(artist_devanaagarii, xsanscript.DEVANAGARI, xsanscript.OPTITRANS), artist_devanaagarii)
+        if self.script == xsanscript.DEVANAGARI:
+            artist_devanaagarii = self.episode_df.loc[episode_id, self.recorder_column]
+            return "%s %s" % (
+            xsanscript.transliterate(artist_devanaagarii, xsanscript.DEVANAGARI, xsanscript.OPTITRANS), artist_devanaagarii)
+        else:
+            return self.episode_df.loc[episode_id, self.recorder_column]

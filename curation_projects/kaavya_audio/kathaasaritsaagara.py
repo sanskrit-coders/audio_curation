@@ -33,7 +33,7 @@ def get_taranga_id(file_path):
     return basename[0:3]
 
 
-def deduce_mp3_metadata(mp3_file):
+def set_mp3_metadata(mp3_file):
     taranga_part_id = os.path.splitext(mp3_file.basename)[0]
     # parva_adhyaaya_id = get_parva_adhyaaya_id(file_path=mp3_file.file_path)
     mp3_file.metadata = mp3_utility.Mp3Metadata(
@@ -51,11 +51,10 @@ class KathasaritsagaraRepo(audio_repo.AudioRepo):
         """
         episode_data = google_sheets_data.EpisodeData(spreadhsheet_id="1K8cuRtvTLQKntE7r9Kn5gOqg_ciGlwYWao4RX9Wx-TQ", worksheet_name="कार्यावली", google_key = '/home/vvasuki/sysconf/kunchikA/google_service_account_key_sanskritnlp.json', episode_id_column="आदितस्तरङ्गः", recorder_column="पठिता")
         for mp3_file in mp3_files:
-            deduce_mp3_metadata(mp3_file)
+            set_mp3_metadata(mp3_file)
             mp3_file.metadata.artist = episode_data.get_recorder(get_taranga_id(file_path=mp3_file.file_path))
             mp3_file.save_metadata()
 
-    pass
 repo = KathasaritsagaraRepo(git_repo_paths=repo_paths, archive_id="kathAsaritsAgara-shrAvaNam", git_remote_origin_basepath="git@github.com:kAvya-audio")
 # repo.update_metadata(mp3_files=repo.get_unnormalized_files())
 # repo.update_git(collapse_history=False, first_push=True)

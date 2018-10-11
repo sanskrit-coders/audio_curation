@@ -8,7 +8,7 @@ import glob
 import logging
 import os
 
-from audio_curation import audio_repo
+from audio_curation import audio_repo, mp3_utility
 
 repo_paths = ["/home/vvasuki/kAvya-audio/raghuvamsha"]
 
@@ -33,10 +33,28 @@ We would like to express gratitude to our co-ordinators Sri K. Aravinda Rao, Sri
 }
 
 
+def set_mp3_metadata(mp3_file):
+    part_id = mp3_file.basename[:-4]
+    # parva_adhyaaya_id = get_parva_adhyaaya_id(file_path=mp3_file.file_path)
+    mp3_file.metadata = mp3_utility.Mp3Metadata(
+        title=part_id,
+        album = "रघुवंशः raghuvaMsha",
+        artist = "कालिदासः kAlidAsa and vedabhoomi.org"
+    )
+
+
 class RaghuvamshaRepo(audio_repo.AudioRepo):
-    pass
+    def update_metadata(self, mp3_files):
+        """
+    
+        :param mp3_files: 
+        """
+        for mp3_file in mp3_files:
+            set_mp3_metadata(mp3_file)
+            mp3_file.save_metadata()
+
 repo = RaghuvamshaRepo(git_repo_paths=repo_paths, archive_id="Raghuvamsha-mUlam-vedabhoomi.org", git_remote_origin_basepath="git@github.com:kAvya-audio")
-repo.update_git(collapse_history=False, first_push=True)
+# repo.update_git(collapse_history=False, first_push=False)
 # exit(1)
 # repo.archive_item.update_metadata(metadata=metadata)
 # repo.archive_item.archive_item.modify_metadata(metadata=metadata)
