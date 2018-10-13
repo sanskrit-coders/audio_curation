@@ -46,7 +46,7 @@ metadata = {
     """
 }
 
-repo = RgVedaSrirangaRepo(git_repo_paths=[LOCAL_REPO_BASE_PATH], archive_id="rgveda-auro-sriranga", git_remote_origin_basepath="git@github.com:veda-audio")
+repo = RgVedaSrirangaRepo(git_repo_paths=[LOCAL_REPO_BASE_PATH], archive_id="rgveda-shriranga", git_remote_origin_basepath="git@github.com:veda-audio")
 # repo.update_git(collapse_history=False, first_push=True)
 # exit(1)
 # repo.archive_item.update_metadata(metadata=metadata)

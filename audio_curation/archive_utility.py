@@ -21,15 +21,15 @@ logging.basicConfig(
 # logging.getLogger('internetarchive').setLevel(logging.INFO)
 # logging.getLogger('requests').setLevel(logging.INFO)
 
-class ArchiveAudioItem(object):
+class ArchiveItem(object):
     """
-    Represents an archive.org audio item.
+    Represents an archive.org item.
     """
-
     def __init__(self, archive_id, config_file_path=None, mirrors_repo_structure=False):
         """
         
         :param archive_id: 
+        :param config_file_path:
         :param mirror_repo_structure: In archive item, place each file in a folder mirroring its local location.
         """
         self.mirrors_repo_structure = mirrors_repo_structure
@@ -37,13 +37,13 @@ class ArchiveAudioItem(object):
         self.archive_item = internetarchive.get_item(archive_id, config_file=config_file_path)
         logging.info(self.archive_item.identifier)
 
-        self.item_files_mp3 = list(filter(lambda x: x["name"].endswith("mp3"), self.archive_item.files))
-        self.item_filenames_mp3 = sorted(map(lambda x: x["name"], self.item_files_mp3))
-        self.item_files_dict = dict(zip(self.item_filenames_mp3, self.item_files_mp3))
         self.original_item_files = list(filter(
             lambda x: x["source"] == "original" and not x["name"].startswith(self.archive_item.identifier) and not x[
                 "name"].startswith ("_"), self.archive_item.files))
         self.original_item_file_names = sorted(map(lambda x: x["name"], self.original_item_files))
+
+    def update_metadata(self, metadata):
+        self.archive_item.modify_metadata(metadata=metadata)
 
     def get_remote_name(self, file_path):
         """
@@ -60,29 +60,29 @@ class ArchiveAudioItem(object):
     
         :param all_files: This has to include exactly _every_ file that is expected to be present in the archive item.
         """
-        local_mp3_file_basenames = list(map(lambda file: file.basename, all_files))
+        local_basenames = list(map(lambda file: file.basename, all_files))
         # Deletion
         false_original_item_file_names = list(
-            filter(lambda x: x not in local_mp3_file_basenames, self.original_item_file_names))
+            filter(lambda x: x not in local_basenames, self.original_item_file_names))
         logging.info("************************* Deleting the below unaccounted for files: \n" + pprint.pformat(
             false_original_item_file_names))
         if len(false_original_item_file_names) > 0:
             internetarchive.delete(self.archive_item.identifier, files=false_original_item_file_names,
                                    cascade_delete=True)
 
-    def update_archive_item(self, mp3_files, overwrite_all=False, dry_run=False):
+    def update_archive_item(self, files_in, overwrite_all=False, dry_run=False):
         """
-        Upload some audio files, set the metadata.
+        Upload some files.
     
-        :param mp3_files: List of  :py:class:mp3_utility.Mp3File objects.
+        :param files_in: List of  :py:class:mp3_utility.Mp3File objects.
         :param overwrite_all: Boolean.
         :param dry_run: Boolean.
         """
         logging.info("************************* Now uploading")
-        remote_names = list(map(lambda file: self.get_remote_name(file.file_path), mp3_files))
-        basename_to_file = dict(zip(remote_names, mp3_files))
+        remote_names = list(map(lambda file: self.get_remote_name(file.file_path), files_in))
+        basename_to_file = dict(zip(remote_names, files_in))
         remote_name_to_file_path = dict(
-            zip(remote_names, list(map(lambda file: file.file_path, mp3_files))))
+            zip(remote_names, list(map(lambda file: file.file_path, files_in))))
         remote_name_to_file_path_filtered = remote_name_to_file_path
         if not overwrite_all:
             remote_name_to_file_path_filtered = dict(
@@ -96,13 +96,32 @@ class ArchiveAudioItem(object):
                 responses = self.archive_item.upload(remote_name_to_file_path_filtered, verbose=False, checksum=False,
                                                      verify=False)
                 logging.info(pprint.pformat(dict(zip(remote_name_to_file_path_filtered.keys(), responses))))
-                for basename in remote_name_to_file_path_filtered.keys():
-                    self.update_mp3_metadata(mp3_file=basename_to_file[basename])
+                # It is futile to do the below as archive.org says that the file does not exist for newly uploaded files.
+                # for basename in remote_name_to_file_path_filtered.keys():
+                #     self.update_mp3_metadata(mp3_file=basename_to_file[basename])
             else:
                 logging.warning("Found nothing to update!")
 
-    def update_metadata(self, metadata):
-        self.archive_item.modify_metadata(metadata=metadata)
+
+
+
+class ArchiveAudioItem(ArchiveItem):
+    """
+    Represents an archive.org audio item.
+    """
+
+    def __init__(self, archive_id, config_file_path=None, mirrors_repo_structure=False):
+        """
+        
+        :param archive_id: 
+        :param config_file_path:
+        :param mirror_repo_structure: In archive item, place each file in a folder mirroring its local location.
+        """
+        super(ArchiveAudioItem, self).__init__(archive_id=archive_id, config_file_path=config_file_path, mirrors_repo_structure=mirrors_repo_structure)
+        self.item_files_mp3 = list(filter(lambda x: x["name"].endswith("mp3"), self.archive_item.files))
+        self.item_filenames_mp3 = sorted(map(lambda x: x["name"], self.item_files_mp3))
+        self.item_files_dict = dict(zip(self.item_filenames_mp3, self.item_files_mp3))
+
 
     def update_mp3_metadata(self, mp3_file):
         """
