@@ -139,6 +139,7 @@ class AudioRepo(object):
         """ When you add a new file to the repository, use this method to update the metadata, the local normalized file colleciton, archive and git locations. 
     
         """
+        logging.info("reprocessing %d files", len(mp3_files))
         self.update_metadata(mp3_files=mp3_files)
         self.update_git()
         update_normalized_mp3s(mp3_files=mp3_files)

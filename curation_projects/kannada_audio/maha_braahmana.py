@@ -25,10 +25,12 @@ metadata = {
 
 class MahaBrahmanaRepo(audio_repo.AudioRepo):
     pass
-archive_id="MahaBrahmana-by-DevuduAudio"
-archive_audio_item = archive_utility.ArchiveAudioItem(archive_id=archive_id, config_file_path="/home/vvasuki/kannada-audio/ia_nagu.config")
-repo = MahaBrahmanaRepo(git_repo_paths=repo_paths, archive_audio_item=archive_audio_item, git_remote_origin_basepath="git@github.com:kannada-audio")
-# repo.update_git(collapse_history=False, first_push=True)
-# exit(1)
-# repo.archive_item.update_metadata(metadata=metadata)
-# repo.archive_item.archive_item.modify_metadata(metadata=metadata)
+
+if __name__ == "__main__":
+    archive_id="MahaBrahmana-by-DevuduAudio"
+    archive_audio_item = archive_utility.ArchiveAudioItem(archive_id=archive_id, config_file_path="/home/vvasuki/kannada-audio/ia_nagu.config")
+    repo = MahaBrahmanaRepo(git_repo_paths=repo_paths, archive_audio_item=archive_audio_item, git_remote_origin_basepath="git@github.com:kannada-audio")
+    # repo.update_git(collapse_history=False, first_push=True)
+    # exit(1)
+    # repo.archive_item.update_metadata(metadata=metadata)
+    # repo.archive_item.archive_item.modify_metadata(metadata=metadata)

@@ -9,7 +9,7 @@ import logging
 import os
 
 # noinspection PyPep8
-from audio_curation import audio_repo
+from audio_curation import audio_repo, archive_utility
 
 # Remove all handlers associated with the root logger object.
 
@@ -43,9 +43,3 @@ metadata = {
 Tech details- see  https://sanskrit.github.io/projects/audio/ramayana-audio/index.html
 """
 }
-
-repo = RamayanaRepo(git_repo_paths=repo_paths, archive_id="Ramayana-recitation-Sriram-harisItArAmamUrti-Ghanapaati-v2", git_remote_origin_basepath="git@github.com:ramayana-audio")
-# repo.update_git(collapse_history=False, first_push=True)
-# exit(1)
-# repo.archive_item.update_metadata(metadata=metadata)
-# repo.update_archive_item(mp3_files_in=repo.get_unnormalized_files(), mirror_repo_structure=True, dry_run=False)
