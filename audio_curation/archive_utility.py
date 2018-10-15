@@ -58,6 +58,7 @@ class ArchiveItem(object):
         """
         Delete all unaccounted-for-files among all_files.
     
+        May not satisfactorily delete files under directories.
         :param all_files: This has to include exactly _every_ file that is expected to be present in the archive item.
         """
         local_basenames = list(map(lambda file: file.basename, all_files))
@@ -70,19 +71,18 @@ class ArchiveItem(object):
             internetarchive.delete(self.archive_item.identifier, files=false_original_item_file_names,
                                    cascade_delete=True)
 
-    def update_archive_item(self, files_in, overwrite_all=False, dry_run=False):
+    def update_archive_item(self, file_paths, overwrite_all=False, dry_run=False):
         """
         Upload some files.
     
-        :param files_in: List of  :py:class:mp3_utility.Mp3File objects.
+        :param files_paths: List of Strings.
         :param overwrite_all: Boolean.
         :param dry_run: Boolean.
         """
         logging.info("************************* Now uploading")
-        remote_names = list(map(lambda file: self.get_remote_name(file.file_path), files_in))
-        basename_to_file = dict(zip(remote_names, files_in))
+        remote_names = list(map(lambda file_path: self.get_remote_name(file_path), file_paths))
         remote_name_to_file_path = dict(
-            zip(remote_names, list(map(lambda file: file.file_path, files_in))))
+            zip(remote_names, file_paths))
         remote_name_to_file_path_filtered = remote_name_to_file_path
         if not overwrite_all:
             remote_name_to_file_path_filtered = dict(
@@ -122,6 +122,15 @@ class ArchiveAudioItem(ArchiveItem):
         self.item_filenames_mp3 = sorted(map(lambda x: x["name"], self.item_files_mp3))
         self.item_files_dict = dict(zip(self.item_filenames_mp3, self.item_files_mp3))
 
+    def update_archive_audio_item(self, files_in, overwrite_all=False, dry_run=False):
+        """
+        Upload some files.
+
+        :param files_in: List of  :py:class:mp3_utility.Mp3File objects.
+        :param overwrite_all: Boolean.
+        :param dry_run: Boolean.
+        """
+        self.update_archive_item(file_paths=list(map(lambda file: file.file_path, files_in), overwrite_all=overwrite_all, dry_run=dry_run))
 
     def update_mp3_metadata(self, mp3_file):
         """

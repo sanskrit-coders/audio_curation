@@ -133,7 +133,7 @@ class AudioRepo(object):
         mp3_files = mp3_files_in[:]
         if start_at is not None:
             mp3_files = list(itertools.dropwhile(lambda file: file.basename != start_at, mp3_files))
-        self.archive_item.update_archive_item(files_in=mp3_files, overwrite_all=overwrite_all, dry_run=dry_run)
+        self.archive_item.update_archive_audio_item(files_in=mp3_files, overwrite_all=overwrite_all, dry_run=dry_run)
 
     def reprocess_files(self, mp3_files):
         """ When you add a new file to the repository, use this method to update the metadata, the local normalized file colleciton, archive and git locations. 
