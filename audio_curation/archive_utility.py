@@ -130,7 +130,7 @@ class ArchiveAudioItem(ArchiveItem):
         :param overwrite_all: Boolean.
         :param dry_run: Boolean.
         """
-        self.update_archive_item(file_paths=list(map(lambda file: file.file_path, files_in), overwrite_all=overwrite_all, dry_run=dry_run))
+        self.update_archive_item(file_paths=list(map(lambda file: file.file_path, files_in)), overwrite_all=overwrite_all, dry_run=dry_run)
 
     def update_mp3_metadata(self, mp3_file):
         """

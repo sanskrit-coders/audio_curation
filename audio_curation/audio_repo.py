@@ -158,9 +158,10 @@ class AudioRepo(object):
             :param repo_x: Some git repo object.
             """
             untracked_files = git_repo.untracked_files.copy()
-            assert (False not in set(map(lambda file: file.endswith(".mp3") or file.endswith("md") or os.path.basename(file) in [".gitignore"], untracked_files)))
-            git_repo.index.add(untracked_files)
-            git_repo.index.commit(message="Added %d mp3-s" % len(untracked_files))
+            if len(untracked_files) > 0:
+                assert (False not in set(map(lambda file: file.endswith(".mp3") or file.endswith("md") or os.path.basename(file) in [".gitignore"], untracked_files)))
+                git_repo.index.add(untracked_files)
+                git_repo.index.commit(message="Added %d mp3-s" % len(untracked_files))
 
         # In case of collapse_history, we are:
         # following tip from https://stackoverflow.com/questions/13716658/how-to-delete-all-commit-history-in-github
