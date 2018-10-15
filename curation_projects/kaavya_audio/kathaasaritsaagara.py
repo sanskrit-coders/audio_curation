@@ -49,7 +49,7 @@ class KathasaritsagaraRepo(audio_repo.AudioRepo):
     
         :param mp3_files: 
         """
-        episode_data = google_sheets_data.EpisodeData(spreadhsheet_id="1K8cuRtvTLQKntE7r9Kn5gOqg_ciGlwYWao4RX9Wx-TQ", worksheet_name="कार्यावली", google_key = '/home/vvasuki/sysconf/kunchikA/google_service_account_key_sanskritnlp.json', episode_id_column="आदितस्तरङ्गः", recorder_column="पठिता")
+        episode_data = google_sheets_data.EpisodeData(spreadhsheet_id="1K8cuRtvTLQKntE7r9Kn5gOqg_ciGlwYWao4RX9Wx-TQ", worksheet_name="कार्यावली", google_key = '/home/vvasuki/sysconf/kunchikA/google/sanskritnlp/service_account_key.json', episode_id_column="आदितस्तरङ्गः", recorder_column="पठिता")
         for mp3_file in mp3_files:
             set_mp3_metadata(mp3_file)
             mp3_file.metadata.artist = episode_data.get_recorder(get_taranga_id(file_path=mp3_file.file_path))
