@@ -16,6 +16,7 @@
     <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="audio_curation.audio_repo" href="audio_curation_audio_repo.html" />
     <link rel="prev" title="audio_curation.mp3_utility" href="audio_curation_archive_utility.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
@@ -38,33 +39,20 @@
 <p>Various utilities to access and manipulate an archive.org audio item.</p>
 <dl class="class">
 <dt id="audio_curation.archive_utility.ArchiveAudioItem">
-<em class="property">class </em><code class="descclassname">audio_curation.archive_utility.</code><code class="descname">ArchiveAudioItem</code><span class="sig-paren">(</span><em>archive_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/audio_curation/archive_utility.html#ArchiveAudioItem"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#audio_curation.archive_utility.ArchiveAudioItem" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">audio_curation.archive_utility.</code><code class="descname">ArchiveAudioItem</code><span class="sig-paren">(</span><em>archive_id</em>, <em>config_file_path=None</em>, <em>mirrors_repo_structure=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/audio_curation/archive_utility.html#ArchiveAudioItem"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#audio_curation.archive_utility.ArchiveAudioItem" title="Permalink to this definition">¶</a></dt>
 <dd><p>Represents an archive.org audio item.</p>
 <dl class="method">
-<dt id="audio_curation.archive_utility.ArchiveAudioItem.delete_unaccounted_for_files">
-<code class="descname">delete_unaccounted_for_files</code><span class="sig-paren">(</span><em>all_files</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/audio_curation/archive_utility.html#ArchiveAudioItem.delete_unaccounted_for_files"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#audio_curation.archive_utility.ArchiveAudioItem.delete_unaccounted_for_files" title="Permalink to this definition">¶</a></dt>
-<dd><p>Delete all unaccounted-for-files among all_files.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>all_files</strong> – This has to include exactly _every_ file that is expected to be present in the archive item.</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="audio_curation.archive_utility.ArchiveAudioItem.update_archive_item">
-<code class="descname">update_archive_item</code><span class="sig-paren">(</span><em>mp3_files</em>, <em>overwrite_all=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/audio_curation/archive_utility.html#ArchiveAudioItem.update_archive_item"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#audio_curation.archive_utility.ArchiveAudioItem.update_archive_item" title="Permalink to this definition">¶</a></dt>
-<dd><p>Upload some audio files, set the metadata.</p>
+<dt id="audio_curation.archive_utility.ArchiveAudioItem.update_archive_audio_item">
+<code class="descname">update_archive_audio_item</code><span class="sig-paren">(</span><em>files_in</em>, <em>overwrite_all=False</em>, <em>dry_run=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/audio_curation/archive_utility.html#ArchiveAudioItem.update_archive_audio_item"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#audio_curation.archive_utility.ArchiveAudioItem.update_archive_audio_item" title="Permalink to this definition">¶</a></dt>
+<dd><p>Upload some files.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>mp3_files</strong> – </li>
-<li><strong>overwrite_all</strong> – </li>
+<li><strong>files_in</strong> – List of  :py:class:mp3_utility.Mp3File objects.</li>
+<li><strong>overwrite_all</strong> – Boolean.</li>
+<li><strong>dry_run</strong> – Boolean.</li>
 </ul>
 </td>
 </tr>
@@ -73,8 +61,8 @@
 </dd></dl>
 
 <dl class="method">
-<dt id="audio_curation.archive_utility.ArchiveAudioItem.update_metadata">
-<code class="descname">update_metadata</code><span class="sig-paren">(</span><em>mp3_file</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/audio_curation/archive_utility.html#ArchiveAudioItem.update_metadata"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#audio_curation.archive_utility.ArchiveAudioItem.update_metadata" title="Permalink to this definition">¶</a></dt>
+<dt id="audio_curation.archive_utility.ArchiveAudioItem.update_mp3_metadata">
+<code class="descname">update_mp3_metadata</code><span class="sig-paren">(</span><em>mp3_file</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/audio_curation/archive_utility.html#ArchiveAudioItem.update_mp3_metadata"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#audio_curation.archive_utility.ArchiveAudioItem.update_mp3_metadata" title="Permalink to this definition">¶</a></dt>
 <dd><p>Update metadata for a given file.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -85,6 +73,59 @@
 </tbody>
 </table>
 </dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="audio_curation.archive_utility.ArchiveItem">
+<em class="property">class </em><code class="descclassname">audio_curation.archive_utility.</code><code class="descname">ArchiveItem</code><span class="sig-paren">(</span><em>archive_id</em>, <em>config_file_path=None</em>, <em>mirrors_repo_structure=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/audio_curation/archive_utility.html#ArchiveItem"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#audio_curation.archive_utility.ArchiveItem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Represents an archive.org item.</p>
+<dl class="method">
+<dt id="audio_curation.archive_utility.ArchiveItem.delete_unaccounted_for_files">
+<code class="descname">delete_unaccounted_for_files</code><span class="sig-paren">(</span><em>all_files</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/audio_curation/archive_utility.html#ArchiveItem.delete_unaccounted_for_files"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#audio_curation.archive_utility.ArchiveItem.delete_unaccounted_for_files" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete all unaccounted-for-files among all_files.</p>
+<p>May not satisfactorily delete files under directories.
+:param all_files: This has to include exactly _every_ file that is expected to be present in the archive item.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="audio_curation.archive_utility.ArchiveItem.get_remote_name">
+<code class="descname">get_remote_name</code><span class="sig-paren">(</span><em>file_path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/audio_curation/archive_utility.html#ArchiveItem.get_remote_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#audio_curation.archive_utility.ArchiveItem.get_remote_name" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>file_path</strong> – A path like git_repo_name/mp3/xyz.mp3</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">If self.mirrors_repo_structure : git_repo_name/xyz.mp3, else: xyz.mp3</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="audio_curation.archive_utility.ArchiveItem.update_archive_item">
+<code class="descname">update_archive_item</code><span class="sig-paren">(</span><em>file_paths</em>, <em>overwrite_all=False</em>, <em>dry_run=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/audio_curation/archive_utility.html#ArchiveItem.update_archive_item"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#audio_curation.archive_utility.ArchiveItem.update_archive_item" title="Permalink to this definition">¶</a></dt>
+<dd><p>Upload some files.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>files_paths</strong> – List of Strings.</li>
+<li><strong>overwrite_all</strong> – Boolean.</li>
+<li><strong>dry_run</strong> – Boolean.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="audio_curation.archive_utility.ArchiveItem.update_metadata">
+<code class="descname">update_metadata</code><span class="sig-paren">(</span><em>metadata</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/audio_curation/archive_utility.html#ArchiveItem.update_metadata"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#audio_curation.archive_utility.ArchiveItem.update_metadata" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 
@@ -110,6 +151,8 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="audio_curation_archive_utility.html">audio_curation.mp3_utility</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">audio_curation.archive_utility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="audio_curation_audio_repo.html">audio_curation.audio_repo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="audio_curation_episode_data.html">audio_curation.episode_data</a></li>
 </ul>
 
 <div class="relations">
@@ -117,6 +160,7 @@
 <ul>
   <li><a href="audio_curation.html">Documentation overview</a><ul>
       <li>Previous: <a href="audio_curation_archive_utility.html" title="previous chapter">audio_curation.mp3_utility</a></li>
+      <li>Next: <a href="audio_curation_audio_repo.html" title="next chapter">audio_curation.audio_repo</a></li>
   </ul></li>
 </ul>
 </div>

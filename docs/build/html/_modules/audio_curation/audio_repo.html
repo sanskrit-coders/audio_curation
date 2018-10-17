@@ -54,7 +54,7 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Get some stats about loudness levels among a bunch of mp3 files.</span>
 
-<span class="sd">    :param mp3_files: List of Mp3File objects</span>
+<span class="sd">    :param mp3_files: List of :py:class:mp3_utility.Mp3File objects</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">loudnesses</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">mp3_file</span><span class="p">:</span> <span class="n">mp3_file</span><span class="o">.</span><span class="n">check_loudness</span><span class="p">(),</span> <span class="n">mp3_files</span><span class="p">))</span>
     <span class="n">local_mp3_file_basenames</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">basename</span><span class="p">,</span> <span class="n">mp3_files</span><span class="p">))</span>
@@ -69,10 +69,9 @@
 
 
 <div class="viewcode-block" id="update_normalized_mp3s"><a class="viewcode-back" href="../../audio_curation_audio_repo.html#audio_curation.audio_repo.update_normalized_mp3s">[docs]</a><span class="k">def</span> <span class="nf">update_normalized_mp3s</span><span class="p">(</span><span class="n">mp3_files</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Regenerate normalized files corresponding to some mp3_files</span>
+    <span class="sd">&quot;&quot;&quot;Regenerate normalized files corresponding to some mp3_files</span>
 
-<span class="sd">    :param mp3_files: List of Mp3File objects</span>
+<span class="sd">    :param mp3_files: List of :py:class:mp3_utility.Mp3File objects</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">for</span> <span class="n">mp3_file</span> <span class="ow">in</span> <span class="n">mp3_files</span><span class="p">:</span>
         <span class="n">mp3_file</span><span class="o">.</span><span class="n">save_normalized</span><span class="p">(</span><span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
@@ -81,32 +80,45 @@
 <div class="viewcode-block" id="AudioRepo"><a class="viewcode-back" href="../../audio_curation_audio_repo.html#audio_curation.audio_repo.AudioRepo">[docs]</a><span class="k">class</span> <span class="nc">AudioRepo</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; An Audio file repository.</span>
 <span class="sd">    The local repository, by default, is assumed to be a collection of git repository working directories (self.git_repo_paths) with two subfolders:</span>
+
 <span class="sd">        - mp3: Containing mp3-s for every &quot;episode&quot; in the repository. </span>
 <span class="sd">        - normalized_mp3: Automatically generated from mp3/*.mp3.</span>
 <span class="sd">    </span>
 <span class="sd">    Remote staging/ storage can happen via git remotes and an archive item with a given id.</span>
 <span class="sd">    </span>
 <span class="sd">    Current recommendations regarding git repos:</span>
+
 <span class="sd">        - be mindful of Github repo size limits (1GB as of 2018)</span>
 <span class="sd">        - setup .gitignore in the repo so as to ignore contents of normalized_mp3</span>
 <span class="sd">        - periodically collapse git history (using update_git()) so as to avoid wasted space. </span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">git_repo_paths</span><span class="p">,</span> <span class="n">archive_id</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">git_repo_paths</span><span class="p">,</span> <span class="n">archive_audio_item</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">git_remote_origin_basepath</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">git_repo_paths</span> <span class="o">=</span> <span class="n">git_repo_paths</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">git_repos</span> <span class="o">=</span> <span class="p">[</span><span class="n">git</span><span class="o">.</span><span class="n">Repo</span><span class="p">(</span><span class="n">repo_path</span><span class="p">)</span> <span class="k">for</span> <span class="n">repo_path</span> <span class="ow">in</span> <span class="n">git_repo_paths</span><span class="p">]</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">git_repos</span> <span class="o">=</span> <span class="p">[</span><span class="n">git</span><span class="o">.</span><span class="n">Repo</span><span class="p">(</span><span class="n">repo_path</span><span class="p">)</span> <span class="k">for</span> <span class="n">repo_path</span> <span class="ow">in</span> <span class="n">git_repo_paths</span><span class="p">]</span>
+        <span class="k">except</span> <span class="n">git</span><span class="o">.</span><span class="n">InvalidGitRepositoryError</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">git_repos</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">assert</span> <span class="n">git_remote_origin_basepath</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;Pass valid git repos, or specify git_remote_origin_basepath so that we may initialize repos for you.&quot;</span>
+            <span class="k">for</span> <span class="n">repo_path</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">git_repo_paths</span><span class="p">:</span>
+                <span class="n">repo</span> <span class="o">=</span> <span class="n">git</span><span class="o">.</span><span class="n">Repo</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="n">repo_path</span><span class="p">)</span>
+                <span class="n">remote_origin_path</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">git_remote_origin_basepath</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">repo_path</span><span class="p">))</span>
+                <span class="n">remote_origin_path</span> <span class="o">=</span> <span class="n">remote_origin_path</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;//&quot;</span><span class="p">,</span> <span class="s2">&quot;/&quot;</span><span class="p">)</span>
+                <span class="n">repo</span><span class="o">.</span><span class="n">create_remote</span><span class="p">(</span><span class="s2">&quot;origin&quot;</span><span class="p">,</span> <span class="n">remote_origin_path</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">git_repos</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">repo</span><span class="p">)</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">base_mp3_file_paths</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span> <span class="k">for</span> <span class="n">sublist</span> <span class="ow">in</span>
                                     <span class="p">[</span><span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">repo_path</span><span class="p">,</span> <span class="s2">&quot;mp3&quot;</span><span class="p">,</span> <span class="s2">&quot;*.mp3&quot;</span><span class="p">)))</span> <span class="k">for</span> <span class="n">repo_path</span> <span class="ow">in</span>
                                      <span class="n">git_repo_paths</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">sublist</span><span class="p">]</span>
         <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Got </span><span class="si">%d</span><span class="s2"> files&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base_mp3_file_paths</span><span class="p">)))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">base_mp3_files</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
             <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">fpath</span><span class="p">:</span> <span class="n">mp3_utility</span><span class="o">.</span><span class="n">Mp3File</span><span class="p">(</span><span class="n">file_path</span><span class="o">=</span><span class="n">fpath</span><span class="p">,</span> <span class="n">load_tags_from_file</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_mp3_file_paths</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">archive_item</span> <span class="o">=</span> <span class="n">archive_utility</span><span class="o">.</span><span class="n">ArchiveAudioItem</span><span class="p">(</span><span class="n">archive_id</span><span class="o">=</span><span class="n">archive_id</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">archive_item</span> <span class="o">=</span> <span class="n">archive_audio_item</span>
 
 <div class="viewcode-block" id="AudioRepo.get_normalized_files"><a class="viewcode-back" href="../../audio_curation_audio_repo.html#audio_curation.audio_repo.AudioRepo.get_normalized_files">[docs]</a>    <span class="k">def</span> <span class="nf">get_normalized_files</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Get all non-outdated normalized-sound files from this repo. </span>
 <span class="sd">    </span>
-<span class="sd">        :return: List of Mp3File objects</span>
+<span class="sd">        :return: List of :py:class:mp3_utility.Mp3File objects</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">normalized_files</span> <span class="o">=</span> <span class="p">[</span><span class="n">file</span><span class="o">.</span><span class="n">normalized_file</span> <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_mp3_files</span> <span class="k">if</span>
                             <span class="ow">not</span> <span class="n">file</span><span class="o">.</span><span class="n">is_normalized_file_outdated</span><span class="p">()]</span>
@@ -117,7 +129,7 @@
 <div class="viewcode-block" id="AudioRepo.get_unnormalized_files"><a class="viewcode-back" href="../../audio_curation_audio_repo.html#audio_curation.audio_repo.AudioRepo.get_unnormalized_files">[docs]</a>    <span class="k">def</span> <span class="nf">get_unnormalized_files</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Get all </span>
 <span class="sd">    </span>
-<span class="sd">        :return: List of Mp3File objects </span>
+<span class="sd">        :return: List of :py:class:mp3_utility.Mp3File objects </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">file</span> <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_mp3_files</span> <span class="k">if</span> <span class="n">file</span><span class="o">.</span><span class="n">is_normalized_file_outdated</span><span class="p">()]</span></div>
 
@@ -125,50 +137,55 @@
         <span class="sd">&quot;&quot;&quot; Get normalized-sound files corresponding to basename_list.</span>
 
 <span class="sd">        :param basename_list: A list of file names.</span>
-<span class="sd">        :return: List of Mp3File objects</span>
+<span class="sd">        :return: List of :py:class:mp3_utility.Mp3File objects</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">file</span><span class="o">.</span><span class="n">normalized_file</span> <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_mp3_files</span> <span class="k">if</span> <span class="n">file</span><span class="o">.</span><span class="n">basename</span> <span class="ow">in</span> <span class="n">basename_list</span><span class="p">]</span></div>
 
 <div class="viewcode-block" id="AudioRepo.update_archive_metadata"><a class="viewcode-back" href="../../audio_curation_audio_repo.html#audio_curation.audio_repo.AudioRepo.update_archive_metadata">[docs]</a>    <span class="k">def</span> <span class="nf">update_archive_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mp3_files</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Update archive metadata based on mp3 file metadata.</span>
 <span class="sd">    </span>
-<span class="sd">        :param mp3_files: List of Mp3File objects </span>
+<span class="sd">        :param mp3_files: List of :py:class:mp3_utility.Mp3File objects </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">mp3_file</span> <span class="ow">in</span> <span class="n">mp3_files</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">archive_item</span><span class="o">.</span><span class="n">update_metadata</span><span class="p">(</span><span class="n">mp3_file</span><span class="o">=</span><span class="n">mp3_file</span><span class="p">)</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">archive_item</span><span class="o">.</span><span class="n">update_mp3_metadata</span><span class="p">(</span><span class="n">mp3_file</span><span class="o">=</span><span class="n">mp3_file</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="AudioRepo.update_metadata"><a class="viewcode-back" href="../../audio_curation_audio_repo.html#audio_curation.audio_repo.AudioRepo.update_metadata">[docs]</a>    <span class="k">def</span> <span class="nf">update_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mp3_files</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Update mp3 metadata of a bunch of files. Meant to be overridden.</span>
 
-<span class="sd">        :param mp3_files: List of Mp3File objects</span>
+<span class="sd">        :param mp3_files: List of :py:class:mp3_utility.Mp3File objects</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">pass</span></div>
 
-<div class="viewcode-block" id="AudioRepo.update_archive_item"><a class="viewcode-back" href="../../audio_curation_audio_repo.html#audio_curation.audio_repo.AudioRepo.update_archive_item">[docs]</a>    <span class="k">def</span> <span class="nf">update_archive_item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mp3_files_in</span><span class="p">,</span> <span class="n">overwrite_all</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">start_at</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="AudioRepo.update_archive_item"><a class="viewcode-back" href="../../audio_curation_audio_repo.html#audio_curation.audio_repo.AudioRepo.update_archive_item">[docs]</a>    <span class="k">def</span> <span class="nf">update_archive_item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mp3_files_in</span><span class="p">,</span> <span class="n">overwrite_all</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">start_at</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">mirror_repo_structure</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                            <span class="n">dry_run</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Upload a bunch of files to archive.</span>
 <span class="sd">    </span>
-<span class="sd">        :param mp3_files_in: List of Mp3File objects</span>
-<span class="sd">        :param overwrite_all: </span>
-<span class="sd">        :param start_at: </span>
+<span class="sd">        :param mp3_files_in: List of :py:class:mp3_utility.Mp3File objects</span>
+<span class="sd">        :param overwrite_all: Boolean </span>
+<span class="sd">        :param start_at: String representing the basename of the file to start the uploading with.</span>
+<span class="sd">        :param mirror_repo_structure: In archive item, place each file in a folder mirroring its local location.</span>
+<span class="sd">        :param dry_run: Boolean</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">mp3_files</span> <span class="o">=</span> <span class="n">mp3_files_in</span><span class="p">[:]</span>
         <span class="k">if</span> <span class="n">start_at</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">mp3_files</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">dropwhile</span><span class="p">(</span><span class="k">lambda</span> <span class="n">file</span><span class="p">:</span> <span class="n">file</span><span class="o">.</span><span class="n">basename</span> <span class="o">!=</span> <span class="n">start_at</span><span class="p">,</span> <span class="n">mp3_files</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">archive_item</span><span class="o">.</span><span class="n">update_archive_item</span><span class="p">(</span><span class="n">mp3_files</span><span class="o">=</span><span class="n">mp3_files</span><span class="p">,</span> <span class="n">overwrite_all</span><span class="o">=</span><span class="n">overwrite_all</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">archive_item</span><span class="o">.</span><span class="n">update_archive_audio_item</span><span class="p">(</span><span class="n">files_in</span><span class="o">=</span><span class="n">mp3_files</span><span class="p">,</span> <span class="n">overwrite_all</span><span class="o">=</span><span class="n">overwrite_all</span><span class="p">,</span> <span class="n">dry_run</span><span class="o">=</span><span class="n">dry_run</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="AudioRepo.reprocess_files"><a class="viewcode-back" href="../../audio_curation_audio_repo.html#audio_curation.audio_repo.AudioRepo.reprocess_files">[docs]</a>    <span class="k">def</span> <span class="nf">reprocess_files</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mp3_files</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; When you add a new file to the repository, use this method to update the metadata, archive and git locations. </span>
+        <span class="sd">&quot;&quot;&quot; When you add a new file to the repository, use this method to update the metadata, the local normalized file colleciton, archive and git locations. </span>
 <span class="sd">    </span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;reprocessing </span><span class="si">%d</span><span class="s2"> files&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">mp3_files</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">update_metadata</span><span class="p">(</span><span class="n">mp3_files</span><span class="o">=</span><span class="n">mp3_files</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">update_git</span><span class="p">()</span>
         <span class="n">update_normalized_mp3s</span><span class="p">(</span><span class="n">mp3_files</span><span class="o">=</span><span class="n">mp3_files</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update_archive_item</span><span class="p">(</span><span class="n">mp3_files_in</span><span class="o">=</span><span class="n">mp3_files</span><span class="p">,</span> <span class="n">overwrite_all</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">start_at</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_archive_item</span><span class="p">(</span><span class="n">mp3_files_in</span><span class="o">=</span><span class="n">mp3_utility</span><span class="o">.</span><span class="n">get_normalized_files</span><span class="p">(</span><span class="n">mp3_files</span><span class="o">=</span><span class="n">mp3_files</span><span class="p">,</span> <span class="n">skip_missing</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span> <span class="n">overwrite_all</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">start_at</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="AudioRepo.update_git"><a class="viewcode-back" href="../../audio_curation_audio_repo.html#audio_curation.audio_repo.AudioRepo.update_git">[docs]</a>    <span class="k">def</span> <span class="nf">update_git</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">collapse_history</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="AudioRepo.update_git"><a class="viewcode-back" href="../../audio_curation_audio_repo.html#audio_curation.audio_repo.AudioRepo.update_git">[docs]</a>    <span class="k">def</span> <span class="nf">update_git</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">collapse_history</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">first_push</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Update git repos associated with this item.</span>
 
-<span class="sd">        :param collapse_history: Boolean. Git history involving mp3 files takes up too much space - more than what providers like GitHub offer for free. This option makes this method put up the latest files without any history. </span>
+<span class="sd">        :param collapse_history: Boolean. Git history involving mp3 files takes up too much space - more than what providers like GitHub offer for free. This option makes this method put up the latest files without any history.</span>
+<span class="sd">        :param first_push: Boolean. Do  git push --set-upstream origin master in such cases.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">def</span> <span class="nf">add_untracked</span><span class="p">(</span><span class="n">repo_x</span><span class="p">):</span>
@@ -177,23 +194,28 @@
 <span class="sd">            :param repo_x: Some git repo object.</span>
 <span class="sd">            &quot;&quot;&quot;</span>
             <span class="n">untracked_files</span> <span class="o">=</span> <span class="n">git_repo</span><span class="o">.</span><span class="n">untracked_files</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-            <span class="k">assert</span> <span class="p">(</span><span class="kc">False</span> <span class="ow">not</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">file</span><span class="p">:</span> <span class="n">file</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.mp3&quot;</span><span class="p">),</span> <span class="n">untracked_files</span><span class="p">)))</span>
-            <span class="n">git_repo</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">untracked_files</span><span class="p">)</span>
-            <span class="n">git_repo</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">commit</span><span class="p">(</span><span class="n">message</span><span class="o">=</span><span class="s2">&quot;Added </span><span class="si">%d</span><span class="s2"> mp3-s&quot;</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">untracked_files</span><span class="p">))</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">untracked_files</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">assert</span> <span class="p">(</span><span class="kc">False</span> <span class="ow">not</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">file</span><span class="p">:</span> <span class="n">file</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.mp3&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">file</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;md&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">file</span><span class="p">)</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;.gitignore&quot;</span><span class="p">],</span> <span class="n">untracked_files</span><span class="p">)))</span>
+                <span class="n">git_repo</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">untracked_files</span><span class="p">)</span>
+                <span class="n">git_repo</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">commit</span><span class="p">(</span><span class="n">message</span><span class="o">=</span><span class="s2">&quot;Added </span><span class="si">%d</span><span class="s2"> files&quot;</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">untracked_files</span><span class="p">))</span>
+            <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">untracked_files</span><span class="p">)</span>
 
-        <span class="c1"># In case of collapse_history:</span>
-        <span class="c1"># Following tip from https://stackoverflow.com/questions/13716658/how-to-delete-all-commit-history-in-github</span>
+        <span class="c1"># In case of collapse_history, we are:</span>
+        <span class="c1"># following tip from https://stackoverflow.com/questions/13716658/how-to-delete-all-commit-history-in-github</span>
         <span class="k">for</span> <span class="n">git_repo</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">git_repos</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">collapse_history</span><span class="p">:</span>
-                <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">git_repo</span><span class="o">.</span><span class="n">git</span><span class="o">.</span><span class="n">checkout</span><span class="p">(</span><span class="s2">&quot;--orphan&quot;</span><span class="p">,</span> <span class="s2">&quot;branch_for_collapsing&quot;</span><span class="p">))</span>
-            <span class="n">add_untracked</span><span class="p">(</span><span class="n">git_repo</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">collapse_history</span><span class="p">:</span>
-                <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">git_repo</span><span class="o">.</span><span class="n">git</span><span class="o">.</span><span class="n">branch</span><span class="p">(</span><span class="s2">&quot;-D&quot;</span><span class="p">,</span> <span class="s2">&quot;master&quot;</span><span class="p">))</span>
-                <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">git_repo</span><span class="o">.</span><span class="n">git</span><span class="o">.</span><span class="n">branch</span><span class="p">(</span><span class="s2">&quot;-m&quot;</span><span class="p">,</span> <span class="s2">&quot;master&quot;</span><span class="p">))</span>
-                <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">git_repo</span><span class="o">.</span><span class="n">git</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="s2">&quot;-f&quot;</span><span class="p">,</span> <span class="s2">&quot;origin&quot;</span><span class="p">,</span> <span class="s2">&quot;master&quot;</span><span class="p">))</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">git_repo</span><span class="o">.</span><span class="n">remote</span><span class="p">(</span><span class="s2">&quot;origin&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">push</span><span class="p">()</span></div></div>
-            <span class="c1"># git_repo.commit()</span>
+            <span class="n">commits_behind</span> <span class="o">=</span> <span class="n">git_repo</span><span class="o">.</span><span class="n">iter_commits</span><span class="p">(</span><span class="s1">&#39;master..origin/master&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">git_repo</span><span class="o">.</span><span class="n">untracked_files</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">commits_behind</span><span class="p">))</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">collapse_history</span><span class="p">:</span>
+                    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">git_repo</span><span class="o">.</span><span class="n">git</span><span class="o">.</span><span class="n">checkout</span><span class="p">(</span><span class="s2">&quot;--orphan&quot;</span><span class="p">,</span> <span class="s2">&quot;branch_for_collapsing&quot;</span><span class="p">))</span>
+                <span class="n">add_untracked</span><span class="p">(</span><span class="n">git_repo</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">collapse_history</span><span class="p">:</span>
+                    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">git_repo</span><span class="o">.</span><span class="n">git</span><span class="o">.</span><span class="n">branch</span><span class="p">(</span><span class="s2">&quot;-D&quot;</span><span class="p">,</span> <span class="s2">&quot;master&quot;</span><span class="p">))</span>
+                    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">git_repo</span><span class="o">.</span><span class="n">git</span><span class="o">.</span><span class="n">branch</span><span class="p">(</span><span class="s2">&quot;-m&quot;</span><span class="p">,</span> <span class="s2">&quot;master&quot;</span><span class="p">))</span>
+                    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">git_repo</span><span class="o">.</span><span class="n">git</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="s2">&quot;-f&quot;</span><span class="p">,</span> <span class="s2">&quot;origin&quot;</span><span class="p">,</span> <span class="s2">&quot;master&quot;</span><span class="p">))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">git_repo</span><span class="o">.</span><span class="n">git</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="s2">&quot;-u&quot;</span><span class="p">,</span> <span class="s2">&quot;origin&quot;</span><span class="p">,</span> <span class="s2">&quot;master&quot;</span><span class="p">))</span></div></div>
+                    <span class="c1"># The below would only work if the remote branch is set.</span>
+                    <span class="c1"># git_repo.remote(&quot;origin&quot;).push() </span>
 </pre></div>
 
           </div>

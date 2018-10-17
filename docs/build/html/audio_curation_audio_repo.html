@@ -16,6 +16,8 @@
     <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="audio_curation.episode_data" href="audio_curation_episode_data.html" />
+    <link rel="prev" title="audio_curation.archive_utility" href="audio_curation_mp3_utility.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -36,7 +38,7 @@
 <span id="audio-curation-audio-repo"></span><h1>audio_curation.audio_repo<a class="headerlink" href="#module-audio_curation.audio_repo" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="audio_curation.audio_repo.AudioRepo">
-<em class="property">class </em><code class="descclassname">audio_curation.audio_repo.</code><code class="descname">AudioRepo</code><span class="sig-paren">(</span><em>git_repo_paths</em>, <em>archive_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/audio_curation/audio_repo.html#AudioRepo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#audio_curation.audio_repo.AudioRepo" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">audio_curation.audio_repo.</code><code class="descname">AudioRepo</code><span class="sig-paren">(</span><em>git_repo_paths</em>, <em>archive_audio_item=None</em>, <em>git_remote_origin_basepath=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/audio_curation/audio_repo.html#AudioRepo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#audio_curation.audio_repo.AudioRepo" title="Permalink to this definition">¶</a></dt>
 <dd><p>An Audio file repository.
 The local repository, by default, is assumed to be a collection of git repository working directories (self.git_repo_paths) with two subfolders:</p>
 <blockquote>
@@ -46,15 +48,14 @@ The local repository, by default, is assumed to be a collection of git repositor
 </ul>
 </div></blockquote>
 <p>Remote staging/ storage can happen via git remotes and an archive item with a given id.</p>
-<dl class="docutils">
-<dt>Current recommendations regarding git repos:</dt>
-<dd><ul class="first last simple">
+<p>Current recommendations regarding git repos:</p>
+<blockquote>
+<div><ul class="simple">
 <li>be mindful of Github repo size limits (1GB as of 2018)</li>
 <li>setup .gitignore in the repo so as to ignore contents of normalized_mp3</li>
 <li>periodically collapse git history (using update_git()) so as to avoid wasted space.</li>
 </ul>
-</dd>
-</dl>
+</div></blockquote>
 <dl class="method">
 <dt id="audio_curation.audio_repo.AudioRepo.get_normalized_files">
 <code class="descname">get_normalized_files</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/audio_curation/audio_repo.html#AudioRepo.get_normalized_files"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#audio_curation.audio_repo.AudioRepo.get_normalized_files" title="Permalink to this definition">¶</a></dt>
@@ -63,7 +64,7 @@ The local repository, by default, is assumed to be a collection of git repositor
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">List of Mp3File objects</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">List of :py:class:mp3_utility.Mp3File objects</td>
 </tr>
 </tbody>
 </table>
@@ -79,7 +80,7 @@ The local repository, by default, is assumed to be a collection of git repositor
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>basename_list</strong> – A list of file names.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">List of Mp3File objects</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">List of :py:class:mp3_utility.Mp3File objects</td>
 </tr>
 </tbody>
 </table>
@@ -93,7 +94,7 @@ The local repository, by default, is assumed to be a collection of git repositor
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">List of Mp3File objects</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">List of :py:class:mp3_utility.Mp3File objects</td>
 </tr>
 </tbody>
 </table>
@@ -102,21 +103,23 @@ The local repository, by default, is assumed to be a collection of git repositor
 <dl class="method">
 <dt id="audio_curation.audio_repo.AudioRepo.reprocess_files">
 <code class="descname">reprocess_files</code><span class="sig-paren">(</span><em>mp3_files</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/audio_curation/audio_repo.html#AudioRepo.reprocess_files"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#audio_curation.audio_repo.AudioRepo.reprocess_files" title="Permalink to this definition">¶</a></dt>
-<dd><p>When you add a new file to the repository, use this method to update the metadata, archive and git locations.</p>
+<dd><p>When you add a new file to the repository, use this method to update the metadata, the local normalized file colleciton, archive and git locations.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="audio_curation.audio_repo.AudioRepo.update_archive_item">
-<code class="descname">update_archive_item</code><span class="sig-paren">(</span><em>mp3_files_in</em>, <em>overwrite_all=False</em>, <em>start_at=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/audio_curation/audio_repo.html#AudioRepo.update_archive_item"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#audio_curation.audio_repo.AudioRepo.update_archive_item" title="Permalink to this definition">¶</a></dt>
+<code class="descname">update_archive_item</code><span class="sig-paren">(</span><em>mp3_files_in</em>, <em>overwrite_all=False</em>, <em>start_at=None</em>, <em>mirror_repo_structure=False</em>, <em>dry_run=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/audio_curation/audio_repo.html#AudioRepo.update_archive_item"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#audio_curation.audio_repo.AudioRepo.update_archive_item" title="Permalink to this definition">¶</a></dt>
 <dd><p>Upload a bunch of files to archive.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>mp3_files_in</strong> – List of Mp3File objects</li>
-<li><strong>overwrite_all</strong> – </li>
-<li><strong>start_at</strong> – </li>
+<li><strong>mp3_files_in</strong> – List of :py:class:mp3_utility.Mp3File objects</li>
+<li><strong>overwrite_all</strong> – Boolean</li>
+<li><strong>start_at</strong> – String representing the basename of the file to start the uploading with.</li>
+<li><strong>mirror_repo_structure</strong> – In archive item, place each file in a folder mirroring its local location.</li>
+<li><strong>dry_run</strong> – Boolean</li>
 </ul>
 </td>
 </tr>
@@ -132,7 +135,7 @@ The local repository, by default, is assumed to be a collection of git repositor
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>mp3_files</strong> – List of Mp3File objects</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>mp3_files</strong> – List of :py:class:mp3_utility.Mp3File objects</td>
 </tr>
 </tbody>
 </table>
@@ -140,13 +143,17 @@ The local repository, by default, is assumed to be a collection of git repositor
 
 <dl class="method">
 <dt id="audio_curation.audio_repo.AudioRepo.update_git">
-<code class="descname">update_git</code><span class="sig-paren">(</span><em>collapse_history=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/audio_curation/audio_repo.html#AudioRepo.update_git"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#audio_curation.audio_repo.AudioRepo.update_git" title="Permalink to this definition">¶</a></dt>
+<code class="descname">update_git</code><span class="sig-paren">(</span><em>collapse_history=False</em>, <em>first_push=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/audio_curation/audio_repo.html#AudioRepo.update_git"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#audio_curation.audio_repo.AudioRepo.update_git" title="Permalink to this definition">¶</a></dt>
 <dd><p>Update git repos associated with this item.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>collapse_history</strong> – Boolean. Git history involving mp3 files takes up too much space - more than what providers like GitHub offer for free. This option makes this method put up the latest files without any history.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>collapse_history</strong> – Boolean. Git history involving mp3 files takes up too much space - more than what providers like GitHub offer for free. This option makes this method put up the latest files without any history.</li>
+<li><strong>first_push</strong> – Boolean. Do  git push –set-upstream origin master in such cases.</li>
+</ul>
+</td>
 </tr>
 </tbody>
 </table>
@@ -160,7 +167,7 @@ The local repository, by default, is assumed to be a collection of git repositor
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>mp3_files</strong> – List of Mp3File objects</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>mp3_files</strong> – List of :py:class:mp3_utility.Mp3File objects</td>
 </tr>
 </tbody>
 </table>
@@ -176,7 +183,7 @@ The local repository, by default, is assumed to be a collection of git repositor
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>mp3_files</strong> – List of Mp3File objects</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>mp3_files</strong> – List of :py:class:mp3_utility.Mp3File objects</td>
 </tr>
 </tbody>
 </table>
@@ -190,7 +197,7 @@ The local repository, by default, is assumed to be a collection of git repositor
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>mp3_files</strong> – List of Mp3File objects</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>mp3_files</strong> – List of :py:class:mp3_utility.Mp3File objects</td>
 </tr>
 </tbody>
 </table>
@@ -215,15 +222,19 @@ The local repository, by default, is assumed to be a collection of git repositor
 
 
 <h3>Navigation</h3>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="audio_curation_archive_utility.html">audio_curation.mp3_utility</a></li>
 <li class="toctree-l1"><a class="reference internal" href="audio_curation_mp3_utility.html">audio_curation.archive_utility</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">audio_curation.audio_repo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="audio_curation_episode_data.html">audio_curation.episode_data</a></li>
 </ul>
 
 <div class="relations">
 <h3>Related Topics</h3>
 <ul>
   <li><a href="audio_curation.html">Documentation overview</a><ul>
+      <li>Previous: <a href="audio_curation_mp3_utility.html" title="previous chapter">audio_curation.archive_utility</a></li>
+      <li>Next: <a href="audio_curation_episode_data.html" title="next chapter">audio_curation.episode_data</a></li>
   </ul></li>
 </ul>
 </div>

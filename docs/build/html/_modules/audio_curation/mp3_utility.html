@@ -36,6 +36,8 @@
 <span></span><span class="kn">import</span> <span class="nn">logging</span>
 
 <span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">pprint</span>
+
 <span class="kn">import</span> <span class="nn">eyed3</span>
 
 <span class="c1"># Remove all handlers associated with the root logger object.</span>
@@ -85,6 +87,7 @@
 
         <span class="k">if</span> <span class="n">local_tag_update_needed</span><span class="p">:</span>
             <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;***Updating </span><span class="si">%s</span><span class="s2"> locally.&quot;</span> <span class="o">%</span> <span class="n">file_path</span><span class="p">)</span>
+            <span class="n">audiofile</span><span class="o">.</span><span class="n">initTag</span><span class="p">()</span>
             <span class="n">audiofile</span><span class="o">.</span><span class="n">tag</span><span class="o">.</span><span class="n">artist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">artist</span>
             <span class="n">audiofile</span><span class="o">.</span><span class="n">tag</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">title</span>
             <span class="n">audiofile</span><span class="o">.</span><span class="n">tag</span><span class="o">.</span><span class="n">album</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">album</span>
@@ -110,7 +113,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">normalized_file</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_normalized_file</span><span class="p">(</span><span class="n">normalized_file_path</span><span class="o">=</span><span class="n">normalized_file_path</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s2">&quot;Mp3File(</span><span class="si">%s</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_path</span>
 
 <div class="viewcode-block" id="Mp3File.save_metadata"><a class="viewcode-back" href="../../audio_curation_archive_utility.html#audio_curation.mp3_utility.Mp3File.save_metadata">[docs]</a>    <span class="k">def</span> <span class="nf">save_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -134,11 +137,12 @@
         <span class="k">if</span> <span class="n">normalized_file_path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">normalized_file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">directory</span><span class="p">),</span> <span class="s2">&quot;normalized_mp3&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">basename</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_file_normalized</span><span class="p">():</span>
-            <span class="k">return</span>
-        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">normalized_file_path</span><span class="p">)</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">access</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">normalized_file_path</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">R_OK</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">normalized_file</span> <span class="o">=</span> <span class="n">Mp3File</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">normalized_file_path</span><span class="p">,</span> <span class="n">mp3_metadata</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">normalized_file</span> <span class="o">=</span> <span class="bp">self</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">normalized_file</span> <span class="o">=</span> <span class="kc">None</span></div>
+            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">normalized_file_path</span><span class="p">)</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">access</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">normalized_file_path</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">R_OK</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">normalized_file</span> <span class="o">=</span> <span class="n">Mp3File</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">normalized_file_path</span><span class="p">,</span> <span class="n">mp3_metadata</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">normalized_file</span> <span class="o">=</span> <span class="kc">None</span></div>
 
 <div class="viewcode-block" id="Mp3File.is_normalized_file_outdated"><a class="viewcode-back" href="../../audio_curation_archive_utility.html#audio_curation.mp3_utility.Mp3File.is_normalized_file_outdated">[docs]</a>    <span class="k">def</span> <span class="nf">is_normalized_file_outdated</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Is the normalized file corresponding to this file outdated?</span>
@@ -184,6 +188,17 @@
             <span class="s2">&quot;album&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">album</span>
         <span class="p">})</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_normalized_file</span><span class="p">()</span></div></div>
+
+
+<div class="viewcode-block" id="get_normalized_files"><a class="viewcode-back" href="../../audio_curation_archive_utility.html#audio_curation.mp3_utility.get_normalized_files">[docs]</a><span class="k">def</span> <span class="nf">get_normalized_files</span><span class="p">(</span><span class="n">mp3_files</span><span class="p">,</span> <span class="n">skip_missing</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="n">normalized_files_unfiltered</span> <span class="o">=</span> <span class="p">[</span><span class="n">mp3_file</span><span class="o">.</span><span class="n">normalized_file</span> <span class="k">for</span> <span class="n">mp3_file</span> <span class="ow">in</span> <span class="n">mp3_files</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">skip_missing</span><span class="p">:</span>
+        <span class="n">normalized_files_present_only</span> <span class="o">=</span> <span class="p">[</span><span class="n">mp3_file</span> <span class="k">for</span> <span class="n">mp3_file</span> <span class="ow">in</span> <span class="n">normalized_files_unfiltered</span> <span class="k">if</span> <span class="n">mp3_file</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">]</span>
+        <span class="n">skipped_files</span> <span class="o">=</span> <span class="p">[</span><span class="n">mp3_file</span> <span class="k">for</span> <span class="n">mp3_file</span> <span class="ow">in</span> <span class="n">normalized_files_unfiltered</span> <span class="k">if</span> <span class="n">mp3_file</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">normalized_files_present_only</span><span class="p">]</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Skipping: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">pprint</span><span class="o">.</span><span class="n">pformat</span><span class="p">(</span><span class="n">skipped_files</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">normalized_files_present_only</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">normalized_files_unfiltered</span></div>
 </pre></div>
 
           </div>

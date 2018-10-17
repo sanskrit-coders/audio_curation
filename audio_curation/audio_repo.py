@@ -34,8 +34,7 @@ def check_loudness(mp3_files):
 
 
 def update_normalized_mp3s(mp3_files):
-    """
-    Regenerate normalized files corresponding to some mp3_files
+    """Regenerate normalized files corresponding to some mp3_files
 
     :param mp3_files: List of :py:class:mp3_utility.Mp3File objects
     """
@@ -46,12 +45,14 @@ def update_normalized_mp3s(mp3_files):
 class AudioRepo(object):
     """ An Audio file repository.
     The local repository, by default, is assumed to be a collection of git repository working directories (self.git_repo_paths) with two subfolders:
+
         - mp3: Containing mp3-s for every "episode" in the repository. 
         - normalized_mp3: Automatically generated from mp3/*.mp3.
     
     Remote staging/ storage can happen via git remotes and an archive item with a given id.
     
     Current recommendations regarding git repos:
+
         - be mindful of Github repo size limits (1GB as of 2018)
         - setup .gitignore in the repo so as to ignore contents of normalized_mp3
         - periodically collapse git history (using update_git()) so as to avoid wasted space. 

@@ -76,7 +76,7 @@
 <span class="sd">    Represents episode data stored in a Google spreadsheet.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spreadhsheet_id</span><span class="p">,</span> <span class="n">worksheet_name</span><span class="p">,</span> <span class="n">google_key</span><span class="p">,</span>
-                 <span class="n">episode_id_column</span><span class="p">,</span> <span class="n">recorder_column</span><span class="p">):</span>
+                 <span class="n">episode_id_column</span><span class="p">,</span> <span class="n">recorder_column</span><span class="p">,</span> <span class="n">script</span><span class="o">=</span><span class="n">xsanscript</span><span class="o">.</span><span class="n">DEVANAGARI</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    </span>
 <span class="sd">        :return: </span>
@@ -85,8 +85,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">data_sheet</span> <span class="o">=</span> <span class="n">get_sheet</span><span class="p">(</span><span class="n">spreadhsheet_id</span><span class="o">=</span><span class="n">spreadhsheet_id</span><span class="p">,</span> <span class="n">worksheet_name</span><span class="o">=</span><span class="n">worksheet_name</span><span class="p">,</span> <span class="n">google_key</span><span class="o">=</span><span class="n">google_key</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">episode_id_column</span> <span class="o">=</span> <span class="n">episode_id_column</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">recorder_column</span> <span class="o">=</span> <span class="n">recorder_column</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">script</span> <span class="o">=</span> <span class="n">script</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">episode_df</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">set_episode_df</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_episode_df</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">_set_episode_df</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -105,9 +106,12 @@
 <span class="sd">        :param episode_id: </span>
 <span class="sd">        :return: </span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">artist_devanaagarii</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">episode_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">episode_id</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">recorder_column</span><span class="p">]</span>
-        <span class="k">return</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span>
-        <span class="n">xsanscript</span><span class="o">.</span><span class="n">transliterate</span><span class="p">(</span><span class="n">artist_devanaagarii</span><span class="p">,</span> <span class="n">xsanscript</span><span class="o">.</span><span class="n">DEVANAGARI</span><span class="p">,</span> <span class="n">xsanscript</span><span class="o">.</span><span class="n">OPTITRANS</span><span class="p">),</span> <span class="n">artist_devanaagarii</span><span class="p">)</span></div></div>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">script</span> <span class="o">==</span> <span class="n">xsanscript</span><span class="o">.</span><span class="n">DEVANAGARI</span><span class="p">:</span>
+            <span class="n">artist_devanaagarii</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">episode_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">episode_id</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">recorder_column</span><span class="p">]</span>
+            <span class="k">return</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span>
+            <span class="n">xsanscript</span><span class="o">.</span><span class="n">transliterate</span><span class="p">(</span><span class="n">artist_devanaagarii</span><span class="p">,</span> <span class="n">xsanscript</span><span class="o">.</span><span class="n">DEVANAGARI</span><span class="p">,</span> <span class="n">xsanscript</span><span class="o">.</span><span class="n">OPTITRANS</span><span class="p">),</span> <span class="n">artist_devanaagarii</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">episode_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">episode_id</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">recorder_column</span><span class="p">]</span></div></div>
 </pre></div>
 
           </div>
