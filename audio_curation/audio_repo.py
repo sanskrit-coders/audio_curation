@@ -161,20 +161,22 @@ class AudioRepo(object):
             if len(untracked_files) > 0:
                 assert (False not in set(map(lambda file: file.endswith(".mp3") or file.endswith("md") or os.path.basename(file) in [".gitignore"], untracked_files)))
                 git_repo.index.add(untracked_files)
-                git_repo.index.commit(message="Added %d mp3-s" % len(untracked_files))
+                git_repo.index.commit(message="Added %d files" % len(untracked_files))
+            return len(untracked_files)
 
         # In case of collapse_history, we are:
         # following tip from https://stackoverflow.com/questions/13716658/how-to-delete-all-commit-history-in-github
         for git_repo in self.git_repos:
-            if collapse_history:
-                logging.info(git_repo.git.checkout("--orphan", "branch_for_collapsing"))
-            add_untracked(git_repo)
-            if collapse_history:
-                logging.info(git_repo.git.branch("-D", "master"))
-                logging.info(git_repo.git.branch("-m", "master"))
-                logging.info(git_repo.git.push("-f", "origin", "master"))
-            else:
-                logging.info(git_repo.git.push("-u", "origin", "master"))
-                # The below would only work if the remote branch is set.
-                # git_repo.remote("origin").push() 
-            # git_repo.commit()
+            commits_behind = git_repo.iter_commits('master..origin/master')
+            if len(git_repo.untracked_files) > 0 or len(list(commits_behind)) > 0:
+                if collapse_history:
+                    logging.info(git_repo.git.checkout("--orphan", "branch_for_collapsing"))
+                add_untracked(git_repo)
+                if collapse_history:
+                    logging.info(git_repo.git.branch("-D", "master"))
+                    logging.info(git_repo.git.branch("-m", "master"))
+                    logging.info(git_repo.git.push("-f", "origin", "master"))
+                else:
+                    logging.info(git_repo.git.push("-u", "origin", "master"))
+                    # The below would only work if the remote branch is set.
+                    # git_repo.remote("origin").push() 
