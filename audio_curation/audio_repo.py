@@ -42,6 +42,19 @@ def update_normalized_mp3s(mp3_files):
         mp3_file.save_normalized(overwrite=True)
 
 
+def _get_repo(repo_path, git_remote_origin_basepath=None):
+    try:
+        return git.Repo(repo_path)
+    except git.InvalidGitRepositoryError:
+        assert git_remote_origin_basepath is not None, "Pass valid git repos, or specify git_remote_origin_basepath so that we may initialize repos for you."
+        repo = git.Repo.init(repo_path)
+        remote_origin_path = "%s/%s" % (git_remote_origin_basepath, os.path.basename(repo_path))
+        remote_origin_path = remote_origin_path.replace("//", "/")
+        repo.create_remote("origin", remote_origin_path)
+        return repo
+    
+
+
 class AudioRepo(object):
     """ An Audio file repository.
     The local repository, by default, is assumed to be a collection of git repository working directories (self.git_repo_paths) with two subfolders:
@@ -60,17 +73,7 @@ class AudioRepo(object):
 
     def __init__(self, git_repo_paths, archive_audio_item=None, git_remote_origin_basepath=None):
         self.git_repo_paths = git_repo_paths
-        try:
-            self.git_repos = [git.Repo(repo_path) for repo_path in git_repo_paths]
-        except git.InvalidGitRepositoryError:
-            self.git_repos = []
-            assert git_remote_origin_basepath is not None, "Pass valid git repos, or specify git_remote_origin_basepath so that we may initialize repos for you."
-            for repo_path in self.git_repo_paths:
-                repo = git.Repo.init(repo_path)
-                remote_origin_path = "%s/%s" % (git_remote_origin_basepath, os.path.basename(repo_path))
-                remote_origin_path = remote_origin_path.replace("//", "/")
-                repo.create_remote("origin", remote_origin_path)
-                self.git_repos.append(repo)
+        self.git_repos = [_get_repo(repo_path, git_remote_origin_basepath=git_remote_origin_basepath) for repo_path in git_repo_paths]
 
         self.base_mp3_file_paths = [item for sublist in
                                     [sorted(glob.glob(os.path.join(repo_path, "mp3", "*.mp3"))) for repo_path in
@@ -97,6 +100,16 @@ class AudioRepo(object):
         :return: List of :py:class:mp3_utility.Mp3File objects 
         """
         return [file for file in self.base_mp3_files if file.is_normalized_file_outdated()]
+
+    def delete_obsolete_normalized_files(self):
+        normalized_files = self.get_normalized_files()
+        normalized_file_paths_retainable = [file.file_path for file in normalized_files]
+        normalized_mp3_file_paths = [item for sublist in
+                                    [sorted(glob.glob(os.path.join(repo_path, "normalized_mp3", "*.mp3"))) for repo_path in self.git_repo_paths] for item in sublist]
+        for file_path in normalized_mp3_file_paths:
+            if file_path not in normalized_file_paths_retainable:
+                logging.info("Removing obsolete file: %s", file_path)
+                os.remove(file_path)
 
     def get_particular_normalized_files(self, basename_list):
         """ Get normalized-sound files corresponding to basename_list.
@@ -143,6 +156,7 @@ class AudioRepo(object):
         logging.info("reprocessing %d files", len(mp3_files))
         self.update_metadata(mp3_files=mp3_files)
         self.update_git()
+        self.delete_obsolete_normalized_files()
         update_normalized_mp3s(mp3_files=mp3_files)
         self.update_archive_item(mp3_files_in=mp3_utility.get_normalized_files(mp3_files=mp3_files, skip_missing=True), overwrite_all=True, start_at=None)
 
