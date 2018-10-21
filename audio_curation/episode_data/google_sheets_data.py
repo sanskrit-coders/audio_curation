@@ -78,3 +78,17 @@ class EpisodeData(object):
             xsanscript.transliterate(artist_devanaagarii, xsanscript.DEVANAGARI, xsanscript.OPTITRANS), artist_devanaagarii)
         else:
             return self.episode_df.loc[episode_id, self.recorder_column]
+
+    def get_title(self, episode_id):
+        """
+        Read the title of this episode.
+    
+        :param episode_id: 
+        :return: 
+        """
+        if self.script == xsanscript.DEVANAGARI:
+            artist_devanaagarii = self.episode_df.loc[episode_id, self.title_column]
+            return "%s %s" % (
+                xsanscript.transliterate(artist_devanaagarii, xsanscript.DEVANAGARI, xsanscript.OPTITRANS), artist_devanaagarii)
+        else:
+            return self.episode_df.loc[episode_id, self.title_column]
