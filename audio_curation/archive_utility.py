@@ -54,7 +54,7 @@ class ArchiveItem(object):
         basename = os.path.basename(file_path)
         return os.path.join(os.path.basename(os.path.dirname(os.path.dirname(file_path))), basename) if self.mirrors_repo_structure else basename
 
-    def delete_unaccounted_for_files(self, all_files):
+    def delete_unaccounted_for_files(self, all_files, dry_run=False):
         """
         Delete all unaccounted-for-files among all_files.
     
@@ -67,9 +67,9 @@ class ArchiveItem(object):
             filter(lambda x: x not in local_basenames, self.original_item_file_names))
         logging.info("************************* Deleting the below unaccounted for files: \n" + pprint.pformat(
             false_original_item_file_names))
-        if len(false_original_item_file_names) > 0:
-            internetarchive.delete(self.archive_item.identifier, files=false_original_item_file_names,
-                                   cascade_delete=True)
+        if len(false_original_item_file_names) > 0 and not dry_run:
+                internetarchive.delete(self.archive_item.identifier, files=false_original_item_file_names,
+                                       cascade_delete=True)
 
     def update_archive_item(self, file_paths, overwrite_all=False, dry_run=False):
         """

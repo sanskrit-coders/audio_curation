@@ -29,6 +29,12 @@ class Mp3Metadata(object):
         self.album = album
         self.album_artist = album_artist
 
+    @classmethod
+    def from_file(cls, file_path):
+        self = Mp3Metadata()
+        self.get_from_file(file_path)
+        return self
+
     def get_from_file(self, file_path):
         """
 
@@ -101,11 +107,13 @@ class Mp3File(object):
         """
         if normalized_file_path is None:
             self.normalized_file_path = os.path.join(os.path.dirname(self.directory), "normalized_mp3", self.basename)
+        else:
+            self.normalized_file_path = normalized_file_path
         if self.is_file_normalized():
             self.normalized_file = self
         else:
             if os.path.isfile(self.normalized_file_path) and os.access(self.normalized_file_path, os.R_OK):
-                self.normalized_file = Mp3File(self.normalized_file_path, mp3_metadata=self.metadata)
+                self.normalized_file = Mp3File(self.normalized_file_path, mp3_metadata=self.metadata, normalized_file_path=self.normalized_file_path)
             else:
                 self.normalized_file = None
 
@@ -155,14 +163,12 @@ class Mp3File(object):
         self.set_normalized_file()
 
     def rename_to_title(self):
-        title_fixed = self.metadata.title.replace(" ", "_")
-        new_basename = title_fixed + ".mp3"
+        new_basename = filename_from_title(self.metadata.title)
         new_filepath = os.path.join(self.directory, new_basename)
         logging.info("renaming %s to %s", self.file_path, new_filepath)
         os.rename(self.file_path, new_filepath)
         self.basename = new_basename
         self.file_path = new_filepath
-
 
 def get_normalized_files(mp3_files, skip_missing=True):
     normalized_files_unfiltered = [mp3_file.normalized_file for mp3_file in mp3_files]
@@ -173,3 +179,9 @@ def get_normalized_files(mp3_files, skip_missing=True):
         return normalized_files_present_only
     else:
         return normalized_files_unfiltered
+
+
+def filename_from_title(title):
+    title_fixed = title.replace(" ", "_").replace(".mp3", "")
+    return title_fixed + ".mp3"
+    

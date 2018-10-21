@@ -25,13 +25,22 @@ metadata = {
 
 def set_mp3_metadata(mp3_file):
     mp3_file.metadata = mp3_utility.Mp3Metadata(
-        album = "महाभारतम् mahA-brAhmaNa",
+        album = "ಮಹಾ-ಬ್ರಾಹ್ಮಣ mahA-brAhmaNa",
         artist="ಕಡಬ-ವಾಸುಕಿ kaDaba-vAsuki",
         album_artist = "ದೇವುಡು ನರಸಿಂಹ-ಶಾಸ್ತ್ರೀ devuDu-narasimha-shAstrI"
     )
 
 
 class MahaBrahmanaRepo(audio_repo.AudioRepo):
+    def update_metadata(self, mp3_files):
+        """
+    
+        :param mp3_files: 
+        """
+        for mp3_file in mp3_files:
+            set_mp3_metadata(mp3_file)
+            mp3_file.metadata.title = mp3_file.basename[:-4]
+            mp3_file.save_metadata()
 
     def update_metadata_initial(self, mp3_files):
         """
@@ -50,8 +59,9 @@ if __name__ == "__main__":
     repo = MahaBrahmanaRepo(git_repo_paths=repo_paths, archive_audio_item=archive_audio_item, git_remote_origin_basepath="git@github.com:kannada-audio")
     # repo.rename_to_titles(mp3_files=repo.get_unnormalized_files())
     # repo.update_metadata(mp3_files=repo.get_unnormalized_files())
-    repo.reprocess_files(mp3_files=repo.get_unnormalized_files(), update_git=False)
+    # repo.reprocess_files(mp3_files=repo.base_mp3_files, update_git=False)
     # repo.update_git(collapse_history=True, first_push=False)
     # exit(1)
     # repo.archive_item.update_metadata(metadata=metadata)
-    # repo.archive_item.archive_item.modify_metadata(metadata=metadata)
+    # repo.update_archive_metadata(mp3_files=repo.get_normalized_files())
+    archive_audio_item.delete_unaccounted_for_files(all_files=repo.get_normalized_files(), dry_run=False)

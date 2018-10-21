@@ -52,7 +52,15 @@ def _get_repo(repo_path, git_remote_origin_basepath=None):
         remote_origin_path = remote_origin_path.replace("//", "/")
         repo.create_remote("origin", remote_origin_path)
         return repo
-    
+
+
+def title_based_normalized_file_namer(fpath):
+    metadata = mp3_utility.Mp3Metadata.from_file(fpath)
+    new_basename = mp3_utility.filename_from_title(metadata.title)
+    return os.path.join(os.path.dirname(os.path.dirname(fpath)), "normalized_mp3", new_basename)
+
+def basename_based_normalized_file_namer(fpath):
+    return os.path.join(os.path.dirname(os.path.dirname(fpath)), "normalized_mp3", os.path.basename(fpath))
 
 
 class AudioRepo(object):
@@ -70,8 +78,7 @@ class AudioRepo(object):
         - setup .gitignore in the repo so as to ignore contents of normalized_mp3
         - periodically collapse git history (using update_git()) so as to avoid wasted space. 
     """
-
-    def __init__(self, git_repo_paths, archive_audio_item=None, git_remote_origin_basepath=None):
+    def __init__(self, git_repo_paths, archive_audio_item=None, git_remote_origin_basepath=None, normalized_file_namer = basename_based_normalized_file_namer):
         self.git_repo_paths = git_repo_paths
         self.git_repos = [_get_repo(repo_path, git_remote_origin_basepath=git_remote_origin_basepath) for repo_path in git_repo_paths]
 
@@ -80,7 +87,7 @@ class AudioRepo(object):
                                      git_repo_paths] for item in sublist]
         logging.info("Got %d files" % (len(self.base_mp3_file_paths)))
         self.base_mp3_files = list(
-            map(lambda fpath: mp3_utility.Mp3File(file_path=fpath, load_tags_from_file=True), self.base_mp3_file_paths))
+            map(lambda fpath: mp3_utility.Mp3File(file_path=fpath, load_tags_from_file=True, normalized_file_path=normalized_file_namer(fpath)), self.base_mp3_file_paths))
         self.archive_item = archive_audio_item
 
     def get_normalized_files(self):
