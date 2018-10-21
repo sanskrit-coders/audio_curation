@@ -53,6 +53,7 @@ if __name__ == "__main__":
     repo = MahaKshatriyaRepo(git_repo_paths=repo_paths, archive_audio_item=archive_audio_item, git_remote_origin_basepath="git@github.com:kannada-audio")
     # repo.update_metadata_initial(mp3_files=repo.get_unnormalized_files())
     repo.reprocess_files(mp3_files=repo.get_unnormalized_files())
+    repo.update_archive_item(mp3_files_in=repo.get_normalized_files())
     # repo.update_git(collapse_history=False, first_push=True)
     # exit(1)
     # repo.archive_item.update_metadata(metadata=metadata)
