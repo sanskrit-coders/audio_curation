@@ -33,7 +33,7 @@ def set_mp3_metadata(mp3_file):
 
 class MahaBrahmanaRepo(audio_repo.AudioRepo):
 
-    def update_metadata(self, mp3_files):
+    def update_metadata_initial(self, mp3_files):
         """
     
         :param mp3_files: 
@@ -48,9 +48,10 @@ if __name__ == "__main__":
     archive_id="MahaBrahmana-by-DevuduAudio"
     archive_audio_item = archive_utility.ArchiveAudioItem(archive_id=archive_id, config_file_path="/home/vvasuki/kannada-audio/ia_nagu.config")
     repo = MahaBrahmanaRepo(git_repo_paths=repo_paths, archive_audio_item=archive_audio_item, git_remote_origin_basepath="git@github.com:kannada-audio")
-    repo.update_metadata(mp3_files=repo.get_unnormalized_files())
-    # repo.reprocess_files(mp3_files=repo.get_unnormalized_files())
-    # repo.update_git(collapse_history=False, first_push=True)
+    # repo.rename_to_titles(mp3_files=repo.get_unnormalized_files())
+    # repo.update_metadata(mp3_files=repo.get_unnormalized_files())
+    repo.reprocess_files(mp3_files=repo.get_unnormalized_files(), update_git=False)
+    # repo.update_git(collapse_history=True, first_push=False)
     # exit(1)
     # repo.archive_item.update_metadata(metadata=metadata)
     # repo.archive_item.archive_item.modify_metadata(metadata=metadata)

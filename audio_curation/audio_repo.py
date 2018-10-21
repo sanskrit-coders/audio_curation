@@ -149,13 +149,18 @@ class AudioRepo(object):
             mp3_files = list(itertools.dropwhile(lambda file: file.basename != start_at, mp3_files))
         self.archive_item.update_archive_audio_item(files_in=mp3_files, overwrite_all=overwrite_all, dry_run=dry_run)
 
-    def reprocess_files(self, mp3_files):
+    def rename_to_titles(self, mp3_files):
+        for mp3_file in mp3_files:
+            mp3_file.rename_to_title()
+
+    def reprocess_files(self, mp3_files, update_git=True):
         """ When you add a new file to the repository, use this method to update the metadata, the local normalized file colleciton, archive and git locations. 
     
         """
         logging.info("reprocessing %d files", len(mp3_files))
         self.update_metadata(mp3_files=mp3_files)
-        self.update_git()
+        if update_git:
+            self.update_git()
         self.delete_obsolete_normalized_files()
         update_normalized_mp3s(mp3_files=mp3_files)
         self.update_archive_item(mp3_files_in=mp3_utility.get_normalized_files(mp3_files=mp3_files, skip_missing=True), overwrite_all=True, start_at=None)
@@ -183,12 +188,13 @@ class AudioRepo(object):
         # following tip from https://stackoverflow.com/questions/13716658/how-to-delete-all-commit-history-in-github
         for git_repo in self.git_repos:
             commits_behind = git_repo.iter_commits('master..origin/master')
-            if len(git_repo.untracked_files) > 0 or len(list(commits_behind)) > 0:
+            if collapse_history or len(git_repo.untracked_files) > 0 or len(list(commits_behind)) > 0:
                 if collapse_history:
                     logging.info(git_repo.git.checkout("--orphan", "branch_for_collapsing"))
                 add_untracked(git_repo)
                 if collapse_history:
-                    logging.info(git_repo.git.branch("-D", "master"))
+                    if "master" in [h.name for h in git_repo.branches]:
+                        logging.info(git_repo.git.branch("-D", "master"))
                     logging.info(git_repo.git.branch("-m", "master"))
                     logging.info(git_repo.git.push("-f", "origin", "master"))
                 else:

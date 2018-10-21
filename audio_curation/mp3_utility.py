@@ -154,6 +154,15 @@ class Mp3File(object):
         })
         self.set_normalized_file()
 
+    def rename_to_title(self):
+        title_fixed = self.metadata.title.replace(" ", "_")
+        new_basename = title_fixed + ".mp3"
+        new_filepath = os.path.join(self.directory, new_basename)
+        logging.info("renaming %s to %s", self.file_path, new_filepath)
+        os.rename(self.file_path, new_filepath)
+        self.basename = new_basename
+        self.file_path = new_filepath
+
 
 def get_normalized_files(mp3_files, skip_missing=True):
     normalized_files_unfiltered = [mp3_file.normalized_file for mp3_file in mp3_files]
