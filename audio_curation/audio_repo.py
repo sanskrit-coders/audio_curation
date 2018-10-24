@@ -179,26 +179,32 @@ class AudioRepo(object):
         :param first_push: Boolean. Do  git push --set-upstream origin master in such cases.
         """
 
-        def add_untracked(repo_x):
-            """Add all untracked items in a repo.
+        def add_changed(repo_x):
+            """Add all untracked or changed items in a repo.
 
             :param repo_x: Some git repo object.
             """
-            untracked_files = git_repo.untracked_files.copy()
-            if len(untracked_files) > 0:
-                assert (False not in set(map(lambda file: file.endswith(".mp3") or file.endswith("md") or os.path.basename(file) in [".gitignore"], untracked_files)))
-                git_repo.index.add(untracked_files)
-                git_repo.index.commit(message="Added %d files" % len(untracked_files))
-            return len(untracked_files)
+            changed_files = [ item.a_path for item in repo_x.index.diff(None) ]
+            if len(changed_files) > 0:
+                assert (False not in set(map(lambda file: file.endswith(".mp3") or file.endswith("md") or os.path.basename(file) in [".gitignore"], changed_files)))
+                for fpath in changed_files:
+                    if os.path.exists(os.path.join(repo_x.working_tree_dir, fpath)):
+                        repo_x.index.add([fpath])
+                    else:
+                        repo_x.index.remove([fpath],working_tree = True)
+                repo_x.index.commit(message="Changed %d files\n\n%s" % (len(changed_files), changed_files))
+            return len(changed_files)
 
         # In case of collapse_history, we are:
         # following tip from https://stackoverflow.com/questions/13716658/how-to-delete-all-commit-history-in-github
         for git_repo in self.git_repos:
             commits_behind = git_repo.iter_commits('master..origin/master')
-            if collapse_history or len(git_repo.untracked_files) > 0 or len(list(commits_behind)) > 0:
+            changed_files = [ item.a_path for item in git_repo.index.diff(None) ]
+            logging.info("Got %d changed files for %s: %s", len(changed_files), git_repo.git_dir, changed_files)
+            if collapse_history or len(changed_files) > 0 or len(list(commits_behind)) > 0:
                 if collapse_history:
                     logging.info(git_repo.git.checkout("--orphan", "branch_for_collapsing"))
-                add_untracked(git_repo)
+                add_changed(git_repo)
                 if collapse_history:
                     if "master" in [h.name for h in git_repo.branches]:
                         logging.info(git_repo.git.branch("-D", "master"))
