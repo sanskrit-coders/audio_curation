@@ -35,6 +35,7 @@ def update_rgveda_sriranga():
     ऋग्वेदः। शकल-संहिता।
     Reciters: Sri Shyama Sundara Sharma, Sri Satya Krishna Bhatta
     via aurobindo.ru, by Sriranga Technologies Pvt. Ltd. (2012)
+    Sharing permitted by shrI Arjun Kashyap of Sriranga Technologies Pvt. Ltd. ( 20181023 - https://imgur.com/a/ftlYJ79 )
     Tech details- see  https://sanskrit.github.io/projects/audio/veda-audio/index.html
     """
     }
@@ -44,9 +45,9 @@ def update_rgveda_sriranga():
     repo = RgVedaRepo(git_repo_paths=[os.path.join("/home/vvasuki/veda-audio/", "rgveda-shriranga")], archive_audio_item=archive_audio_item, git_remote_origin_basepath="git@github.com:veda-audio")
     # repo.update_git(collapse_history=False, first_push=True)
     # exit(1)
-    # repo.archive_item.update_metadata(metadata=metadata)
+    repo.archive_item.update_metadata(metadata=metadata)
     # repo.archive_item.delete_unaccounted_for_files(all_files=repo.get_unnormalized_files())
-    repo.update_archive_item(mp3_files_in=repo.get_unnormalized_files(), overwrite_all=False)
+    # repo.update_archive_item(mp3_files_in=repo.get_unnormalized_files(), overwrite_all=False)
 
 
 
@@ -72,4 +73,4 @@ def update_rgveda_auro():
 
 
 if __name__ == "__main__":
-    update_rgveda_auro()
+    update_rgveda_sriranga()
