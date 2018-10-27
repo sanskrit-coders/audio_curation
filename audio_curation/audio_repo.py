@@ -161,7 +161,7 @@ class AudioRepo(object):
             mp3_file.rename_to_title()
 
     def reprocess_files(self, mp3_files, update_git=True):
-        """ When you add a new file to the repository, use this method to update the metadata, the local normalized file colleciton, archive and git locations. 
+        """ When you add a new file to the repository, use this method to update the metadata, the local normalized file colleciton, archive and git locations.
     
         """
         logging.info("reprocessing %d files", len(mp3_files))
