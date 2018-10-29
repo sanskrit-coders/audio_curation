@@ -56,8 +56,11 @@ def _get_repo(repo_path, git_remote_origin_basepath=None):
 
 def title_based_normalized_file_namer(fpath):
     metadata = mp3_utility.Mp3Metadata.from_file(fpath)
-    new_basename = mp3_utility.filename_from_title(metadata.title)
-    return os.path.join(os.path.dirname(os.path.dirname(fpath)), "normalized_mp3", new_basename)
+    if metadata.title is None:
+        return basename_based_normalized_file_namer(fpath)
+    else:
+        new_basename = mp3_utility.filename_from_title(metadata.title)
+        return os.path.join(os.path.dirname(os.path.dirname(fpath)), "normalized_mp3", new_basename)
 
 def basename_based_normalized_file_namer(fpath):
     return os.path.join(os.path.dirname(os.path.dirname(fpath)), "normalized_mp3", os.path.basename(fpath))
