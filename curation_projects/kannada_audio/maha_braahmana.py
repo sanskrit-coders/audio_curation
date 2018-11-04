@@ -64,4 +64,4 @@ if __name__ == "__main__":
     # exit(1)
     # repo.archive_item.update_metadata(metadata=metadata)
     # repo.update_archive_metadata(mp3_files=repo.get_normalized_files())
-    archive_audio_item.delete_unaccounted_for_files(all_files=repo.get_normalized_files(), dry_run=False)
+    # archive_audio_item.delete_unaccounted_for_files(all_files=repo.get_normalized_files(), dry_run=False)

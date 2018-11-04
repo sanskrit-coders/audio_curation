@@ -29,6 +29,9 @@ class Mp3Metadata(object):
         self.album = album
         self.album_artist = album_artist
 
+    def __repr__(self):
+        return "Title: %s, Artist: %s, Album: %s, Album artist: %s" % (self.title, self.artist, self.album, self.album_artist)
+
     @classmethod
     def from_file(cls, file_path):
         self = Mp3Metadata()
@@ -58,6 +61,7 @@ class Mp3Metadata(object):
 
         if local_tag_update_needed:
             logging.info("***Updating %s locally." % file_path)
+            logging.info("***Info: %s" % self)
             audiofile.initTag()
             audiofile.tag.artist = self.artist
             audiofile.tag.title = self.title
@@ -182,6 +186,6 @@ def get_normalized_files(mp3_files, skip_missing=True):
 
 
 def filename_from_title(title):
-    title_fixed = title.replace(" ", "_").replace(".mp3", "")
+    title_fixed = title.strip().replace(" ", "_").replace(".mp3", "")
     return title_fixed + ".mp3"
     
