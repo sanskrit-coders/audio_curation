@@ -55,6 +55,6 @@ if __name__ == "__main__":
     # repo.update_metadata_initial(mp3_files=repo.get_unnormalized_files())
     # repo.update_git(collapse_history=True, first_push=True)
     # repo.reprocess_files(mp3_files=repo.get_unnormalized_files())
-    repo.update_archive_item(mp3_files_in=repo.get_normalized_files())
+    # repo.update_archive_item(mp3_files_in=repo.get_normalized_files())
     # archive_audio_item.update_metadata(metadata=metadata)
     archive_audio_item.delete_unaccounted_for_files(all_files=repo.get_normalized_files(), dry_run=False)

@@ -18,6 +18,23 @@ logging.basicConfig(
 logging.getLogger('eyed3').setLevel(logging.INFO)
 
 
+def detect_leading_silence(sound, silence_threshold=-50.0, chunk_size=10):
+    '''
+    sound is a pydub.AudioSegment
+    silence_threshold in dB
+    chunk_size in ms
+
+    iterate over chunks until you find the first one with sound
+    '''
+    trim_ms = 0 # ms
+
+    assert chunk_size > 0 # to avoid infinite loop
+    while sound[trim_ms:trim_ms+chunk_size].dBFS < silence_threshold and trim_ms < len(sound):
+        trim_ms += chunk_size
+
+    return trim_ms
+
+
 class Mp3Metadata(object):
     """
     Models the metadata in an mp3 file.
@@ -157,6 +174,14 @@ class Mp3File(object):
         # Set loudness to the standard level:  -16LUFS or roughly -16dbFS
         # Eventually we would want to use LUFS. One would need to switch libraries or await resolution of https://github.com/jiaaro/pydub/issues/321 .
         normalized_sound = normalized_sound.apply_gain(-16 - sound.dBFS)
+
+        # Remove leading and ending silence beyond 1s and .5s respectively
+        start_trim = max(detect_leading_silence(normalized_sound) - 1000, 0)
+        end_trim = max(detect_leading_silence(normalized_sound.reverse()) - 500, 0)
+        
+        duration = len(normalized_sound)
+        normalized_sound = normalized_sound[start_trim:duration-end_trim]
+        
         logging.info(normalized_sound.dBFS)
         os.makedirs(os.path.dirname(self.normalized_file_path), exist_ok=True)
         self.metadata.get_from_file(self.file_path)
