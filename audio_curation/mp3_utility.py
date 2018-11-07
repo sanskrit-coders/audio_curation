@@ -18,6 +18,7 @@ logging.basicConfig(
 logging.getLogger('eyed3').setLevel(logging.INFO)
 
 
+## TODO: Move this to pydub.silence
 def detect_leading_silence(sound, silence_threshold=-50.0, chunk_size=10):
     '''
     sound is a pydub.AudioSegment
