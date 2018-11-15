@@ -44,9 +44,10 @@ class Gopal2015Repo(audio_repo.AudioRepo):
         """
         for mp3_file in mp3_files:
             mp3_file.metadata = mp3_utility.Mp3Metadata(
-                title = mp3_file.title_from_filename(),
-                album = "jaiminIya-sAma-gAna-paravastu-tradition-gopAla-2015 जैमिनीय-परवस्तु-साम-गानम् २०१५",
-                artist = "paravastu-gopAla परवस्तु-गोपालः"
+                title=mp3_file.title_from_filename(),
+                album="jaiminIya-sAma-gAna-paravastu-tradition-gopAla-2015 जैमिनीय-परवस्तु-साम-गानम् २०१५",
+                album_artist="paravastu-gopAla परवस्तु-गोपालः",
+                artist="paravastu-gopAla परवस्तु-गोपालः"
             )
             mp3_file.save_metadata()
 
@@ -67,8 +68,9 @@ def update_gopal_2015(gmusic_client):
     }
     archive_id="jaiminIya-sAma-gAna-paravastu-tradition-gopAla-2015"
     archive_audio_item = archive_utility.ArchiveAudioItem(archive_id=archive_id)
-    repo = Gopal2015Repo(git_repo_paths=[os.path.join("/home/vvasuki/veda-audio/jaiminIya-sAma-paravastu", "jaiminIya-sAma-gAna-paravastu-tradition-gopAla-2015")], archive_audio_item=None, git_remote_origin_basepath="git@github.com:veda-audio", gmusic_client=gmusic_client)
-    repo.reprocess_files(mp3_files=repo.get_unnormalized_files(), update_git=False, dry_run=False, normalize_files=False)
+    archive_audio_item.update_metadata(metadata=metadata)
+    repo = Gopal2015Repo(git_repo_paths=[os.path.join("/home/vvasuki/veda-audio/jaiminIya-sAma-paravastu", "jaiminIya-sAma-gAna-paravastu-tradition-gopAla-2015")], archive_audio_item=archive_audio_item, git_remote_origin_basepath="git@github.com:veda-audio", gmusic_client=gmusic_client)
+    repo.reprocess_files(mp3_files=repo.get_unnormalized_files(), update_git=False, dry_run=True, normalize_files=False)
     # gmusic_client.upload(mp3_files=repo.get_unnormalized_files(), dry_run=True)
 
 if __name__ == "__main__":
