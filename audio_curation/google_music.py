@@ -53,7 +53,12 @@ class GMusicClient(object):
             with open(destination_path, 'wb') as f:
                 f.write(audio)
 
-    def upload(self, mp3_file_paths):
-        for mp3_file_path in mp3_file_paths:
-            logging.info("Uploading %s", mp3_file_path)
-            self.mm_client.upload(mp3_file_path)
+    def upload(self, mp3_files, dry_run=False):
+        for mp3_file in mp3_files:
+            already_present = len(list(filter(lambda track: mp3_file.metadata.album == track["album"] and mp3_file.metadata.title == track["title"], self.uploaded_tracks))) > 0
+            if already_present:
+                logging.info("Skipping %s", mp3_file)
+            else:
+                logging.info("Uploading %s", mp3_file)
+                if not dry_run:
+                    self.mm_client.upload(mp3_file.path)
