@@ -200,6 +200,9 @@ class Mp3File(object):
         self.basename = new_basename
         self.file_path = new_filepath
 
+    def title_from_filename(self):
+        return self.basename[:-4]
+
 def get_normalized_files(mp3_files, skip_missing=True):
     normalized_files_unfiltered = [mp3_file.normalized_file for mp3_file in mp3_files]
     if skip_missing:
@@ -214,4 +217,4 @@ def get_normalized_files(mp3_files, skip_missing=True):
 def filename_from_title(title):
     title_fixed = title.strip().replace(" ", "_").replace(".mp3", "")
     return title_fixed + ".mp3"
-    
+

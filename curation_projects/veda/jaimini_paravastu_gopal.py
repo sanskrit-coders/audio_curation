@@ -24,7 +24,7 @@ import logging
 import os
 
 # noinspection PyPep8
-from audio_curation import audio_repo, google_music, archive_utility
+from audio_curation import audio_repo, google_music, archive_utility, mp3_utility
 
 # Remove all handlers associated with the root logger object.
 for handler in logging.root.handlers[:]:
@@ -36,11 +36,42 @@ logging.basicConfig(
 
 
 class Gopal2015Repo(audio_repo.AudioRepo):
-    pass
+
+    def update_metadata(self, mp3_files):
+        """ Update mp3 metadata of a bunch of files. Meant to be overridden.
+
+        :param mp3_files: List of :py:class:mp3_utility.Mp3File objects
+        """
+        for mp3_file in mp3_files:
+            mp3_file.metadata = mp3_utility.Mp3Metadata(
+                title = mp3_file.title_from_filename(),
+                album = "jaiminIya-sAma-gAna-paravastu-tradition-gopAla-2015 जैमिनीय-परवस्तु-साम-गानम् २०१५",
+                artist = "paravastu-gopAla परवस्तु-गोपालः"
+            )
+            mp3_file.save_metadata()
 
 
-
-
+def update_gopal_2015(gmusic_client):
+    metadata = {
+        "title" : "jaiminIya-sAma-gAna-paravastu-tradition-gopAla-2015",
+        "description" : """
+    सामवेदः। जैमिनीय-शाखा।
+    
+    jaiminIya-sAma-gAna TN-AP-paravastu-tradition, as presented by shrI gopAla around 2015.
+    
+    Generations ago from ALwarthirunagari.
+    
+    Details: https://sanskritdocuments.org/sites/pssramanujaswamy/#audios
+    Tech details- see  https://sanskrit.github.io/projects/audio/veda-audio/index.html
+    """
+    }
+    archive_id="jaiminIya-sAma-gAna-paravastu-tradition-gopAla-2015"
+    archive_audio_item = archive_utility.ArchiveAudioItem(archive_id=archive_id)
+    repo = Gopal2015Repo(git_repo_paths=[os.path.join("/home/vvasuki/veda-audio/jaiminIya-sAma-paravastu", "jaiminIya-sAma-gAna-paravastu-tradition-gopAla-2015")], archive_audio_item=None, git_remote_origin_basepath="git@github.com:veda-audio", gmusic_client=gmusic_client)
+    repo.reprocess_files(mp3_files=repo.get_unnormalized_files(), update_git=False, dry_run=False, normalize_files=False)
+    # gmusic_client.upload(mp3_files=repo.get_unnormalized_files(), dry_run=True)
 
 if __name__ == "__main__":
+    gmusic_client = google_music.GMusicClient(oauth_file_path="/home/vvasuki/sysconf/kunchikA/google/sanskritnlp/oauth_access_token_gmusic.json")
+    update_gopal_2015(gmusic_client=gmusic_client)
     pass

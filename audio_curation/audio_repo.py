@@ -81,7 +81,7 @@ class AudioRepo(object):
         - setup .gitignore in the repo so as to ignore contents of normalized_mp3
         - periodically collapse git history (using update_git()) so as to avoid wasted space. 
     """
-    def __init__(self, git_repo_paths, archive_audio_item=None, git_remote_origin_basepath=None, normalized_file_namer = basename_based_normalized_file_namer):
+    def __init__(self, git_repo_paths, archive_audio_item=None, git_remote_origin_basepath=None, normalized_file_namer = basename_based_normalized_file_namer, gmusic_client=None):
         self.git_repo_paths = git_repo_paths
         self.git_repos = [_get_repo(repo_path, git_remote_origin_basepath=git_remote_origin_basepath) for repo_path in git_repo_paths]
 
@@ -92,6 +92,7 @@ class AudioRepo(object):
         self.base_mp3_files = list(
             map(lambda fpath: mp3_utility.Mp3File(file_path=fpath, load_tags_from_file=True, normalized_file_path=normalized_file_namer(fpath)), self.base_mp3_file_paths))
         self.archive_item = archive_audio_item
+        self.gmusic_client = gmusic_client
 
     def get_normalized_files(self):
         """ Get all non-outdated normalized-sound files from this repo. 
@@ -163,7 +164,7 @@ class AudioRepo(object):
         for mp3_file in mp3_files:
             mp3_file.rename_to_title()
 
-    def reprocess_files(self, mp3_files, update_git=True):
+    def reprocess_files(self, mp3_files, update_git=True, normalize_files=True, dry_run=False):
         """ When you add a new file to the repository, use this method to update the metadata, the local normalized file colleciton, archive and git locations.
     
         """
@@ -171,9 +172,17 @@ class AudioRepo(object):
         self.update_metadata(mp3_files=mp3_files)
         if update_git:
             self.update_git()
-        self.delete_obsolete_normalized_files()
-        update_normalized_mp3s(mp3_files=mp3_files)
-        self.update_archive_item(mp3_files_in=mp3_utility.get_normalized_files(mp3_files=mp3_files, skip_missing=True), overwrite_all=True, start_at=None)
+        files_to_upload = mp3_files
+        if normalize_files:
+            self.delete_obsolete_normalized_files()
+            update_normalized_mp3s(mp3_files=mp3_files)
+            files_to_upload = mp3_utility.get_normalized_files(mp3_files=mp3_files, skip_missing=True)
+        
+        if self.archive_item is not None:
+            self.update_archive_item(mp3_files_in=files_to_upload, overwrite_all=True, start_at=None, dry_run=dry_run)
+        if self.gmusic_client is not None and len(files_to_upload) > 0:
+            logging.debug(self.gmusic_client.get_album_tracks(files_to_upload[0].metadata.album))
+            self.gmusic_client.upload(mp3_files=files_to_upload, dry_run=dry_run)
 
     def update_git(self, collapse_history=False, first_push=False):
         """ Update git repos associated with this item.
@@ -209,7 +218,7 @@ class AudioRepo(object):
                     logging.info(git_repo.git.checkout("--orphan", "branch_for_collapsing"))
                 add_changed(git_repo)
                 if collapse_history:
-                    if "master" in [h.name for h in git_repo.branches]:
+                    if "master" in [h.name for h in git_repo.branches()]:
                         logging.info(git_repo.git.branch("-D", "master"))
                     logging.info(git_repo.git.branch("-m", "master"))
                     logging.info(git_repo.git.push("-f", "origin", "master"))

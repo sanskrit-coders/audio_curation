@@ -34,10 +34,13 @@ class GMusicClient(object):
  
         # Returns a list of dictionaries, one for each audio track, each with the following keys: ('id', 'title', 'album', 'album_artist', 'artist', 'track_number', 'track_size', 'disc_number', 'total_disc_count').
         self.uploaded_tracks = self.mm_client.get_uploaded_songs()
-        self.albums = set(map(lambda track: track["album"], self.uploaded_tracks))
-        self.album_artists = set(map(lambda track: track["album_artist"], self.uploaded_tracks))
-        self.artists = set(map(lambda track: track["artist"], self.uploaded_tracks))
+        self.albums = sorted(set(map(lambda track: track["album"], self.uploaded_tracks)))
+        self.album_artists = sorted(set(map(lambda track: track["album_artist"], self.uploaded_tracks)))
+        self.artists = sorted(set(map(lambda track: track["artist"], self.uploaded_tracks)))
         # self.titles = set(map(lambda track: track["title"], self.uploaded_tracks))
+
+    def get_album_tracks(self, album_name):
+        return sorted(filter(lambda track: track["album"] == album_name, self.uploaded_tracks), key = lambda track: track["title"])
 
     def download_album(self, album_name_substring, download_path):
         tracks_in_album = list(filter(lambda track: album_name_substring in track["album"], self.uploaded_tracks))
@@ -53,12 +56,25 @@ class GMusicClient(object):
             with open(destination_path, 'wb') as f:
                 f.write(audio)
 
+    def is_file_present(self, mp3_file):
+        return len(list(filter(lambda track: mp3_file.metadata.album == track["album"] and mp3_file.metadata.title == track["title"], self.uploaded_tracks))) > 0
+
     def upload(self, mp3_files, dry_run=False):
         for mp3_file in mp3_files:
-            already_present = len(list(filter(lambda track: mp3_file.metadata.album == track["album"] and mp3_file.metadata.title == track["title"], self.uploaded_tracks))) > 0
+            already_present = self.is_file_present(mp3_file=mp3_file)
             if already_present:
                 logging.info("Skipping %s", mp3_file)
             else:
                 logging.info("Uploading %s", mp3_file)
                 if not dry_run:
-                    self.mm_client.upload(mp3_file.path)
+                    self.mm_client.upload(mp3_file.file_path)
+
+
+    def delete_unaccounted_for_files(self, all_files, dry_run=False):
+        """
+        Delete all unaccounted-for-files among all_files.
+    
+        TODO: Complete this.
+        :param all_files: This has to include exactly _every_ file that is expected to be present in the archive item.
+        """
+        pass
