@@ -7,6 +7,7 @@ Some related information. Google places various limits:
 
 import logging
 import os
+import pprint
 
 import gmusicapi
 
@@ -15,12 +16,23 @@ class GMusicClient(object):
     """A client to back up music files into the Google Play Music cloud storage."""
     def __init__(self, oauth_file_path, username=None, password=None):
         self.oauth_file_path = oauth_file_path
-        
+
+        if username is not None:
+            if password is None:
+                password = input("Enter password")
+
         # The docs say: If you’re not going to be uploading music, you’ll likely want to use the Mobileclient: it supports streaming and library management. It requires plaintext auth.
+        # But it needs an android_id, which may be in short supply due to Google.
         self.mobile_client = gmusicapi.Mobileclient()
         if username is not None and password is not None:
             logged_in = self.mobile_client.login(username, password, android_id=gmusicapi.Mobileclient.FROM_MAC_ADDRESS)
             logging.info("self.mobile_client login result: ", logged_in)
+
+        # Login fails as of 2019-11, hence disabling.
+        # self.web_client =  gmusicapi.Webclient()
+        # if username is not None and password is not None:
+        #     logged_in = self.web_client.login(username, password)
+        #     logging.info("self.web_client login result: %s", logged_in)
 
         # The docs say: If you’re going to upload Music, you want the Musicmanager. It uses OAuth2 and does not require plaintext credentials.
         self.mm_client = gmusicapi.Musicmanager()
@@ -74,7 +86,18 @@ class GMusicClient(object):
         """
         Delete all unaccounted-for-files among all_files.
     
-        TODO: Complete this.
+        Requires use of the mobile client, so must log in with username and password.
         :param all_files: This has to include exactly _every_ file that is expected to be present in the archive item.
         """
-        pass
+        if len(all_files) == 0:
+            return
+        album_name = all_files[0].metadata.album
+        album_tracks = self.get_album_tracks(album_name=album_name)
+        input_file_albums_set = set([mp3_file.metadata.album for mp3_file in all_files])
+        assert len(input_file_albums_set) == 1 and next(iter(input_file_albums_set)) == album_name
+        titles = [mp3_file.metadata.title for mp3_file in all_files]
+        excess_tracks = list(filter(lambda track: track["title"] not in titles, album_tracks))
+        if len(excess_tracks) > 0:
+            logging.info("deleting %s", pprint.pformat(excess_tracks))
+            if not dry_run:
+                self.mobile_client.delete_songs([track["id"] for track in excess_tracks])

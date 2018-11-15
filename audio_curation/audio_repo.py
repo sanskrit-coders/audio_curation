@@ -184,6 +184,12 @@ class AudioRepo(object):
             logging.debug(self.gmusic_client.get_album_tracks(files_to_upload[0].metadata.album))
             self.gmusic_client.upload(mp3_files=files_to_upload, dry_run=dry_run)
 
+    def delete_unaccounted_for_files(self, all_files, dry_run=False):
+        if self.archive_item is not None:
+            self.archive_item.delete_unaccounted_for_files(all_files=all_files, dry_run=dry_run)
+        if self.gmusic_client is not None:
+            self.gmusic_client.delete_unaccounted_for_files(all_files=all_files, dry_run=dry_run)
+
     def update_git(self, collapse_history=False, first_push=False):
         """ Update git repos associated with this item.
 
