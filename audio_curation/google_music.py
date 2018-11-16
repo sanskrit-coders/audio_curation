@@ -26,7 +26,7 @@ class GMusicClient(object):
         self.mobile_client = gmusicapi.Mobileclient()
         if username is not None and password is not None:
             logged_in = self.mobile_client.login(username, password, android_id=gmusicapi.Mobileclient.FROM_MAC_ADDRESS)
-            logging.info("self.mobile_client login result: ", logged_in)
+            logging.info("self.mobile_client login result: %s", logged_in)
 
         # Login fails as of 2019-11, hence disabling.
         # self.web_client =  gmusicapi.Webclient()
