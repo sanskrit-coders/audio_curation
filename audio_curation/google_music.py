@@ -19,7 +19,7 @@ class GMusicClient(object):
 
         if username is not None:
             if password is None:
-                password = input("Enter password")
+                password = input("Enter password :")
 
         # The docs say: If you’re not going to be uploading music, you’ll likely want to use the Mobileclient: it supports streaming and library management. It requires plaintext auth.
         # But it needs an android_id, which may be in short supply due to Google.
