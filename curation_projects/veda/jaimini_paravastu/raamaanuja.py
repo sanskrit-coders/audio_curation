@@ -68,7 +68,7 @@ def update_rAmAnuja_1974(gmusic_client):
     archive_audio_item = archive_utility.ArchiveAudioItem(archive_id=archive_id)
     archive_audio_item.update_metadata(metadata=metadata)
     repo = RamanujaRepo(git_repo_paths=[os.path.join("/home/vvasuki/veda-audio/jaiminIya-sAma-paravastu", "jaiminIya-sAma-gAna-paravastu-tradition-rAmAnuja")], archive_audio_item=archive_audio_item, git_remote_origin_basepath="git@github.com:veda-audio", gmusic_client=gmusic_client)
-    repo.reprocess_files(mp3_files=repo.get_unnormalized_files(), update_git=False, dry_run=False, normalize_files=False)
+    repo.reprocess_files(mp3_files=repo.get_unnormalized_files(), update_git=False, dry_run=False, normalize_files=True)
     repo.delete_unaccounted_for_files(all_files=repo.get_unnormalized_files(), dry_run=False)
     # gmusic_client.upload(mp3_files=repo.get_unnormalized_files(), dry_run=True)
 

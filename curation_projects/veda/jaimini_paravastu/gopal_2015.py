@@ -69,7 +69,7 @@ def update_gopal_2015(gmusic_client):
     archive_audio_item = archive_utility.ArchiveAudioItem(archive_id=archive_id)
     archive_audio_item.update_metadata(metadata=metadata)
     repo = Gopal2015Repo(git_repo_paths=[os.path.join("/home/vvasuki/veda-audio/jaiminIya-sAma-paravastu", "jaiminIya-sAma-gAna-paravastu-tradition-gopAla-2015")], archive_audio_item=archive_audio_item, git_remote_origin_basepath="git@github.com:veda-audio", gmusic_client=gmusic_client)
-    repo.reprocess_files(mp3_files=repo.get_unnormalized_files(), update_git=False, dry_run=False, normalize_files=False)
+    repo.reprocess_files(mp3_files=repo.get_unnormalized_files(), update_git=False, dry_run=False, normalize_files=True)
     # repo.delete_unaccounted_for_files(all_files=repo.get_unnormalized_files(), dry_run=False)
     # gmusic_client.upload(mp3_files=repo.get_unnormalized_files(), dry_run=True)
 
@@ -77,6 +77,5 @@ def update_gopal_2015(gmusic_client):
 if __name__ == "__main__":
     gmusic_client = google_music.GMusicClient(oauth_file_path="/home/vvasuki/sysconf/kunchikA/google/sanskritnlp/oauth_access_token_gmusic.json", username="vishvas.vasuki@gmail.com")
     # gmusic_client = None
-    # update_gopal_2015(gmusic_client=gmusic_client)
-    # update_rAmAnuja_1974(gmusic_client=gmusic_client)
+    update_gopal_2015(gmusic_client=gmusic_client)
     pass
