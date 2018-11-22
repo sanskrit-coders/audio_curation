@@ -60,7 +60,12 @@ class Mp3Metadata(object):
         """
 
         """
+        if not os.path.exists(file_path):
+            raise FileNotFoundError(file_path)
         audiofile = eyed3.load(file_path)
+        if audiofile is None:
+            raise Exception("Failed to load:" + file_path)
+        # logging.debug("Loaded: " + file_path)
         if audiofile.tag is not None:
             self.artist = audiofile.tag.artist
             self.title = audiofile.tag.title
