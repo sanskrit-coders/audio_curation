@@ -173,7 +173,7 @@ class AudioRepo(object):
         if update_git:
             self.update_git()
         files_to_upload = mp3_files
-        if normalize_files:
+        if normalize_files and not dry_run:
             self.delete_obsolete_normalized_files()
             update_normalized_mp3s(mp3_files=mp3_files)
             files_to_upload = mp3_utility.get_normalized_files(mp3_files=mp3_files, skip_missing=True)
