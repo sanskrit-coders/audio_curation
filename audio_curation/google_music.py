@@ -71,10 +71,10 @@ class GMusicClient(object):
     def is_file_present(self, mp3_file):
         return len(list(filter(lambda track: mp3_file.metadata.album == track["album"] and mp3_file.metadata.title == track["title"], self.uploaded_tracks))) > 0
 
-    def upload(self, mp3_files, dry_run=False):
+    def upload(self, mp3_files, dry_run=False, overwrite=False):
         for mp3_file in mp3_files:
             already_present = self.is_file_present(mp3_file=mp3_file)
-            if already_present:
+            if already_present and not overwrite:
                 logging.info("Skipping %s", mp3_file)
             else:
                 logging.info("Uploading %s", mp3_file)

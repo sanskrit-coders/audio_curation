@@ -183,7 +183,7 @@ class AudioRepo(object):
             self.update_archive_item(mp3_files_in=files_to_upload, overwrite_all=True, start_at=None, dry_run=dry_run)
         if self.gmusic_client is not None and len(files_to_upload) > 0:
             logging.debug(self.gmusic_client.get_album_tracks(files_to_upload[0].metadata.album))
-            self.gmusic_client.upload(mp3_files=files_to_upload, dry_run=dry_run)
+            self.gmusic_client.upload(mp3_files=files_to_upload, overwrite=True, dry_run=dry_run)
 
     def delete_unaccounted_for_files(self, all_files, dry_run=False):
         if self.archive_item is not None:
