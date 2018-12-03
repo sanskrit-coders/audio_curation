@@ -62,6 +62,8 @@ class Mp3Metadata(object):
         """
         if not os.path.exists(file_path):
             raise FileNotFoundError(file_path)
+        # eyed3 seems to fail in case of some files (" I use my iPhone (Voice Memos) to record and then use Apple iTunes to convert to MP3 format...").
+        # TODO: Consider switching to mutagen - https://mutagen.readthedocs.io/en/latest/user/id3.html
         audiofile = eyed3.load(file_path)
         if audiofile is None:
             raise Exception("Failed to load:" + file_path)
