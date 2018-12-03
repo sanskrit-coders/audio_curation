@@ -66,7 +66,7 @@ def update_raamaanuja_compilation(gmusic_client, dry_run=False):
     }
     archive_id="jaiminIya-sAma-gAna-paravastu-tradition"
     archive_audio_item = archive_utility.ArchiveAudioItem(archive_id=archive_id)
-    archive_audio_item.update_metadata(metadata=metadata)
+    # archive_audio_item.update_metadata(metadata=metadata)
     repo = RaamaanujaCompilationRepo(git_repo_paths=[os.path.join("/home/vvasuki/veda-audio/jaiminIya-sAma-paravastu", "jaiminIya-sAma-gAna-paravastu-tradition-rAmAnuja-compilation")], archive_audio_item=archive_audio_item, git_remote_origin_basepath="git@github.com:veda-audio", gmusic_client=gmusic_client)
     repo.reprocess_files(mp3_files=repo.get_unnormalized_files(), update_git=False, dry_run=dry_run, normalize_files=False)
     repo.delete_unaccounted_for_files(all_files=repo.get_unnormalized_files(), dry_run=dry_run)
@@ -74,6 +74,7 @@ def update_raamaanuja_compilation(gmusic_client, dry_run=False):
 
 
 if __name__ == "__main__":
+    gmusic_client = None
     gmusic_client = google_music.GMusicClient(oauth_file_path="/home/vvasuki/sysconf/kunchikA/google/sanskritnlp/oauth_access_token_gmusic.json", username="vishvas.vasuki@gmail.com")
     # gmusic_client = None
     update_raamaanuja_compilation(gmusic_client=gmusic_client, dry_run=False)
