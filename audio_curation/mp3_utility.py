@@ -18,7 +18,7 @@ logging.basicConfig(
 logging.getLogger('eyed3').setLevel(logging.INFO)
 
 
-## TODO: Move this to pydub.silence
+## TODO: Move this to pydub.silence - https://github.com/jiaaro/pydub/pull/335
 def detect_leading_silence(sound, silence_threshold=-50.0, chunk_size=10):
     '''
     sound is a pydub.AudioSegment
@@ -164,7 +164,7 @@ class Mp3File(object):
         sound = AudioSegment.from_mp3(self.file_path)
         return sound.dBFS
 
-    def save_normalized(self, overwrite=False):
+    def save_normalized(self, overwrite=False, speed_multiplier=1):
         """ Save the sound-normalized version of this file. 
 
         Currently the normalzied file produced will be mono-channel, around -16dbFS loud, have the same metadata as the original file.
@@ -182,7 +182,7 @@ class Mp3File(object):
         # Set loudness to the standard level:  -16LUFS or roughly -16dbFS
         # Eventually we would want to use LUFS. One would need to switch libraries or await resolution of https://github.com/jiaaro/pydub/issues/321 .
         normalized_sound = normalized_sound.apply_gain(-16 - sound.dBFS)
-
+        
         # Remove leading and ending silence beyond 1s and .5s respectively
         start_trim = max(detect_leading_silence(normalized_sound) - 1000, 0)
         end_trim = max(detect_leading_silence(normalized_sound.reverse()) - 500, 0)
@@ -197,7 +197,10 @@ class Mp3File(object):
             "artist": self.metadata.artist, "album_artist": self.metadata.album_artist, "title": self.metadata.title,
             "album": self.metadata.album
         })
+
         self.set_normalized_file()
+        if speed_multiplier != 1:
+            self.normalized_file.speedup(speed_multiplier=speed_multiplier)
 
     def rename_to_title(self):
         new_basename = filename_from_title(self.metadata.title)
@@ -209,6 +212,23 @@ class Mp3File(object):
 
     def title_from_filename(self):
         return self.basename[:-4]
+
+    def speedup(self, speed_multiplier=1, out_file=None):
+        # Not using pydub: pydub speedup is noticably worse than audacity or ffmpeg "change tempo" output - introduces weird effects in case of gamaka-s.
+        import ffmpy
+        edit_in_place = False
+        if out_file == None:
+            # Editing in-place: Move the file to a temporary location. ffmpeg cannot edit in place.
+            edit_in_place = True
+            unsped_file = self.file_path + ".tmp.mp3"
+            os.rename(self.normalized_file_path, unsped_file)
+            out_file = self.file_path
+        else:
+            unsped_file = self.file_path
+        ff = ffmpy.FFmpeg(inputs={unsped_file: None}, outputs={out_file: ["-filter:a", "atempo=" + str(speed_multiplier)]}, global_options="-y")
+        ff.run()
+        if edit_in_place:
+            os.remove(unsped_file)
 
 def get_normalized_files(mp3_files, skip_missing=True):
     normalized_files_unfiltered = [mp3_file.normalized_file for mp3_file in mp3_files]

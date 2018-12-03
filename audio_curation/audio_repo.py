@@ -1,11 +1,11 @@
 import glob
-
-import git
 import itertools
 import logging
 import os
 
-from audio_curation import mp3_utility, archive_utility
+import git
+
+from audio_curation import mp3_utility
 
 for handler in logging.root.handlers[:]:
     logging.root.removeHandler(handler)
@@ -31,15 +31,6 @@ def check_loudness(mp3_files):
     logging.info("mean %d", basenames_to_loudnesses["loudness"].mean())
     logging.info("max %d", basenames_to_loudnesses["loudness"].max())
     logging.info("deviation %f", basenames_to_loudnesses["loudness"].std())
-
-
-def update_normalized_mp3s(mp3_files):
-    """Regenerate normalized files corresponding to some mp3_files
-
-    :param mp3_files: List of :py:class:mp3_utility.Mp3File objects
-    """
-    for mp3_file in mp3_files:
-        mp3_file.save_normalized(overwrite=True)
 
 
 def _get_repo(repo_path, git_remote_origin_basepath=None):
@@ -81,7 +72,7 @@ class AudioRepo(object):
         - setup .gitignore in the repo so as to ignore contents of normalized_mp3
         - periodically collapse git history (using update_git()) so as to avoid wasted space. 
     """
-    def __init__(self, git_repo_paths, archive_audio_item=None, git_remote_origin_basepath=None, normalized_file_namer = basename_based_normalized_file_namer, gmusic_client=None):
+    def __init__(self, git_repo_paths, archive_audio_item=None, git_remote_origin_basepath=None, normalized_file_namer = basename_based_normalized_file_namer, normalization_speed_multiplier=1, gmusic_client=None):
         self.git_repo_paths = git_repo_paths
         self.git_repos = [_get_repo(repo_path, git_remote_origin_basepath=git_remote_origin_basepath) for repo_path in git_repo_paths]
 
@@ -93,6 +84,16 @@ class AudioRepo(object):
             map(lambda fpath: mp3_utility.Mp3File(file_path=fpath, load_tags_from_file=True, normalized_file_path=normalized_file_namer(fpath)), self.base_mp3_file_paths))
         self.archive_item = archive_audio_item
         self.gmusic_client = gmusic_client
+        self.normalization_speed_multiplier = normalization_speed_multiplier
+
+    def update_normalized_mp3s(self, mp3_files):
+        """Regenerate normalized files corresponding to some mp3_files
+    
+        :param mp3_files: List of :py:class:mp3_utility.Mp3File objects
+        """
+        for mp3_file in mp3_files:
+            mp3_file.save_normalized(overwrite=True, speed_multiplier=self.normalization_speed_multiplier)
+
 
     def get_normalized_files(self):
         """ Get all non-outdated normalized-sound files from this repo. 
@@ -175,7 +176,7 @@ class AudioRepo(object):
         files_to_upload = mp3_files
         if normalize_files and not dry_run:
             self.delete_obsolete_normalized_files()
-            update_normalized_mp3s(mp3_files=mp3_files)
+            self.update_normalized_mp3s(mp3_files=mp3_files)
             files_to_upload = mp3_utility.get_normalized_files(mp3_files=mp3_files, skip_missing=True)
         
         if self.archive_item is not None:
