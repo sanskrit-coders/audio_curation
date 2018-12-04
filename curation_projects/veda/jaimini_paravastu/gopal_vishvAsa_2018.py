@@ -41,8 +41,7 @@ class GopalVishvAsa2018Repo(audio_repo.AudioRepo):
             )
             mp3_file.save_metadata()
 
-
-def update_gopal_2018(gmusic_client, dry_run=False):
+class NormalizedFilesRepo(audio_repo.NormalizedRepo):
     metadata = {
         "title" : "jaiminIya-sAma-gAna-paravastu-tradition-anuvachanam-gopAla-vishvAsa",
         "description" : """
@@ -57,14 +56,16 @@ def update_gopal_2018(gmusic_client, dry_run=False):
     """
     }
     archive_id="jaiminIya-sAma-gAna-paravastu-tradition-anuvachanam-gopAla-vishvAsa-2018"
-    archive_audio_item = None
-    archive_audio_item = archive_utility.ArchiveAudioItem(archive_id=archive_id)
-    # archive_audio_item.update_metadata(metadata=metadata)
-    repo = GopalVishvAsa2018Repo(git_repo_paths=[os.path.join("/home/vvasuki/veda-audio/jaiminIya-sAma-paravastu", "jaiminIya-sAma-gAna-paravastu-tradition-anuvachanam-gopAla-vishvAsa")], git_remote_origin_basepath="git@github.com:veda-audio")
-    normalized_files_repo = audio_repo.NormalizedRepo(base_repo=repo, archive_audio_item=archive_audio_item, gmusic_client=gmusic_client)
-    repo.update_metadata(mp3_files=[mp3_utility.Mp3File(file_path=file) for file in normalized_files_repo.get_underived_files()])
-    files_updated = normalized_files_repo.reprocess(dry_run=dry_run)
 
+
+def update_gopal_2018(gmusic_client, dry_run=False):
+    repo = GopalVishvAsa2018Repo(git_repo_paths=[os.path.join("/home/vvasuki/veda-audio/jaiminIya-sAma-paravastu", "jaiminIya-sAma-gAna-paravastu-tradition-anuvachanam-gopAla-vishvAsa")], git_remote_origin_basepath="git@github.com:veda-audio")
+
+    archive_audio_item = None
+    archive_audio_item = archive_utility.ArchiveAudioItem(archive_id=NormalizedFilesRepo.archive_id)
+    archive_audio_item.update_metadata(metadata=NormalizedFilesRepo.metadata)
+    normalized_files_repo = audio_repo.NormalizedRepo(base_repo=repo, archive_audio_item=archive_audio_item, gmusic_client=gmusic_client)
+    processed_files = normalized_files_repo.reprocess(dry_run=dry_run)
     
     # archive_audio_item.update_archive_audio_item(files_in=repo.get_normalized_files(), overwrite_all=False, dry_run=dry_run)
 

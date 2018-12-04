@@ -68,19 +68,28 @@ class GMusicClient(object):
             with open(destination_path, 'wb') as f:
                 f.write(audio)
 
-    def is_file_present(self, mp3_file):
-        return len(list(filter(lambda track: mp3_file.metadata.album == track["album"] and mp3_file.metadata.title == track["title"], self.uploaded_tracks))) > 0
+    def get_track(self, mp3_file):
+        matching_tracks = list(filter(lambda track: mp3_file.metadata.album == track["album"] and mp3_file.metadata.title == track["title"], self.uploaded_tracks))
+        if len(matching_tracks) > 0:
+            return matching_tracks[0]
+        else:
+            return None
 
     def upload(self, mp3_files, dry_run=False, overwrite=False):
         for mp3_file in mp3_files:
-            already_present = self.is_file_present(mp3_file=mp3_file)
-            if already_present and not overwrite:
+            track = self.get_track(mp3_file=mp3_file)
+            if track is not None and not overwrite:
                 logging.info("Skipping %s", mp3_file)
             else:
                 logging.info("Uploading %s", mp3_file)
                 if not dry_run:
+                    if track is not None:
+                        self.delete(tracks=[track])
                     self.mm_client.upload(mp3_file.file_path)
 
+    def delete(self, tracks):
+        """Deletion can fail if exactly the same file was uploaded in a different album with a different title."""
+        self.mobile_client.delete_songs([track["id"] for track in tracks])
 
     def delete_unaccounted_for_files(self, all_files, dry_run=False):
         """
@@ -95,10 +104,10 @@ class GMusicClient(object):
         album_tracks = self.get_album_tracks(album_name=album_name)
         input_file_albums_set = set([mp3_file.metadata.album for mp3_file in all_files])
         assert len(input_file_albums_set) == 1, input_file_albums_set
-        assert next(iter(input_file_albums_set)) == album_name, input_file_albums_set + " " + album_name
+        assert next(iter(input_file_albums_set)) == album_name, str(input_file_albums_set) + " " + album_name
         titles = [mp3_file.metadata.title for mp3_file in all_files]
         excess_tracks = list(filter(lambda track: track["title"] not in titles, album_tracks))
         if len(excess_tracks) > 0:
             logging.info("deleting %s", pprint.pformat(excess_tracks))
             if not dry_run:
-                self.mobile_client.delete_songs([track["id"] for track in excess_tracks])
+                self.delete(tracks=excess_tracks)

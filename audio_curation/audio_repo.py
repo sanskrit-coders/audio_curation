@@ -143,6 +143,10 @@ class NormalizedRepo(DerivativeRepo):
         mp3_utility.Mp3File(file_path=base_file, load_tags_from_file=True).save_normalized(overwrite=True, speed_multiplier=self.normalization_speed_multiplier, normalized_file_path=self.derivative_namer(base_file))
         return self.derivative_namer(base_file)
 
+    def reprocess(self, dry_run=False):
+        self.base_repo.update_metadata(mp3_files=[mp3_utility.Mp3File(file_path=file, load_tags_from_file=True) for file in self.get_underived_files()])
+        super(NormalizedRepo, self).reprocess()
+
 
 class AudioRepo(object):
     """ An Audio file repository.
