@@ -43,7 +43,7 @@ def set_mp3_metadata(mp3_file):
     )
 
 
-class KathasaritsagaraRepo(audio_repo.AudioRepo):
+class KathasaritsagaraRepoBase(audio_repo.BaseAudioRepo):
     def update_metadata(self, mp3_files):
         """
     
@@ -55,7 +55,7 @@ class KathasaritsagaraRepo(audio_repo.AudioRepo):
             mp3_file.metadata.artist = episode_data.get_recorder(get_taranga_id(file_path=mp3_file.file_path))
             mp3_file.save_metadata()
 
-repo = KathasaritsagaraRepo(git_repo_paths=repo_paths, archive_id="kathAsaritsAgara-shrAvaNam", git_remote_origin_basepath="git@github.com:kAvya-audio")
+repo = KathasaritsagaraRepoBase(repo_paths=repo_paths, archive_id="kathAsaritsAgara-shrAvaNam", git_remote_origin_basepath="git@github.com:kAvya-audio")
 # repo.update_metadata(mp3_files=repo.get_unnormalized_files())
 # repo.update_git(collapse_history=False, first_push=True)
 repo.reprocess_files(mp3_files=repo.get_unnormalized_files())

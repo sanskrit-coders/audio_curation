@@ -24,7 +24,7 @@ logging.basicConfig(
 # wget and urllib.request is blocked.
 
 
-class RgVedaRepo(audio_repo.AudioRepo):
+class RgVedaRepoBase(audio_repo.BaseAudioRepo):
     pass
 
 
@@ -42,7 +42,7 @@ def update_rgveda_sriranga():
 
     archive_id="rgveda-auro-sriranga"
     archive_audio_item = archive_utility.ArchiveAudioItem(archive_id=archive_id)
-    repo = RgVedaRepo(git_repo_paths=[os.path.join("/home/vvasuki/veda-audio/", "rgveda-shriranga")], archive_audio_item=archive_audio_item, git_remote_origin_basepath="git@github.com:veda-audio")
+    repo = RgVedaRepoBase(repo_paths=[os.path.join("/home/vvasuki/veda-audio/", "rgveda-shriranga")], archive_audio_item=archive_audio_item, git_remote_origin_basepath="git@github.com:veda-audio")
     # repo.update_git(collapse_history=False, first_push=True)
     # exit(1)
     repo.archive_item.update_metadata(metadata=metadata)
@@ -64,7 +64,7 @@ def update_rgveda_auro():
 
     archive_id="Rg-veda-shakala-auro1"
     archive_audio_item = archive_utility.ArchiveAudioItem(archive_id=archive_id)
-    repo = RgVedaRepo(git_repo_paths=[os.path.join("/home/vvasuki/veda-audio/", "rgveda-auro")], archive_audio_item=archive_audio_item, git_remote_origin_basepath="git@github.com:veda-audio")
+    repo = RgVedaRepoBase(repo_paths=[os.path.join("/home/vvasuki/veda-audio/", "rgveda-auro")], archive_audio_item=archive_audio_item, git_remote_origin_basepath="git@github.com:veda-audio")
     # repo.update_git(collapse_history=False, first_push=True)
     # exit(1)
     # repo.archive_item.update_metadata(metadata=metadata)

@@ -96,6 +96,7 @@ class DerivativeRepo(object):
             self.gmusic_client.upload(mp3_files=mp3_files, overwrite=True, dry_run=dry_run)
 
         self.delete_obsolete_derivatives(dry_run=dry_run)
+        self.delete_obsolete_uploaded_files(dry_run=dry_run)
         return files_to_upload
 
     def update_derivatives(self, dry_run=False):
@@ -113,6 +114,8 @@ class DerivativeRepo(object):
                 logging.info("Removing obsolete file: %s", file_path)
                 if not dry_run:
                     os.remove(file_path)
+
+    def delete_obsolete_uploaded_files(self, dry_run=False):
         if self.archive_audio_item is not None:
             self.archive_audio_item.delete_unaccounted_for_files(all_files=self.get_files(), dry_run=dry_run)
 
@@ -143,14 +146,17 @@ class NormalizedRepo(DerivativeRepo):
         mp3_utility.Mp3File(file_path=base_file, load_tags_from_file=True).save_normalized(overwrite=True, speed_multiplier=self.normalization_speed_multiplier, normalized_file_path=self.derivative_namer(base_file))
         return self.derivative_namer(base_file)
 
-    def reprocess(self, dry_run=False):
-        self.base_repo.update_metadata(mp3_files=[mp3_utility.Mp3File(file_path=file, load_tags_from_file=True) for file in self.get_underived_files()])
-        super(NormalizedRepo, self).reprocess()
+    def update_metadata(self, mp3_files):
+        """ Update mp3 metadata of a bunch of files. Meant to be overridden.
+
+        :param mp3_files: List of :py:class:mp3_utility.Mp3File objects
+        """
+        pass
 
 
-class AudioRepo(object):
+class BaseAudioRepo(DerivativeRepo):
     """ An Audio file repository.
-    The local repository, by default, is assumed to be a collection of git repository working directories (self.git_repo_paths) with two subfolders:
+    The local repository, by default, is assumed to be a collection of git repository working directories (self.repo_paths) with two subfolders:
 
         - mp3: Containing mp3-s for every "episode" in the repository. 
         - normalized_mp3: Automatically generated from mp3/*.mp3.
@@ -163,67 +169,56 @@ class AudioRepo(object):
         - setup .gitignore in the repo so as to ignore contents of normalized_mp3
         - periodically collapse git history (using update_git()) so as to avoid wasted space. 
     """
-    def __init__(self, git_repo_paths, 
-                 archive_audio_item=None, 
+    def __init__(self, repo_paths,
+                 archive_audio_item=None,
                  git_remote_origin_basepath=None,
                  gmusic_client=None):
-        self.git_repo_paths = git_repo_paths
-        self.git_repos = [_get_repo(repo_path, git_remote_origin_basepath=git_remote_origin_basepath) for repo_path in git_repo_paths]
+        self.git_repos = [_get_repo(repo_path, git_remote_origin_basepath=git_remote_origin_basepath) for repo_path in repo_paths]
 
         self.base_mp3_file_paths = [item for sublist in
                                     [sorted(glob.glob(os.path.join(repo_path, "mp3", "*.mp3"))) for repo_path in
-                                     git_repo_paths] for item in sublist]
+                                     repo_paths] for item in sublist]
         logging.info("Got %d files" % (len(self.base_mp3_file_paths)))
-        self.archive_item = archive_audio_item
-        self.gmusic_client = gmusic_client
+        super(BaseAudioRepo, self).__init__(base_repo=None, derivative_namer=None, repo_paths=repo_paths, archive_audio_item=archive_audio_item, gmusic_client=gmusic_client)
 
     def get_files(self):
         return self.base_mp3_file_paths
 
-    def update_metadata(self, mp3_files):
-        """ Update mp3 metadata of a bunch of files. Meant to be overridden.
+    def get_derived_files(self):
+        return self.get_files()
 
-        :param mp3_files: List of :py:class:mp3_utility.Mp3File objects
-        """
+    def get_underived_files(self):
+        changed_files= []
+        for git_repo in self.git_repos:
+            changed_files.extend([ os.path.join(git_repo.working_tree_dir, item.a_path) for item in git_repo.index.diff(None) if os.path.exists(os.path.join(git_repo.working_tree_dir, item.a_path))])
+        return changed_files
+
+    def update_derivatives(self, dry_run=False):
+        return self.get_underived_files()
+
+    def delete_obsolete_derivatives(self, dry_run=False):
         pass
 
-    def rename_to_titles(self, mp3_files):
-        for mp3_file in mp3_files:
-            mp3_file.rename_to_title()
-
-    def reprocess_files(self, mp3_files, update_git=True, dry_run=False):
+    def reprocess(self, dry_run=False):
         """ When you add a new file to the repository, use this method to update the metadata, the local normalized file colleciton, archive and git locations.
-    
-        
+
         :returns The list of :py:class:mp3_utility.Mp3File objects which were ultimately processed (could be same as mp3_files, or could be their normalized counterparts).
         """
-        logging.info("reprocessing %d files", len(mp3_files))
+        underived_files = self.get_underived_files()
+        logging.info("reprocessing %d files", len(underived_files))
+        mp3_files = [mp3_utility.Mp3File(file_path=file, load_tags_from_file=True) for file in underived_files]
         self.update_metadata(mp3_files=mp3_files)
-        if update_git:
-            self.update_git()
-        files_to_upload = mp3_files
-        if self.archive_item is not None:
-            self.archive_item.update_archive_audio_item(mp3_files_in=files_to_upload, overwrite_all=True, dry_run=dry_run)
-        if self.gmusic_client is not None and len(files_to_upload) > 0:
-            logging.debug(self.gmusic_client.get_album_tracks(files_to_upload[0].metadata.album))
-            self.gmusic_client.upload(mp3_files=files_to_upload, overwrite=True, dry_run=dry_run)
-        return files_to_upload
+        self.update_git(dry_run=dry_run)
+        return super(BaseAudioRepo, self).reprocess(dry_run=dry_run)
 
-    def delete_unaccounted_for_files(self, dry_run=False):
-        if self.archive_item is not None:
-            self.archive_item.delete_unaccounted_for_files(all_files=self.get_files(), dry_run=dry_run)
-        if self.gmusic_client is not None:
-            mp3_files = [mp3_utility.Mp3File(file_path=file, load_tags_from_file=True) for file in self.get_files()]            
-            self.gmusic_client.delete_unaccounted_for_files(all_files=mp3_files, dry_run=dry_run)
-
-    def update_git(self, collapse_history=False, first_push=False):
+    def update_git(self, collapse_history=False, dry_run=False):
         """ Update git repos associated with this item.
 
         :param collapse_history: Boolean. Git history involving mp3 files takes up too much space - more than what providers like GitHub offer for free. This option makes this method put up the latest files without any history.
-        :param first_push: Boolean. Do  git push --set-upstream origin master in such cases.
+        :param dry_run: Boolean.
         """
 
-        def add_changed(repo_x):
+        def add_changed(repo_x, dry_run=False):
             """Add all untracked or changed items in a repo.
 
             :param repo_x: Some git repo object.
@@ -233,11 +228,15 @@ class AudioRepo(object):
                 assert (False not in set(map(lambda file: file.endswith(".mp3") or file.endswith("md") or os.path.basename(file) in [".gitignore"], changed_files)))
                 for fpath in changed_files:
                     if os.path.exists(os.path.join(repo_x.working_tree_dir, fpath)):
-                        repo_x.index.add([fpath])
+                        logging.info("Adding %s", fpath)
+                        if not dry_run:
+                            repo_x.index.add([fpath])
                     else:
-                        repo_x.index.remove([fpath],working_tree = True)
+                        logging.info("Removing %s", fpath)
+                        if not dry_run:
+                            repo_x.index.remove([fpath],working_tree = True)
                 repo_x.index.commit(message="Changed %d files\n\n%s" % (len(changed_files), changed_files))
-            return len(changed_files)
+            return changed_files
 
         # In case of collapse_history, we are:
         # following tip from https://stackoverflow.com/questions/13716658/how-to-delete-all-commit-history-in-github
@@ -246,15 +245,16 @@ class AudioRepo(object):
             changed_files = [ item.a_path for item in git_repo.index.diff(None) ]
             logging.info("Got %d changed files for %s: %s", len(changed_files), git_repo.git_dir, changed_files)
             if collapse_history or len(changed_files) > 0 or len(list(commits_behind)) > 0:
-                if collapse_history:
+                if (not dry_run) and collapse_history:
                     logging.info(git_repo.git.checkout("--orphan", "branch_for_collapsing"))
-                add_changed(git_repo)
-                if collapse_history:
-                    if "master" in [h.name for h in git_repo.branches()]:
-                        logging.info(git_repo.git.branch("-D", "master"))
-                    logging.info(git_repo.git.branch("-m", "master"))
-                    logging.info(git_repo.git.push("-f", "origin", "master"))
-                else:
-                    logging.info(git_repo.git.push("-u", "origin", "master"))
-                    # The below would only work if the remote branch is set.
-                    # git_repo.remote("origin").push() 
+                add_changed(git_repo, dry_run=dry_run)
+                if not dry_run:
+                    if collapse_history:
+                        if "master" in [h.name for h in git_repo.branches()]:
+                            logging.info(git_repo.git.branch("-D", "master"))
+                        logging.info(git_repo.git.branch("-m", "master"))
+                        logging.info(git_repo.git.push("-f", "origin", "master"))
+                    else:
+                        logging.info(git_repo.git.push("-u", "origin", "master"))
+                        # The below would only work if the remote branch is set.
+                        # git_repo.remote("origin").push() 

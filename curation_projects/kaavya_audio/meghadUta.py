@@ -31,9 +31,9 @@ def set_mp3_metadata(mp3_file):
     )
 
 
-class MeghadutaRepo(audio_repo.AudioRepo):
+class MeghadutaRepoBase(audio_repo.BaseAudioRepo):
     pass
-repo = MeghadutaRepo(git_repo_paths=repo_paths, archive_id="meghadUta-dhvaniH", git_remote_origin_basepath="git@github.com:kAvya-audio")
+repo = MeghadutaRepoBase(repo_paths=repo_paths, archive_id="meghadUta-dhvaniH", git_remote_origin_basepath="git@github.com:kAvya-audio")
 # repo.update_git(collapse_history=False, first_push=True)
 # exit(1)
 # repo.archive_item.update_metadata(metadata=metadata)

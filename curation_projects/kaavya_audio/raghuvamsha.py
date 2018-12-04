@@ -43,7 +43,7 @@ def set_mp3_metadata(mp3_file):
     )
 
 
-class RaghuvamshaRepo(audio_repo.AudioRepo):
+class RaghuvamshaRepoBase(audio_repo.BaseAudioRepo):
     def update_metadata(self, mp3_files):
         """
     
@@ -53,7 +53,7 @@ class RaghuvamshaRepo(audio_repo.AudioRepo):
             set_mp3_metadata(mp3_file)
             mp3_file.save_metadata()
 
-repo = RaghuvamshaRepo(git_repo_paths=repo_paths, archive_id="Raghuvamsha-mUlam-vedabhoomi.org", git_remote_origin_basepath="git@github.com:kAvya-audio")
+repo = RaghuvamshaRepoBase(repo_paths=repo_paths, archive_id="Raghuvamsha-mUlam-vedabhoomi.org", git_remote_origin_basepath="git@github.com:kAvya-audio")
 # repo.update_metadata(mp3_files=repo.get_unnormalized_files())
 repo.update_git(collapse_history=True, first_push=False)
 # exit(1)

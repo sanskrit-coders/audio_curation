@@ -32,7 +32,7 @@ def set_mp3_metadata(mp3_file):
     )
 
 
-class MahaKshatriyaRepo(audio_repo.AudioRepo):
+class MahaKshatriyaRepoBase(audio_repo.BaseAudioRepo):
     def update_metadata_initial(self, mp3_files):
         """
     
@@ -47,7 +47,7 @@ class MahaKshatriyaRepo(audio_repo.AudioRepo):
 if __name__ == "__main__":
     archive_id="mahA-kShatriya-devuDu-narasimha-shAstrI"
     archive_audio_item = archive_utility.ArchiveAudioItem(archive_id=archive_id, config_file_path="/home/vvasuki/kannada-audio/ia_nagu.config")
-    repo = MahaKshatriyaRepo(git_repo_paths=repo_paths, archive_audio_item=archive_audio_item, git_remote_origin_basepath="git@github.com:kannada-audio")
+    repo = MahaKshatriyaRepoBase(repo_paths=repo_paths, archive_audio_item=archive_audio_item, git_remote_origin_basepath="git@github.com:kannada-audio")
     # repo.update_metadata_initial(mp3_files=repo.get_unnormalized_files())
     # repo.update_git(collapse_history=False, first_push=True)
     # exit(1)

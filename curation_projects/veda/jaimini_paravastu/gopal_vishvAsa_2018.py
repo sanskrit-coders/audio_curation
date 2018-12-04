@@ -25,7 +25,7 @@ logging.basicConfig(
 )
 
 
-class GopalVishvAsa2018Repo(audio_repo.AudioRepo):
+class GopalVishvAsa2018RepoBase(audio_repo.BaseAudioRepo):
 
     def update_metadata(self, mp3_files):
         """ Update mp3 metadata of a bunch of files. Meant to be overridden.
@@ -59,13 +59,14 @@ class NormalizedFilesRepo(audio_repo.NormalizedRepo):
 
 
 def update_gopal_2018(gmusic_client, dry_run=False):
-    repo = GopalVishvAsa2018Repo(git_repo_paths=[os.path.join("/home/vvasuki/veda-audio/jaiminIya-sAma-paravastu", "jaiminIya-sAma-gAna-paravastu-tradition-anuvachanam-gopAla-vishvAsa")], git_remote_origin_basepath="git@github.com:veda-audio")
-
+    repo = GopalVishvAsa2018RepoBase(repo_paths=[os.path.join("/home/vvasuki/veda-audio/jaiminIya-sAma-paravastu", "jaiminIya-sAma-gAna-paravastu-tradition-anuvachanam-gopAla-vishvAsa")], git_remote_origin_basepath="git@github.com:veda-audio")
+    logging.info(repo.reprocess(dry_run=dry_run))
+    
     archive_audio_item = None
     archive_audio_item = archive_utility.ArchiveAudioItem(archive_id=NormalizedFilesRepo.archive_id)
     archive_audio_item.update_metadata(metadata=NormalizedFilesRepo.metadata)
     normalized_files_repo = audio_repo.NormalizedRepo(base_repo=repo, archive_audio_item=archive_audio_item, gmusic_client=gmusic_client)
-    processed_files = normalized_files_repo.reprocess(dry_run=dry_run)
+    logging.info(normalized_files_repo.reprocess(dry_run=dry_run))
     
     # archive_audio_item.update_archive_audio_item(files_in=repo.get_normalized_files(), overwrite_all=False, dry_run=dry_run)
 

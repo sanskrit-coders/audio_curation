@@ -35,7 +35,7 @@ metadata = {
     """
 }
 
-class MbhRepo(audio_repo.AudioRepo):
+class MbhRepoBase(audio_repo.BaseAudioRepo):
     
     def update_metadata(self, mp3_files):
         """

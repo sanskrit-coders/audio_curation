@@ -23,7 +23,7 @@ logging.basicConfig(
 LOCAL_REPO_BASE_PATH = "/home/vvasuki/rAmAyaNa-audio/"
 repo_paths = sorted(glob.glob(os.path.join(LOCAL_REPO_BASE_PATH, "Kanda*")))
 
-class RamayanaRepo(audio_repo.AudioRepo):
+class RamayanaRepoBase(audio_repo.BaseAudioRepo):
     pass
 
 metadata = {

@@ -34,7 +34,7 @@ logging.basicConfig(
 )
 
 
-class RamanujaRepo(audio_repo.AudioRepo):
+class RamanujaRepoBase(audio_repo.BaseAudioRepo):
 
     def update_metadata(self, mp3_files):
         """ Update mp3 metadata of a bunch of files. Meant to be overridden.
@@ -67,7 +67,7 @@ def update_rAmAnuja_1974(gmusic_client, dry_run=False):
     archive_id="jaiminIya-sAma-gAna-paravastu-tradition-rAmAnuja"
     archive_audio_item = archive_utility.ArchiveAudioItem(archive_id=archive_id)
     # archive_audio_item.update_metadata(metadata=metadata)
-    repo = RamanujaRepo(git_repo_paths=[os.path.join("/home/vvasuki/veda-audio/jaiminIya-sAma-paravastu", "jaiminIya-sAma-gAna-paravastu-tradition-rAmAnuja")], archive_audio_item=archive_audio_item, git_remote_origin_basepath="git@github.com:veda-audio", gmusic_client=gmusic_client)
+    repo = RamanujaRepoBase(repo_paths=[os.path.join("/home/vvasuki/veda-audio/jaiminIya-sAma-paravastu", "jaiminIya-sAma-gAna-paravastu-tradition-rAmAnuja")], archive_audio_item=archive_audio_item, git_remote_origin_basepath="git@github.com:veda-audio", gmusic_client=gmusic_client)
     # archive_audio_item.update_archive_audio_item(files_in=repo.get_normalized_files(), overwrite_all=False, dry_run=dry_run)
     # return
     repo.reprocess_files(mp3_files=repo.get_unnormalized_files(), update_git=False, dry_run=dry_run, normalize_files=True)
