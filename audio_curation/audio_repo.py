@@ -87,17 +87,15 @@ class DerivativeRepo(object):
 
     def reprocess(self, dry_run=False):
         files_to_upload = self.update_derivatives(dry_run=dry_run)
-        self.delete_obsolete_derivatives(dry_run=dry_run)
         if self.archive_audio_item is not None:
             self.archive_audio_item.update_archive_item(file_paths=files_to_upload, overwrite_all=True, dry_run=dry_run)
-            self.archive_audio_item.delete_unaccounted_for_files(all_files=self.get_files(), dry_run=dry_run)
         # In case of dry_run, the derivative mp3 files are not generated, but gmusic_client needs them.
         if self.gmusic_client is not None and len(files_to_upload) > 0 and not dry_run:
             mp3_files = [mp3_utility.Mp3File(file_path=file, load_tags_from_file=True) for file in files_to_upload]
             logging.info(self.gmusic_client.get_album_tracks(mp3_files[0].metadata.album))
             self.gmusic_client.upload(mp3_files=mp3_files, overwrite=True, dry_run=dry_run)
-            all_mp3_files = [mp3_utility.Mp3File(file_path=file, load_tags_from_file=True) for file in self.get_files()]
-            self.gmusic_client.delete_unaccounted_for_files(all_files=all_mp3_files, dry_run=dry_run)
+
+        self.delete_obsolete_derivatives(dry_run=dry_run)
         return files_to_upload
 
     def update_derivatives(self, dry_run=False):
@@ -115,6 +113,13 @@ class DerivativeRepo(object):
                 logging.info("Removing obsolete file: %s", file_path)
                 if not dry_run:
                     os.remove(file_path)
+        if self.archive_audio_item is not None:
+            self.archive_audio_item.delete_unaccounted_for_files(all_files=self.get_files(), dry_run=dry_run)
+
+        if self.gmusic_client is not None:
+            all_mp3_files = [mp3_utility.Mp3File(file_path=file, load_tags_from_file=True) for file in self.get_files()]
+            self.gmusic_client.delete_unaccounted_for_files(all_files=all_mp3_files, dry_run=dry_run)
+
 
     def update_derivative(self, base_file):
         pass

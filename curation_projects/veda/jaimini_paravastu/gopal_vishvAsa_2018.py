@@ -62,6 +62,7 @@ def update_gopal_2018(gmusic_client, dry_run=False):
     # archive_audio_item.update_metadata(metadata=metadata)
     repo = GopalVishvAsa2018Repo(git_repo_paths=[os.path.join("/home/vvasuki/veda-audio/jaiminIya-sAma-paravastu", "jaiminIya-sAma-gAna-paravastu-tradition-anuvachanam-gopAla-vishvAsa")], git_remote_origin_basepath="git@github.com:veda-audio")
     normalized_files_repo = audio_repo.NormalizedRepo(base_repo=repo, archive_audio_item=archive_audio_item, gmusic_client=gmusic_client)
+    repo.update_metadata(mp3_files=[mp3_utility.Mp3File(file_path=file) for file in normalized_files_repo.get_underived_files()])
     files_updated = normalized_files_repo.reprocess(dry_run=dry_run)
 
     

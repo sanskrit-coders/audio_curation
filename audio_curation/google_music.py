@@ -94,7 +94,8 @@ class GMusicClient(object):
         album_name = all_files[0].metadata.album
         album_tracks = self.get_album_tracks(album_name=album_name)
         input_file_albums_set = set([mp3_file.metadata.album for mp3_file in all_files])
-        assert len(input_file_albums_set) == 1 and next(iter(input_file_albums_set)) == album_name
+        assert len(input_file_albums_set) == 1, input_file_albums_set
+        assert next(iter(input_file_albums_set)) == album_name, input_file_albums_set + " " + album_name
         titles = [mp3_file.metadata.title for mp3_file in all_files]
         excess_tracks = list(filter(lambda track: track["title"] not in titles, album_tracks))
         if len(excess_tracks) > 0:
