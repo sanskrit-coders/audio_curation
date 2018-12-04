@@ -9,6 +9,7 @@ https://archive.org/details/jaiminIya-sAma-gAna-paravastu-tradition
 jaiminIya-sAma-gAna-paravastu-tradition-gopAla-2015
 
 """
+import glob
 import logging
 import os
 
@@ -59,9 +60,11 @@ def update_gopal_2018(gmusic_client, dry_run=False):
     archive_audio_item = None
     archive_audio_item = archive_utility.ArchiveAudioItem(archive_id=archive_id)
     # archive_audio_item.update_metadata(metadata=metadata)
-    repo = GopalVishvAsa2018Repo(git_repo_paths=[os.path.join("/home/vvasuki/veda-audio/jaiminIya-sAma-paravastu", "jaiminIya-sAma-gAna-paravastu-tradition-anuvachanam-gopAla-vishvAsa")], archive_audio_item=archive_audio_item, git_remote_origin_basepath="git@github.com:veda-audio", gmusic_client=gmusic_client)
-    repo.reprocess_files(mp3_files=repo.get_unnormalized_files(), update_git=False, dry_run=dry_run, normalize_files=True)
-    repo.delete_unaccounted_for_files(all_files=repo.get_normalized_files(), dry_run=dry_run)
+    repo = GopalVishvAsa2018Repo(git_repo_paths=[os.path.join("/home/vvasuki/veda-audio/jaiminIya-sAma-paravastu", "jaiminIya-sAma-gAna-paravastu-tradition-anuvachanam-gopAla-vishvAsa")], git_remote_origin_basepath="git@github.com:veda-audio")
+    normalized_files_repo = audio_repo.NormalizedRepo(base_repo=repo, archive_audio_item=archive_audio_item, gmusic_client=gmusic_client)
+    files_updated = normalized_files_repo.reprocess(dry_run=dry_run)
+
+    
     # archive_audio_item.update_archive_audio_item(files_in=repo.get_normalized_files(), overwrite_all=False, dry_run=dry_run)
 
 

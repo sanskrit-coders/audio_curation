@@ -69,7 +69,6 @@ def update_rgveda_auro():
     # exit(1)
     # repo.archive_item.update_metadata(metadata=metadata)
     # repo.archive_item.delete_unaccounted_for_files(all_files=repo.get_unnormalized_files())
-    repo.update_archive_item(mp3_files_in=repo.get_unnormalized_files(), overwrite_all=False)
 
 
 if __name__ == "__main__":

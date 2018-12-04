@@ -3,11 +3,11 @@ from curation_projects import mbh_audio
 
 archive_id="mahAbhArata-mUla-paThanam-GP"
 archive_audio_item = archive_utility.ArchiveAudioItem(archive_id=archive_id)
-repo = mbh_audio.MbhRepo(git_repo_paths=mbh_audio.repo_paths, archive_audio_item=archive_audio_item, git_remote_origin_basepath="git@github.com:mahabharata-audio-2018")
+repo = mbh_audio.MbhRepo(git_repo_paths=mbh_audio.repo_paths, git_remote_origin_basepath="git@github.com:mahabharata-audio-2018")
+normalized_files_repo = audio_repo.NormalizedRepo(base_repo=repo, archive_audio_item=archive_audio_item)
 # repo.reprocess_files(mp3_files=repo.get_particular_normalized_files(["001-009.mp3", "001-027.mp3", "001-028.mp3", "001-043.mp3", ]))
 
-repo.reprocess_files(mp3_files=repo.get_unnormalized_files())
-archive_audio_item.delete_unaccounted_for_files(all_files=repo.get_normalized_files())
+normalized_files_repo.reprocess_files()
 
 # audio_repo.update_normalized_mp3s(mp3_files=repo.get_unnormalized_files())
 # repo.update_archive_item(mp3_files_in=repo.get_normalized_files(), overwrite_all=False)

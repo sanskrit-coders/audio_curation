@@ -57,6 +57,88 @@ def basename_based_normalized_file_namer(fpath):
     return os.path.join(os.path.dirname(os.path.dirname(fpath)), "normalized_mp3", os.path.basename(fpath))
 
 
+class DerivativeRepo(object):
+    """A repo whose files are derived from another DerivativeRepo or AudioRepo"""
+    def __init__(self, base_repo, derivative_namer, repo_paths=None, archive_audio_item=None,
+                 gmusic_client=None):
+        self.base_repo = base_repo
+        if repo_paths is None:
+            self.repo_paths = []
+        self.archive_audio_item = archive_audio_item
+        self.gmusic_client = gmusic_client
+        self.derivative_namer = derivative_namer
+
+    def get_files(self):
+        return [self.derivative_namer(file) for file in self.base_repo.get_files() if os.path.exists(file)]
+
+    def get_derived_files(self):
+        """ Get all non-outdated derivative files from this repo. 
+    
+        :return: List of :py:class:mp3_utility.Mp3File objects
+        """
+        derived_files = [self.derivative_namer(file.file_path) for file in self.base_repo.get_files() if
+                            not self.is_derivative_file_outdated(file.file_path)]
+        if len(derived_files) == 0:
+            logging.warning("derivative_files is empty! Out of date? Regenerate them.")
+        return derived_files
+
+    def get_underived_files(self):
+        return [file for file in self.base_repo.get_files() if self.is_derivative_file_outdated(file)]
+
+    def reprocess(self, dry_run=False):
+        files_to_upload = self.update_derivatives(dry_run=dry_run)
+        self.delete_obsolete_derivatives(dry_run=dry_run)
+        if self.archive_audio_item is not None:
+            self.archive_audio_item.update_archive_item(file_paths=files_to_upload, overwrite_all=True, dry_run=dry_run)
+            self.archive_audio_item.delete_unaccounted_for_files(all_files=self.get_files(), dry_run=dry_run)
+        # In case of dry_run, the derivative mp3 files are not generated, but gmusic_client needs them.
+        if self.gmusic_client is not None and len(files_to_upload) > 0 and not dry_run:
+            mp3_files = [mp3_utility.Mp3File(file_path=file, load_tags_from_file=True) for file in files_to_upload]
+            logging.info(self.gmusic_client.get_album_tracks(mp3_files[0].metadata.album))
+            self.gmusic_client.upload(mp3_files=mp3_files, overwrite=True, dry_run=dry_run)
+            all_mp3_files = [mp3_utility.Mp3File(file_path=file, load_tags_from_file=True) for file in self.get_files()]
+            self.gmusic_client.delete_unaccounted_for_files(all_files=all_mp3_files, dry_run=dry_run)
+        return files_to_upload
+
+    def update_derivatives(self, dry_run=False):
+        if dry_run:
+            return [self.derivative_namer(file) for file in self.get_underived_files()]
+        else:
+            underived_files = self.get_underived_files()
+            return [self.update_derivative(file) for file in underived_files]
+
+    def delete_obsolete_derivatives(self, dry_run=False):
+        derivatives_retainable = self.get_files()
+        repo_contents = [item for sublist in [sorted(glob.glob(os.path.join(repo_path, "*"))) for repo_path in self.repo_paths] for item in sublist]
+        for file_path in repo_contents:
+            if file_path not in derivatives_retainable:
+                logging.info("Removing obsolete file: %s", file_path)
+                if not dry_run:
+                    os.remove(file_path)
+
+    def update_derivative(self, base_file):
+        pass
+
+    def is_derivative_file_outdated(self, base_file_path):
+        """ Is the normalized file corresponding to this file outdated?
+    
+        :return: 
+        """
+        derivative_path = self.derivative_namer(base_file_path)
+        return (not os.path.isfile(derivative_path)) or os.path.getmtime(base_file_path) >= os.path.getmtime(derivative_path)
+
+
+class NormalizedRepo(DerivativeRepo):
+    def __init__(self, base_repo, derivative_namer=basename_based_normalized_file_namer, archive_audio_item=None,
+                 gmusic_client=None, normalization_speed_multiplier=1):
+        self.normalization_speed_multiplier = normalization_speed_multiplier
+        super(NormalizedRepo, self).__init__(base_repo=base_repo, derivative_namer=derivative_namer, archive_audio_item=archive_audio_item, gmusic_client=gmusic_client)
+        
+    def update_derivative(self, base_file):
+        mp3_utility.Mp3File(file_path=base_file, load_tags_from_file=True).save_normalized(overwrite=True, speed_multiplier=self.normalization_speed_multiplier, normalized_file_path=self.derivative_namer(base_file))
+        return self.derivative_namer(base_file)
+
+
 class AudioRepo(object):
     """ An Audio file repository.
     The local repository, by default, is assumed to be a collection of git repository working directories (self.git_repo_paths) with two subfolders:
@@ -72,7 +154,10 @@ class AudioRepo(object):
         - setup .gitignore in the repo so as to ignore contents of normalized_mp3
         - periodically collapse git history (using update_git()) so as to avoid wasted space. 
     """
-    def __init__(self, git_repo_paths, archive_audio_item=None, git_remote_origin_basepath=None, normalized_file_namer = basename_based_normalized_file_namer, normalization_speed_multiplier=1, gmusic_client=None):
+    def __init__(self, git_repo_paths, 
+                 archive_audio_item=None, 
+                 git_remote_origin_basepath=None,
+                 gmusic_client=None):
         self.git_repo_paths = git_repo_paths
         self.git_repos = [_get_repo(repo_path, git_remote_origin_basepath=git_remote_origin_basepath) for repo_path in git_repo_paths]
 
@@ -80,64 +165,11 @@ class AudioRepo(object):
                                     [sorted(glob.glob(os.path.join(repo_path, "mp3", "*.mp3"))) for repo_path in
                                      git_repo_paths] for item in sublist]
         logging.info("Got %d files" % (len(self.base_mp3_file_paths)))
-        self.base_mp3_files = list(
-            map(lambda fpath: mp3_utility.Mp3File(file_path=fpath, load_tags_from_file=True, normalized_file_path=normalized_file_namer(fpath)), self.base_mp3_file_paths))
         self.archive_item = archive_audio_item
         self.gmusic_client = gmusic_client
-        self.normalization_speed_multiplier = normalization_speed_multiplier
 
-    def update_normalized_mp3s(self, mp3_files):
-        """Regenerate normalized files corresponding to some mp3_files
-    
-        :param mp3_files: List of :py:class:mp3_utility.Mp3File objects
-        """
-        for mp3_file in mp3_files:
-            mp3_file.save_normalized(overwrite=True, speed_multiplier=self.normalization_speed_multiplier)
-
-
-    def get_normalized_files(self):
-        """ Get all non-outdated normalized-sound files from this repo. 
-    
-        :return: List of :py:class:mp3_utility.Mp3File objects
-        """
-        normalized_files = [file.normalized_file for file in self.base_mp3_files if
-                            not file.is_normalized_file_outdated()]
-        if len(normalized_files) == 0:
-            logging.warning("normalized_files is empty! Out of date? Regenerate them.")
-        return normalized_files
-
-    def get_unnormalized_files(self):
-        """ Get all 
-    
-        :return: List of :py:class:mp3_utility.Mp3File objects 
-        """
-        return [file for file in self.base_mp3_files if file.is_normalized_file_outdated()]
-
-    def delete_obsolete_normalized_files(self):
-        normalized_files = self.get_normalized_files()
-        normalized_file_paths_retainable = [file.file_path for file in normalized_files]
-        normalized_mp3_file_paths = [item for sublist in
-                                    [sorted(glob.glob(os.path.join(repo_path, "normalized_mp3", "*.mp3"))) for repo_path in self.git_repo_paths] for item in sublist]
-        for file_path in normalized_mp3_file_paths:
-            if file_path not in normalized_file_paths_retainable:
-                logging.info("Removing obsolete file: %s", file_path)
-                os.remove(file_path)
-
-    def get_particular_normalized_files(self, basename_list):
-        """ Get normalized-sound files corresponding to basename_list.
-
-        :param basename_list: A list of file names.
-        :return: List of :py:class:mp3_utility.Mp3File objects
-        """
-        return [file.normalized_file for file in self.base_mp3_files if file.basename in basename_list]
-
-    def update_archive_metadata(self, mp3_files):
-        """ Update archive metadata based on mp3 file metadata.
-    
-        :param mp3_files: List of :py:class:mp3_utility.Mp3File objects 
-        """
-        for mp3_file in mp3_files:
-            self.archive_item.update_mp3_metadata(mp3_file=mp3_file)
+    def get_files(self):
+        return self.base_mp3_file_paths
 
     def update_metadata(self, mp3_files):
         """ Update mp3 metadata of a bunch of files. Meant to be overridden.
@@ -146,50 +178,34 @@ class AudioRepo(object):
         """
         pass
 
-    def update_archive_item(self, mp3_files_in, overwrite_all=False, start_at=None, mirror_repo_structure=False,
-                            dry_run=False):
-        """ Upload a bunch of files to archive.
-    
-        :param mp3_files_in: List of :py:class:mp3_utility.Mp3File objects
-        :param overwrite_all: Boolean 
-        :param start_at: String representing the basename of the file to start the uploading with.
-        :param mirror_repo_structure: In archive item, place each file in a folder mirroring its local location.
-        :param dry_run: Boolean
-        """
-        mp3_files = mp3_files_in[:]
-        if start_at is not None:
-            mp3_files = list(itertools.dropwhile(lambda file: file.basename != start_at, mp3_files))
-        self.archive_item.update_archive_audio_item(files_in=mp3_files, overwrite_all=overwrite_all, dry_run=dry_run)
-
     def rename_to_titles(self, mp3_files):
         for mp3_file in mp3_files:
             mp3_file.rename_to_title()
 
-    def reprocess_files(self, mp3_files, update_git=True, normalize_files=True, dry_run=False):
+    def reprocess_files(self, mp3_files, update_git=True, dry_run=False):
         """ When you add a new file to the repository, use this method to update the metadata, the local normalized file colleciton, archive and git locations.
     
+        
+        :returns The list of :py:class:mp3_utility.Mp3File objects which were ultimately processed (could be same as mp3_files, or could be their normalized counterparts).
         """
         logging.info("reprocessing %d files", len(mp3_files))
         self.update_metadata(mp3_files=mp3_files)
         if update_git:
             self.update_git()
         files_to_upload = mp3_files
-        if normalize_files and not dry_run:
-            self.delete_obsolete_normalized_files()
-            self.update_normalized_mp3s(mp3_files=mp3_files)
-            files_to_upload = mp3_utility.get_normalized_files(mp3_files=mp3_files, skip_missing=True)
-        
         if self.archive_item is not None:
-            self.update_archive_item(mp3_files_in=files_to_upload, overwrite_all=True, start_at=None, dry_run=dry_run)
+            self.archive_item.update_archive_audio_item(mp3_files_in=files_to_upload, overwrite_all=True, dry_run=dry_run)
         if self.gmusic_client is not None and len(files_to_upload) > 0:
             logging.debug(self.gmusic_client.get_album_tracks(files_to_upload[0].metadata.album))
             self.gmusic_client.upload(mp3_files=files_to_upload, overwrite=True, dry_run=dry_run)
+        return files_to_upload
 
-    def delete_unaccounted_for_files(self, all_files, dry_run=False):
+    def delete_unaccounted_for_files(self, dry_run=False):
         if self.archive_item is not None:
-            self.archive_item.delete_unaccounted_for_files(all_files=all_files, dry_run=dry_run)
+            self.archive_item.delete_unaccounted_for_files(all_files=self.get_files(), dry_run=dry_run)
         if self.gmusic_client is not None:
-            self.gmusic_client.delete_unaccounted_for_files(all_files=all_files, dry_run=dry_run)
+            mp3_files = [mp3_utility.Mp3File(file_path=file, load_tags_from_file=True) for file in self.get_files()]            
+            self.gmusic_client.delete_unaccounted_for_files(all_files=mp3_files, dry_run=dry_run)
 
     def update_git(self, collapse_history=False, first_push=False):
         """ Update git repos associated with this item.

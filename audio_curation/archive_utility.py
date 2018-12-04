@@ -30,7 +30,7 @@ class ArchiveItem(object):
         
         :param archive_id: 
         :param config_file_path:
-        :param mirror_repo_structure: In archive item, place each file in a folder mirroring its local location.
+        :param mirrors_repo_structure: In archive item, place each file in a folder mirroring its local location.
         """
         self.mirrors_repo_structure = mirrors_repo_structure
         self.archive_id = archive_id
@@ -61,7 +61,7 @@ class ArchiveItem(object):
         May not satisfactorily delete files under directories.
         :param all_files: This has to include exactly _every_ file that is expected to be present in the archive item.
         """
-        local_basenames = list(map(lambda file: file.basename, all_files))
+        local_basenames = list(map(os.path.basename, all_files))
         # Deletion
         false_original_item_file_names = list(
             filter(lambda x: x not in local_basenames, self.original_item_file_names))
@@ -75,7 +75,7 @@ class ArchiveItem(object):
         """
         Upload some files.
     
-        :param files_paths: List of Strings.
+        :param file_paths: List of Strings.
         :param overwrite_all: Boolean.
         :param dry_run: Boolean.
         """
@@ -115,7 +115,7 @@ class ArchiveAudioItem(ArchiveItem):
         
         :param archive_id: 
         :param config_file_path:
-        :param mirror_repo_structure: In archive item, place each file in a folder mirroring its local location.
+        :param mirrors_repo_structure: In archive item, place each file in a folder mirroring its local location.
         """
         super(ArchiveAudioItem, self).__init__(archive_id=archive_id, config_file_path=config_file_path, mirrors_repo_structure=mirrors_repo_structure)
         self.item_files_mp3 = list(filter(lambda x: x["name"].endswith("mp3"), self.archive_item.files))

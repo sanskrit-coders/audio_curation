@@ -97,21 +97,16 @@ class Mp3Metadata(object):
 
 class Mp3File(object):
     """
-    Represents an mp3 file, together with its metadata and associated normalized-sound file.
+    Represents an mp3 file, together with its metadata.
     """
 
-    def __init__(self, file_path, mp3_metadata=None, load_tags_from_file=False, normalized_file_path=None):
+    def __init__(self, file_path, mp3_metadata=None, load_tags_from_file=False):
         self.file_path = file_path
         self.directory = os.path.dirname(file_path)
         self.basename = os.path.basename(file_path)
         self.metadata = mp3_metadata if mp3_metadata is not None else Mp3Metadata()
         if load_tags_from_file:
             self.metadata.get_from_file(self.file_path)
-
-        # Linter complains if instance variables are defined outside __init__, so defining here despite calling set_normalized_file():
-        self.normalized_file_path = None
-        self.normalized_file = None
-        self.set_normalized_file(normalized_file_path=normalized_file_path)
 
     def __repr__(self):
         return "Mp3File(%s)" % self.file_path
@@ -122,39 +117,6 @@ class Mp3File(object):
         """
         self.metadata.set_in_file(file_path=self.file_path)
 
-    def is_file_normalized(self):
-        """ Does the file_path indicate that this file is normalized?
-
-        :return: 
-        """
-        return self.normalized_file_path == self.file_path
-
-    def set_normalized_file(self, normalized_file_path=None):
-        """ Set details about the normalized file corresponding to this base file.
-
-        :return: 
-        """
-        if normalized_file_path is None:
-            self.normalized_file_path = os.path.join(os.path.dirname(self.directory), "normalized_mp3", self.basename)
-        else:
-            self.normalized_file_path = normalized_file_path
-        if self.is_file_normalized():
-            self.normalized_file = self
-        else:
-            if os.path.isfile(self.normalized_file_path) and os.access(self.normalized_file_path, os.R_OK):
-                self.normalized_file = Mp3File(self.normalized_file_path, mp3_metadata=self.metadata, normalized_file_path=self.normalized_file_path)
-            else:
-                self.normalized_file = None
-
-    def is_normalized_file_outdated(self):
-        """ Is the normalized file corresponding to this file outdated?
-
-        :return: 
-        """
-        return not self.is_file_normalized() and (
-                (not os.path.isfile(self.normalized_file_path)) or os.path.getmtime(self.file_path) >= os.path.getmtime(
-            self.normalized_file_path))
-
     def check_loudness(self):
         """ Get some loudness metric.
 
@@ -164,15 +126,15 @@ class Mp3File(object):
         sound = AudioSegment.from_mp3(self.file_path)
         return sound.dBFS
 
-    def save_normalized(self, overwrite=False, speed_multiplier=1):
+    def save_normalized(self, normalized_file_path, overwrite=False, speed_multiplier=1):
         """ Save the sound-normalized version of this file. 
 
         Currently the normalzied file produced will be mono-channel, around -16dbFS loud, have the same metadata as the original file.
         :param overwrite: 
         :return: 
         """
-        if (not overwrite) and (os.path.isfile(self.normalized_file_path)):
-            logging.warning("Not overwriting %s" % self.normalized_file_path)
+        if (not overwrite) and (os.path.isfile(normalized_file_path)):
+            logging.warning("Not overwriting %s" % normalized_file_path)
             return
         from pydub import AudioSegment
         sound = AudioSegment.from_mp3(self.file_path)
@@ -191,16 +153,15 @@ class Mp3File(object):
         normalized_sound = normalized_sound[start_trim:duration-end_trim]
         
         logging.info(normalized_sound.dBFS)
-        os.makedirs(os.path.dirname(self.normalized_file_path), exist_ok=True)
+        os.makedirs(os.path.dirname(normalized_file_path), exist_ok=True)
         self.metadata.get_from_file(self.file_path)
-        normalized_sound.export(self.normalized_file_path, format="mp3", tags={
+        normalized_sound.export(normalized_file_path, format="mp3", tags={
             "artist": self.metadata.artist, "album_artist": self.metadata.album_artist, "title": self.metadata.title,
             "album": self.metadata.album
         })
 
-        self.set_normalized_file()
         if speed_multiplier != 1:
-            self.normalized_file.speedup(speed_multiplier=speed_multiplier)
+            Mp3File(file_path=normalized_file_path).speedup(speed_multiplier=speed_multiplier)
 
     def rename_to_title(self):
         new_basename = filename_from_title(self.metadata.title)
@@ -221,7 +182,7 @@ class Mp3File(object):
             # Editing in-place: Move the file to a temporary location. ffmpeg cannot edit in place.
             edit_in_place = True
             unsped_file = self.file_path + ".tmp.mp3"
-            os.rename(self.normalized_file_path, unsped_file)
+            os.rename(self.file_path, unsped_file)
             out_file = self.file_path
         else:
             unsped_file = self.file_path
@@ -229,17 +190,6 @@ class Mp3File(object):
         ff.run()
         if edit_in_place:
             os.remove(unsped_file)
-
-def get_normalized_files(mp3_files, skip_missing=True):
-    normalized_files_unfiltered = [mp3_file.normalized_file for mp3_file in mp3_files]
-    if skip_missing:
-        normalized_files_present_only = [mp3_file for mp3_file in normalized_files_unfiltered if mp3_file is not None]
-        skipped_files = [mp3_file for mp3_file in normalized_files_unfiltered if mp3_file not in normalized_files_present_only]
-        logging.warning("Skipping: %s", pprint.pformat(skipped_files))
-        return normalized_files_present_only
-    else:
-        return normalized_files_unfiltered
-
 
 def filename_from_title(title):
     title_fixed = title.strip().replace(" ", "_").replace(".mp3", "")
