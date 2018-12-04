@@ -186,6 +186,7 @@ class Mp3File(object):
             out_file = self.file_path
         else:
             unsped_file = self.file_path
+        os.makedirs(os.path.dirname(out_file), exist_ok=True)
         ff = ffmpy.FFmpeg(inputs={unsped_file: None}, outputs={out_file: ["-filter:a", "atempo=" + str(speed_multiplier)]}, global_options="-y")
         ff.run()
         if edit_in_place:

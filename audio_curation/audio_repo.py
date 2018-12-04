@@ -56,6 +56,9 @@ def title_based_normalized_file_namer(fpath):
 def basename_based_normalized_file_namer(fpath):
     return os.path.join(os.path.dirname(os.path.dirname(fpath)), "normalized_mp3", os.path.basename(fpath))
 
+def basename_based_speed_file_namer(fpath):
+    return os.path.join(os.path.dirname(os.path.dirname(fpath)), "speed_mp3", os.path.basename(fpath))
+
 
 class DerivativeRepo(object):
     """A repo whose files are derived from another DerivativeRepo or AudioRepo"""
@@ -119,7 +122,7 @@ class DerivativeRepo(object):
         if self.archive_audio_item is not None:
             self.archive_audio_item.delete_unaccounted_for_files(all_files=self.get_files(), dry_run=dry_run)
 
-        if self.gmusic_client is not None:
+        if self.gmusic_client is not None and not dry_run:
             all_mp3_files = [mp3_utility.Mp3File(file_path=file, load_tags_from_file=True) for file in self.get_files()]
             self.gmusic_client.delete_unaccounted_for_files(all_files=all_mp3_files, dry_run=dry_run)
 
@@ -135,6 +138,13 @@ class DerivativeRepo(object):
         derivative_path = self.derivative_namer(base_file_path)
         return (not os.path.isfile(derivative_path)) or os.path.getmtime(base_file_path) >= os.path.getmtime(derivative_path)
 
+    def update_metadata(self, mp3_files):
+        """ Update mp3 metadata of a bunch of files. Meant to be overridden.
+
+        :param mp3_files: List of :py:class:mp3_utility.Mp3File objects
+        """
+        pass
+
 
 class NormalizedRepo(DerivativeRepo):
     def __init__(self, base_repo, derivative_namer=basename_based_normalized_file_namer, archive_audio_item=None,
@@ -146,12 +156,17 @@ class NormalizedRepo(DerivativeRepo):
         mp3_utility.Mp3File(file_path=base_file, load_tags_from_file=True).save_normalized(overwrite=True, speed_multiplier=self.normalization_speed_multiplier, normalized_file_path=self.derivative_namer(base_file))
         return self.derivative_namer(base_file)
 
-    def update_metadata(self, mp3_files):
-        """ Update mp3 metadata of a bunch of files. Meant to be overridden.
 
-        :param mp3_files: List of :py:class:mp3_utility.Mp3File objects
-        """
-        pass
+class SpeedFileRepo(DerivativeRepo):
+    def __init__(self, base_repo, derivative_namer=basename_based_speed_file_namer, archive_audio_item=None,
+                 gmusic_client=None, speed_multiplier=1):
+        self.speed_multiplier = speed_multiplier
+        super(SpeedFileRepo, self).__init__(base_repo=base_repo, derivative_namer=derivative_namer, archive_audio_item=archive_audio_item, gmusic_client=gmusic_client)
+
+    def update_derivative(self, base_file):
+        mp3_utility.Mp3File(file_path=base_file, load_tags_from_file=True).speedup(speed_multiplier=self.speed_multiplier, out_file=self.derivative_namer(base_file))
+        self.update_metadata([mp3_utility.Mp3File(file_path=self.derivative_namer(base_file), load_tags_from_file=True)])
+        return self.derivative_namer(base_file)
 
 
 class BaseAudioRepo(DerivativeRepo):
@@ -194,6 +209,10 @@ class BaseAudioRepo(DerivativeRepo):
         return changed_files
 
     def update_derivatives(self, dry_run=False):
+        underived_files = self.get_underived_files()
+        logging.info("reprocessing %d files", len(underived_files))
+        mp3_files = [mp3_utility.Mp3File(file_path=file, load_tags_from_file=True) for file in underived_files]
+        self.update_metadata(mp3_files=mp3_files)
         return self.get_underived_files()
 
     def delete_obsolete_derivatives(self, dry_run=False):
@@ -204,10 +223,7 @@ class BaseAudioRepo(DerivativeRepo):
 
         :returns The list of :py:class:mp3_utility.Mp3File objects which were ultimately processed (could be same as mp3_files, or could be their normalized counterparts).
         """
-        underived_files = self.get_underived_files()
-        logging.info("reprocessing %d files", len(underived_files))
-        mp3_files = [mp3_utility.Mp3File(file_path=file, load_tags_from_file=True) for file in underived_files]
-        self.update_metadata(mp3_files=mp3_files)
+        self.update_derivatives(dry_run=dry_run)
         self.update_git(dry_run=dry_run)
         return super(BaseAudioRepo, self).reprocess(dry_run=dry_run)
 
