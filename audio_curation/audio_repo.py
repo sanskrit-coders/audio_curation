@@ -159,7 +159,7 @@ class NormalizedRepo(DerivativeRepo):
 
 class SpeedFileRepo(DerivativeRepo):
     def __init__(self, base_repo, derivative_namer=basename_based_speed_file_namer, archive_audio_item=None,
-                 gmusic_client=None, speed_multiplier=1):
+                 gmusic_client=None, speed_multiplier=1.5):
         self.speed_multiplier = speed_multiplier
         super(SpeedFileRepo, self).__init__(base_repo=base_repo, derivative_namer=derivative_namer, archive_audio_item=archive_audio_item, gmusic_client=gmusic_client)
 

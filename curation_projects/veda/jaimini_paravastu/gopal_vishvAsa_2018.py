@@ -60,7 +60,7 @@ class NormalizedFilesRepo(audio_repo.NormalizedRepo):
     archive_id="jaiminIya-sAma-gAna-paravastu-tradition-anuvachanam-gopAla-vishvAsa-2018"
 
 
-class SpeedFileRepo(audio_repo.NormalizedRepo):
+class SpeedFileRepo(audio_repo.SpeedFileRepo):
     metadata = {
         "title" : "jaiminIya-sAma-gAna-paravastu-tradition-anuvachanam-gopAla-vishvAsa-150p-speed",
         "description" : """
@@ -102,7 +102,7 @@ def update_gopal_2018(gmusic_client, dry_run=False):
     logging.info(normalized_files_repo.reprocess(dry_run=dry_run))
 
     archive_audio_item = None
-    # archive_audio_item = archive_utility.ArchiveAudioItem(archive_id=SpeedFilesRepo.archive_id)
+    archive_audio_item = archive_utility.ArchiveAudioItem(archive_id=SpeedFileRepo.archive_id)
     # archive_audio_item.update_metadata(metadata=SpeedFilesRepo.metadata)
     speed_files_repo = SpeedFileRepo(base_repo=normalized_files_repo, archive_audio_item=archive_audio_item, gmusic_client=gmusic_client)
     logging.info(speed_files_repo.reprocess(dry_run=dry_run))
@@ -112,6 +112,6 @@ def update_gopal_2018(gmusic_client, dry_run=False):
 
 if __name__ == "__main__":
     gmusic_client = None
-    # gmusic_client = google_music.GMusicClient(oauth_file_path="/home/vvasuki/sysconf/kunchikA/google/sanskritnlp/oauth_access_token_gmusic.json", username="vishvas.vasuki@gmail.com")
+    gmusic_client = google_music.GMusicClient(oauth_file_path="/home/vvasuki/sysconf/kunchikA/google/sanskritnlp/oauth_access_token_gmusic.json", username="vishvas.vasuki@gmail.com")
     update_gopal_2018(gmusic_client=gmusic_client, dry_run=False)
     pass
