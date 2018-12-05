@@ -18,9 +18,9 @@ import pprint
 
 from audio_curation import audio_repo, archive_utility, mp3_utility, google_music
 
-# Remove all handlers associated with the root logger object.
 from audio_curation.audio_repo import SpeedFileRepo
 
+# Remove all handlers associated with the root logger object.
 for handler in logging.root.handlers[:]:
     logging.root.removeHandler(handler)
 logging.basicConfig(

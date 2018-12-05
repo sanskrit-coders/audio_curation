@@ -9,7 +9,7 @@ import logging
 import os
 
 # noinspection PyPep8
-from audio_curation import audio_repo, archive_utility
+from audio_curation import audio_repo, archive_utility, mp3_utility
 
 # Remove all handlers associated with the root logger object.
 from curation_projects.mbh_audio import mbh_book
@@ -26,18 +26,18 @@ repo_paths = sorted(glob.glob(os.path.join(LOCAL_REPO_BASE_PATH, "parva*")))
 
 from audio_curation.episode_data import google_sheets_data
 
-metadata = {
-    "title": "महाभारत-पारायणम् Mahabharata recitation (Gita press edition)",
-    "description": """
+class MbhRepoBase(audio_repo.BaseAudioRepo):
+    metadata = {
+        "title": "महाभारत-पारायणम् Mahabharata recitation (Gita press edition)",
+        "description": """
      महाभारत-मूल-पठनम्।
 
      भवद्योगदानं‌ काङ्क्ष्यते - https://sanskrit.github.io/projects/audio/mbh-audio/index.html
     """
-}
+    }
 
-class MbhRepoBase(audio_repo.BaseAudioRepo):
-    
-    def update_metadata(self, mp3_files):
+
+def update_metadata(self, mp3_files):
         """
     
         :param mp3_files: 
@@ -46,4 +46,25 @@ class MbhRepoBase(audio_repo.BaseAudioRepo):
         for mp3_file in mp3_files:
             mbh_book.set_mp3_metadata(mp3_file)
             mp3_file.metadata.artist = episode_data.get_recorder(mbh_book.get_parva_adhyaaya_id(file_path=mp3_file.file_path))
+            mp3_file.save_metadata()
+
+
+class SpeedFileRepo(audio_repo.SpeedFileRepo):
+    metadata = {
+        "title": "महाभारत-पारायणम् Mahabharata recitation (Gita press edition)",
+        "description": """
+     महाभारत-मूल-पठनम्।
+
+     भवद्योगदानं‌ काङ्क्ष्यते - https://sanskrit.github.io/projects/audio/mbh-audio/index.html
+    """
+    }
+
+    def update_metadata(self, mp3_files):
+        """ Update mp3 metadata of a bunch of files. Meant to be overridden.
+
+        :param mp3_files: List of :py:class:mp3_utility.Mp3File objects
+        """
+        for mp3_file in mp3_files:
+            mbh_book.set_mp3_metadata(mp3_file)
+            mp3_file.metadata.album = mp3_file.metadata.album + " 1.5x speed"
             mp3_file.save_metadata()
