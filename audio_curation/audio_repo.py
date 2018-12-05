@@ -37,12 +37,14 @@ def _get_repo(repo_path, git_remote_origin_basepath=None):
     try:
         return git.Repo(repo_path)
     except git.InvalidGitRepositoryError:
-        assert git_remote_origin_basepath is not None, "Pass valid git repos, or specify git_remote_origin_basepath so that we may initialize repos for you."
-        repo = git.Repo.init(repo_path)
-        remote_origin_path = "%s/%s" % (git_remote_origin_basepath, os.path.basename(repo_path))
-        remote_origin_path = remote_origin_path.replace("//", "/")
-        repo.create_remote("origin", remote_origin_path)
-        return repo
+        if git_remote_origin_basepath is not None:
+            repo = git.Repo.init(repo_path)
+            remote_origin_path = "%s/%s" % (git_remote_origin_basepath, os.path.basename(repo_path))
+            remote_origin_path = remote_origin_path.replace("//", "/")
+            repo.create_remote("origin", remote_origin_path)
+            return repo
+        else:
+            raise
 
 
 def title_based_normalized_file_namer(fpath):
@@ -66,7 +68,8 @@ class DerivativeRepo(object):
                  gmusic_client=None):
         self.base_repo = base_repo
         if repo_paths is None:
-            self.repo_paths = []
+            repo_paths = []
+        self.repo_paths = repo_paths
         self.archive_audio_item = archive_audio_item
         self.gmusic_client = gmusic_client
         self.derivative_namer = derivative_namer
@@ -147,21 +150,27 @@ class DerivativeRepo(object):
 
 
 class NormalizedRepo(DerivativeRepo):
-    def __init__(self, base_repo, derivative_namer=basename_based_normalized_file_namer, archive_audio_item=None,
-                 gmusic_client=None, normalization_speed_multiplier=1):
+    def __init__(self, base_repo, derivative_namer=basename_based_normalized_file_namer, archive_audio_item=None, gmusic_client=None, normalization_speed_multiplier=1, repo_paths=None):
         self.normalization_speed_multiplier = normalization_speed_multiplier
-        super(NormalizedRepo, self).__init__(base_repo=base_repo, derivative_namer=derivative_namer, archive_audio_item=archive_audio_item, gmusic_client=gmusic_client)
+        if repo_paths is None:
+            repo_paths = [os.path.join(repo_path, "normalized_mp3") for repo_path in base_repo.repo_paths]
+        super(NormalizedRepo, self).__init__(base_repo=base_repo, derivative_namer=derivative_namer, archive_audio_item=archive_audio_item, gmusic_client=gmusic_client, repo_paths=repo_paths)
         
     def update_derivative(self, base_file):
-        mp3_utility.Mp3File(file_path=base_file, load_tags_from_file=True).save_normalized(overwrite=True, speed_multiplier=self.normalization_speed_multiplier, normalized_file_path=self.derivative_namer(base_file))
+        base_mp3 = mp3_utility.Mp3File(file_path=base_file, load_tags_from_file=True)
+        # In case of renamed files, observed that the metadata might not get updated. Hence doing the below for good measure.
+        self.base_repo.update_metadata(mp3_files=[base_mp3])
+        base_mp3.save_normalized(overwrite=True, speed_multiplier=self.normalization_speed_multiplier, normalized_file_path=self.derivative_namer(base_file))
         return self.derivative_namer(base_file)
 
 
 class SpeedFileRepo(DerivativeRepo):
     def __init__(self, base_repo, derivative_namer=basename_based_speed_file_namer, archive_audio_item=None,
-                 gmusic_client=None, speed_multiplier=1.5):
+                 gmusic_client=None, speed_multiplier=1.5, repo_paths=None):
         self.speed_multiplier = speed_multiplier
-        super(SpeedFileRepo, self).__init__(base_repo=base_repo, derivative_namer=derivative_namer, archive_audio_item=archive_audio_item, gmusic_client=gmusic_client)
+        if repo_paths is None:
+            repo_paths = [repo_path.replace("normalized_mp3", "speed_mp3") for repo_path in base_repo.repo_paths]
+        super(SpeedFileRepo, self).__init__(base_repo=base_repo, derivative_namer=derivative_namer, archive_audio_item=archive_audio_item, gmusic_client=gmusic_client, repo_paths=repo_paths)
 
     def update_derivative(self, base_file):
         mp3_utility.Mp3File(file_path=base_file, load_tags_from_file=True).speedup(speed_multiplier=self.speed_multiplier, out_file=self.derivative_namer(base_file))
@@ -203,6 +212,7 @@ class BaseAudioRepo(DerivativeRepo):
         return self.get_files()
 
     def get_underived_files(self):
+        """Gets files not updated in git. Not sure how it handles renaming."""
         changed_files= []
         for git_repo in self.git_repos:
             changed_files.extend([ os.path.join(git_repo.working_tree_dir, item.a_path) for item in git_repo.index.diff(None) if os.path.exists(os.path.join(git_repo.working_tree_dir, item.a_path))])
@@ -257,10 +267,9 @@ class BaseAudioRepo(DerivativeRepo):
         # In case of collapse_history, we are:
         # following tip from https://stackoverflow.com/questions/13716658/how-to-delete-all-commit-history-in-github
         for git_repo in self.git_repos:
-            commits_behind = git_repo.iter_commits('master..origin/master')
             changed_files = [ item.a_path for item in git_repo.index.diff(None) ]
             logging.info("Got %d changed files for %s: %s", len(changed_files), git_repo.git_dir, changed_files)
-            if collapse_history or len(changed_files) > 0 or len(list(commits_behind)) > 0:
+            if collapse_history or len(changed_files) > 0:
                 if (not dry_run) and collapse_history:
                     logging.info(git_repo.git.checkout("--orphan", "branch_for_collapsing"))
                 add_changed(git_repo, dry_run=dry_run)
@@ -269,8 +278,13 @@ class BaseAudioRepo(DerivativeRepo):
                         if "master" in [h.name for h in git_repo.branches()]:
                             logging.info(git_repo.git.branch("-D", "master"))
                         logging.info(git_repo.git.branch("-m", "master"))
-                        logging.info(git_repo.git.push("-f", "origin", "master"))
-                    else:
+
+            if len(git_repo.remotes) > 0:
+                if collapse_history:
+                    logging.info(git_repo.git.push("-f", "origin", "master"))
+                else:
+                    commits_behind = list(git_repo.iter_commits('master..origin/master'))
+                    if len(commits_behind) > 0:
                         logging.info(git_repo.git.push("-u", "origin", "master"))
-                        # The below would only work if the remote branch is set.
-                        # git_repo.remote("origin").push() 
+                # The below would only work if the remote branch is set.
+                # git_repo.remote("origin").push() 

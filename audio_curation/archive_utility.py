@@ -65,8 +65,9 @@ class ArchiveItem(object):
         # Deletion
         false_original_item_file_names = list(
             filter(lambda x: x not in local_basenames, self.original_item_file_names))
-        logging.info("************************* Deleting the below unaccounted for files: \n" + pprint.pformat(
-            false_original_item_file_names))
+        if len(false_original_item_file_names) > 0:
+            logging.info("************************* Deleting the below unaccounted for files: \n" + pprint.pformat(
+                false_original_item_file_names))
         if len(false_original_item_file_names) > 0 and not dry_run:
                 internetarchive.delete(self.archive_item.identifier, files=false_original_item_file_names,
                                        cascade_delete=True)

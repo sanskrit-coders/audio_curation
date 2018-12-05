@@ -108,6 +108,6 @@ class GMusicClient(object):
         titles = [mp3_file.metadata.title for mp3_file in all_files]
         excess_tracks = list(filter(lambda track: track["title"] not in titles, album_tracks))
         if len(excess_tracks) > 0:
-            logging.info("deleting %s", pprint.pformat(excess_tracks))
+            logging.info("********* Deleting %s", pprint.pformat(excess_tracks))
             if not dry_run:
                 self.delete(tracks=excess_tracks)
