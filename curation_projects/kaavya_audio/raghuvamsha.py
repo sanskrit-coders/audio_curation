@@ -7,30 +7,11 @@
 import glob
 import logging
 import os
+import pprint
 
-from audio_curation import audio_repo, mp3_utility
+from audio_curation import audio_repo, mp3_utility, archive_utility, google_music
 
 repo_paths = ["/home/vvasuki/kAvya-audio/raghuvamsha"]
-
-metadata = {
-    "title": "raghuvaMsham रघुवंशम्",
-    "description": """
-      रघुवंशम् कालिदास-कृतम्।  
-
-The core portion of https://archive.org/details/RaghuvamshaByMahakaviKalisasrecordedByVedabhoomi-fixed-names .
-
-Original description:
-MahaKavi Kalidasa's second epic is 'Raghuvamsha'. With nineteen chapters ('sargas') in this poem, the epic describes the history of the kings Dileepa, Raghu, Aja, Dasharatha, Sri Rama, Lava and Kusha. 
-It also deals briefly with the twenty kings from Nala up to Agnivarna. Raghuvamsha depicts Bharata Varsha's ancient, historical culture and tradition. 
-Our ancestors had discussed in detail about such matters as to who could be a good ruler, who is a man of 'tapas' (penance), how one should lead a good, purposeful life and the like.
-Kalidasa's works are known for their triple qualities -- a sense of beauty, a capacity for appreciation of the aesthetic values and our traditional culture.
-
-About the recording: 
-With commentary by Sri Mallinatha Suri, the Mahakavya of Kumara Sambhava was recorded by Sri V.Aditya, Dr.K.V.Chandrashekhar, Dr. K. Neela Kantham and Sri N.C.T.Acharyulu.
-We would like to express gratitude to our co-ordinators Sri K. Aravinda Rao, Sri S. Srinivasa Charya, Sri A. Yagnaramulu and Sri B. Ashok Reddy and sponsors Sri Pallampati Venkateswarulu, the Srini Raju Foundation, Sri J.A.Chowdhary and Sri Goka Raju Laila Ganga Raju Charitable Trust who provided support and encouragement towards this endeavor.
-     भवद्योगदानं‌ काङ्क्ष्यते - https://sanskrit.github.io/projects/audio/kaavya-audio/index.html
-    """
-}
 
 
 def set_mp3_metadata(mp3_file):
@@ -44,6 +25,27 @@ def set_mp3_metadata(mp3_file):
 
 
 class RaghuvamshaRepoBase(audio_repo.BaseAudioRepo):
+
+    metadata = {
+        "title": "raghuvaMsham रघुवंशम्",
+        "description": """
+          रघुवंशम् कालिदास-कृतम्।  
+    
+    The core portion of https://archive.org/details/RaghuvamshaByMahakaviKalisasrecordedByVedabhoomi-fixed-names .
+    
+    Original description:
+    MahaKavi Kalidasa's second epic is 'Raghuvamsha'. With nineteen chapters ('sargas') in this poem, the epic describes the history of the kings Dileepa, Raghu, Aja, Dasharatha, Sri Rama, Lava and Kusha. 
+    It also deals briefly with the twenty kings from Nala up to Agnivarna. Raghuvamsha depicts Bharata Varsha's ancient, historical culture and tradition. 
+    Our ancestors had discussed in detail about such matters as to who could be a good ruler, who is a man of 'tapas' (penance), how one should lead a good, purposeful life and the like.
+    Kalidasa's works are known for their triple qualities -- a sense of beauty, a capacity for appreciation of the aesthetic values and our traditional culture.
+    
+    About the recording: 
+    With commentary by Sri Mallinatha Suri, the Mahakavya of Kumara Sambhava was recorded by Sri V.Aditya, Dr.K.V.Chandrashekhar, Dr. K. Neela Kantham and Sri N.C.T.Acharyulu.
+    We would like to express gratitude to our co-ordinators Sri K. Aravinda Rao, Sri S. Srinivasa Charya, Sri A. Yagnaramulu and Sri B. Ashok Reddy and sponsors Sri Pallampati Venkateswarulu, the Srini Raju Foundation, Sri J.A.Chowdhary and Sri Goka Raju Laila Ganga Raju Charitable Trust who provided support and encouragement towards this endeavor.
+         भवद्योगदानं‌ काङ्क्ष्यते - https://sanskrit.github.io/projects/audio/kaavya-audio/index.html
+        """
+    }
+
     def update_metadata(self, mp3_files):
         """
     
@@ -53,9 +55,19 @@ class RaghuvamshaRepoBase(audio_repo.BaseAudioRepo):
             set_mp3_metadata(mp3_file)
             mp3_file.save_metadata()
 
-repo = RaghuvamshaRepoBase(repo_paths=repo_paths, archive_id="Raghuvamsha-mUlam-vedabhoomi.org", git_remote_origin_basepath="git@github.com:kAvya-audio")
-# repo.update_metadata(mp3_files=repo.get_unnormalized_files())
-repo.update_git(collapse_history=True, first_push=False)
-# exit(1)
-# repo.archive_item.update_metadata(metadata=metadata)
-# repo.archive_item.archive_item.modify_metadata(metadata=metadata)
+def update_raghuvaMsha(gmusic_client, dry_run):
+    repo = RaghuvamshaRepoBase(repo_paths=repo_paths)
+    logging.info(pprint.pformat(repo.reprocess(dry_run=dry_run)))
+    
+    archive_id="Raghuvamsha-mUlam-vedabhoomi.org"
+    archive_audio_item = archive_utility.ArchiveAudioItem(archive_id=archive_id)
+    normalized_files_repo = audio_repo.NormalizedRepo(base_repo=repo, archive_audio_item=archive_audio_item)
+    logging.info(pprint.pformat(normalized_files_repo.reprocess(dry_run=dry_run)))
+
+
+
+if __name__ == "__main__":
+    gmusic_client = None
+    gmusic_client = google_music.GMusicClient(oauth_file_path="/home/vvasuki/sysconf/kunchikA/google/sanskritnlp/oauth_access_token_gmusic.json", username="vishvas.vasuki@gmail.com")
+    update_raghuvaMsha(gmusic_client=gmusic_client, dry_run=False)
+    pass

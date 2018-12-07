@@ -10,6 +10,8 @@ import pprint
 import internetarchive
 
 # Remove all handlers associated with the root logger object.
+from audio_curation import mp3_utility
+
 for handler in logging.root.handlers[:]:
     logging.root.removeHandler(handler)
 logging.basicConfig(
@@ -137,8 +139,10 @@ class ArchiveAudioItem(ArchiveItem):
         """
         Update metadata for a given file.
     
-        :param mp3_file: :py:class:mp3_utility.Mp3File 
+        :param mp3_file: string or :py:class:mp3_utility.Mp3File 
         """
+        if isinstance(mp3_file, str):
+            mp3_file = mp3_utility.Mp3File(file_path=mp3_file, load_tags_from_file=True)
         remote_name = self.get_remote_name(mp3_file.file_path)
         archive_item_file_details = self.item_files_dict.get(remote_name, None)
         mp3_metadata = mp3_file.metadata

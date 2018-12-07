@@ -1,3 +1,4 @@
+import glob
 import logging
 
 import pprint
@@ -20,6 +21,8 @@ logging.info(pprint.pformat(repo.reprocess(dry_run=dry_run)))
 
 archive_id="mahAbhArata-mUla-paThanam-GP"
 archive_audio_item = archive_utility.ArchiveAudioItem(archive_id=archive_id)
+# [archive_audio_item.update_mp3_metadata(mp3_file=file) for file in glob.glob("/home/vvasuki/mahabharata-audio-2018/parva01-101-233/normalized_mp3/001-137p0*.mp3")]
+# exit()
 normalized_files_repo = audio_repo.NormalizedRepo(base_repo=repo, archive_audio_item=archive_audio_item)
 logging.info(pprint.pformat(normalized_files_repo.reprocess(dry_run=dry_run)))
 
@@ -29,8 +32,3 @@ archive_audio_item.update_metadata(metadata=mbh_audio.SpeedFileRepo.metadata)
 speed_files_repo = mbh_audio.SpeedFileRepo(base_repo=normalized_files_repo, archive_audio_item=archive_audio_item)
 logging.info(pprint.pformat(speed_files_repo.reprocess(dry_run=dry_run)))
 
-# audio_repo.update_normalized_mp3s(mp3_files=repo.get_unnormalized_files())
-# repo.update_archive_item(mp3_files_in=repo.get_normalized_files(), overwrite_all=False)
-# repo.archive_item.update_metadata(metadata=metadata)
-# repo.update_git(collapse_history=False)
-# repo.archive_item.archive_item.modify_metadata(metadata=metadata)

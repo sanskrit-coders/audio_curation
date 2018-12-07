@@ -158,8 +158,8 @@ class NormalizedRepo(DerivativeRepo):
         
     def update_derivative(self, base_file):
         base_mp3 = mp3_utility.Mp3File(file_path=base_file, load_tags_from_file=True)
-        # In case of renamed files, observed that the metadata might not get updated. Hence doing the below for good measure.
-        self.base_repo.update_metadata(mp3_files=[base_mp3])
+        # In case of renamed files, observed that the metadata might not get updated (To check). Hence doing the below for good measure.
+        self.base_repo.update_derivative(base_file=base_file)
         base_mp3.save_normalized(overwrite=True, speed_multiplier=self.normalization_speed_multiplier, normalized_file_path=self.derivative_namer(base_file))
         return self.derivative_namer(base_file)
 
@@ -203,7 +203,7 @@ class BaseAudioRepo(DerivativeRepo):
                                     [sorted(glob.glob(os.path.join(repo_path, "mp3", "*.mp3"))) for repo_path in
                                      repo_paths] for item in sublist]
         logging.info("Got %d files" % (len(self.base_mp3_file_paths)))
-        super(BaseAudioRepo, self).__init__(base_repo=None, derivative_namer=None, repo_paths=repo_paths, archive_audio_item=archive_audio_item, gmusic_client=gmusic_client)
+        super(BaseAudioRepo, self).__init__(base_repo=None, derivative_namer=lambda x: x, repo_paths=repo_paths, archive_audio_item=archive_audio_item, gmusic_client=gmusic_client)
 
     def get_files(self):
         return self.base_mp3_file_paths
@@ -218,12 +218,10 @@ class BaseAudioRepo(DerivativeRepo):
             changed_files.extend([ os.path.join(git_repo.working_tree_dir, item.a_path) for item in git_repo.index.diff(None) if os.path.exists(os.path.join(git_repo.working_tree_dir, item.a_path))])
         return changed_files
 
-    def update_derivatives(self, dry_run=False):
-        underived_files = self.get_underived_files()
-        logging.info("reprocessing %d files", len(underived_files))
-        mp3_files = [mp3_utility.Mp3File(file_path=file, load_tags_from_file=True) for file in underived_files]
-        self.update_metadata(mp3_files=mp3_files)
-        return self.get_underived_files()
+    def update_derivative(self, base_file):
+        """The derivative, in case of a base repo, is usually the file itself."""
+        self.update_metadata([mp3_utility.Mp3File(file_path=base_file, load_tags_from_file=True)])
+        return base_file
 
     def delete_obsolete_derivatives(self, dry_run=False):
         pass
@@ -243,13 +241,17 @@ class BaseAudioRepo(DerivativeRepo):
         :param collapse_history: Boolean. Git history involving mp3 files takes up too much space - more than what providers like GitHub offer for free. This option makes this method put up the latest files without any history.
         :param dry_run: Boolean.
         """
+        def get_changed_files(repo_x):
+            changed_files = [ item.a_path for item in repo_x.index.diff(None) ]
+            changed_files.extend(list(filter(lambda path: os.path.basename(os.path.dirname(path)) == "mp3", repo_x.untracked_files)))
+            return changed_files
 
         def add_changed(repo_x, dry_run=False):
             """Add all untracked or changed items in a repo.
 
             :param repo_x: Some git repo object.
             """
-            changed_files = [ item.a_path for item in repo_x.index.diff(None) ]
+            changed_files = get_changed_files(repo_x=repo_x)
             if len(changed_files) > 0:
                 assert (False not in set(map(lambda file: file.endswith(".mp3") or file.endswith("md") or os.path.basename(file) in [".gitignore"], changed_files)))
                 for fpath in changed_files:
@@ -267,7 +269,7 @@ class BaseAudioRepo(DerivativeRepo):
         # In case of collapse_history, we are:
         # following tip from https://stackoverflow.com/questions/13716658/how-to-delete-all-commit-history-in-github
         for git_repo in self.git_repos:
-            changed_files = [ item.a_path for item in git_repo.index.diff(None) ]
+            changed_files = get_changed_files(repo_x=git_repo)
             logging.info("Got %d changed files for %s: %s", len(changed_files), git_repo.git_dir, changed_files)
             if collapse_history or len(changed_files) > 0:
                 if (not dry_run) and collapse_history:
@@ -278,12 +280,13 @@ class BaseAudioRepo(DerivativeRepo):
                         if "master" in [h.name for h in git_repo.branches()]:
                             logging.info(git_repo.git.branch("-D", "master"))
                         logging.info(git_repo.git.branch("-m", "master"))
-
+            
+            logging.debug("git_repo.remotes %s", git_repo.remotes)
             if len(git_repo.remotes) > 0:
                 if collapse_history:
                     logging.info(git_repo.git.push("-f", "origin", "master"))
                 else:
-                    commits_behind = list(git_repo.iter_commits('master..origin/master'))
+                    commits_behind = list(git_repo.iter_commits('origin/master..master'))
                     if len(commits_behind) > 0:
                         logging.info(git_repo.git.push("-u", "origin", "master"))
                 # The below would only work if the remote branch is set.

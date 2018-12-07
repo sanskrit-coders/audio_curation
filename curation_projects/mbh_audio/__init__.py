@@ -36,8 +36,7 @@ class MbhRepoBase(audio_repo.BaseAudioRepo):
     """
     }
 
-
-def update_metadata(self, mp3_files):
+    def update_metadata(self, mp3_files):
         """
     
         :param mp3_files: 
