@@ -31,4 +31,3 @@ archive_audio_item = archive_utility.ArchiveAudioItem(archive_id=archive_id)
 archive_audio_item.update_metadata(metadata=mbh_audio.SpeedFileRepo.metadata)
 speed_files_repo = mbh_audio.SpeedFileRepo(base_repo=normalized_files_repo, archive_audio_item=archive_audio_item)
 logging.info(pprint.pformat(speed_files_repo.reprocess(dry_run=dry_run)))
-
