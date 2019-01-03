@@ -1,11 +1,12 @@
 import logging
 
 import os
-import pprint
 
-import eyed3
+from mutagen.easyid3 import EasyID3
 
 # Remove all handlers associated with the root logger object.
+from mutagen.id3 import ID3NoHeaderError
+
 for handler in logging.root.handlers[:]:
     logging.root.removeHandler(handler)
 logging.basicConfig(
@@ -15,7 +16,7 @@ logging.basicConfig(
 
 # logging.warning("Logging.warning functional!")
 # logging.info("Logging.info functional!")
-logging.getLogger('eyed3').setLevel(logging.INFO)
+# logging.getLogger('eyed3').setLevel(logging.INFO)
 
 
 ## TODO: Move this to pydub.silence - https://github.com/jiaaro/pydub/pull/335
@@ -34,6 +35,12 @@ def detect_leading_silence(sound, silence_threshold=-50.0, chunk_size=10):
         trim_ms += chunk_size
 
     return trim_ms
+
+def get_easyId_metadata(key, audiofile):
+    if key in audiofile:
+        return audiofile[key][0]
+    else:
+        return None
 
 
 class Mp3Metadata(object):
@@ -63,36 +70,42 @@ class Mp3Metadata(object):
         if not os.path.exists(file_path):
             raise FileNotFoundError(file_path)
         # eyed3 seems to fail in case of some files (" I use my iPhone (Voice Memos) to record and then use Apple iTunes to convert to MP3 format...").
-        # TODO: Consider switching to mutagen - https://mutagen.readthedocs.io/en/latest/user/id3.html
-        audiofile = eyed3.load(file_path)
-        if audiofile is None:
-            raise Exception("Failed to load:" + file_path)
-        # logging.debug("Loaded: " + file_path)
-        if audiofile.tag is not None:
-            self.artist = audiofile.tag.artist
-            self.title = audiofile.tag.title
-            self.album = audiofile.tag.album
-            self.album_artist = audiofile.tag.album_artist
+        try:
+            audiofile = EasyID3(file_path)
+            if audiofile is None:
+                raise Exception("Failed to load:" + file_path)
+            # logging.debug("Loaded: " + file_path)
+            self.artist = get_easyId_metadata("artist", audiofile=audiofile)
+            self.title = get_easyId_metadata("title", audiofile=audiofile)
+            self.album = get_easyId_metadata("album", audiofile=audiofile)
+            self.album_artist = get_easyId_metadata("albumartist", audiofile=audiofile)
+        except ID3NoHeaderError:
+            audiofile = EasyID3()
+            audiofile.save(file_path)
 
     def set_in_file(self, file_path):
         """
 
         """
-        audiofile = eyed3.load(file_path)
-        if audiofile.tag is None:
-            audiofile.initTag()
-        local_tag_update_needed = (audiofile.tag.artist != self.artist) or (audiofile.tag.title != self.title) or (
-                audiofile.tag.album != self.album) or (audiofile.tag.album_artist != self.album_artist)
+        # eyed3 seems to fail in case of some files (" I use my iPhone (Voice Memos) to record and then use Apple iTunes to convert to MP3 format...").
+        audiofile = EasyID3(file_path)
+        if audiofile is None:
+            raise Exception("Failed to load:" + file_path)
+        local_tag_update_needed = (get_easyId_metadata("artist", audiofile=audiofile) != self.artist) or (get_easyId_metadata("title", audiofile=audiofile) != self.title) or (
+                get_easyId_metadata("album", audiofile=audiofile) != self.album) or (get_easyId_metadata("albumartist", audiofile=audiofile) != self.album_artist)
 
         if local_tag_update_needed:
             logging.info("***Updating %s locally." % file_path)
             logging.info("***Info: %s" % self)
-            audiofile.initTag()
-            audiofile.tag.artist = self.artist
-            audiofile.tag.title = self.title
-            audiofile.tag.album = self.album
-            audiofile.tag.album_artist = self.album_artist
-            audiofile.tag.save()
+            if self.artist is not None:
+                audiofile["artist"] = self.artist
+            if self.title is not None:
+                audiofile["title"] = self.title
+            if self.album is not None:
+                audiofile["album"] = self.album
+            if self.album_artist is not None:
+                audiofile["albumartist"] = self.album_artist
+            audiofile.save()
 
 
 class Mp3File(object):

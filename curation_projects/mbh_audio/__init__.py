@@ -9,7 +9,7 @@ import logging
 import os
 
 # noinspection PyPep8
-from audio_curation import audio_repo, archive_utility, mp3_utility
+from audio_curation import audio_repo
 
 # Remove all handlers associated with the root logger object.
 from curation_projects.mbh_audio import mbh_book
@@ -64,6 +64,5 @@ class SpeedFileRepo(audio_repo.SpeedFileRepo):
         :param mp3_files: List of :py:class:mp3_utility.Mp3File objects
         """
         for mp3_file in mp3_files:
-            mbh_book.set_mp3_metadata(mp3_file)
             mp3_file.metadata.album = mp3_file.metadata.album + " 1.5x speed"
             mp3_file.save_metadata()
