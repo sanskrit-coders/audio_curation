@@ -23,6 +23,8 @@ import logging
 import os
 
 # noinspection PyPep8
+import pprint
+
 from audio_curation import audio_repo, archive_utility, mp3_utility, google_music
 
 # Remove all handlers associated with the root logger object.
@@ -51,7 +53,7 @@ class Gopal2015RepoBase(audio_repo.BaseAudioRepo):
             mp3_file.save_metadata()
 
 
-def update_gopal_2015(gmusic_client, dry_run=False):
+class NormalizedFilesRepo(audio_repo.NormalizedRepo):
     metadata = {
         "title" : "jaiminIya-sAma-gAna-paravastu-tradition-gopAla-2015",
         "description" : """
@@ -66,12 +68,14 @@ def update_gopal_2015(gmusic_client, dry_run=False):
     """
     }
     archive_id="jaiminIya-sAma-gAna-paravastu-tradition-gopAla-2015"
-    archive_audio_item = archive_utility.ArchiveAudioItem(archive_id=archive_id)
-    archive_audio_item.update_metadata(metadata=metadata)
-    repo = Gopal2015RepoBase(repo_paths=[os.path.join("/home/vvasuki/veda-audio/jaiminIya-sAma-paravastu", "jaiminIya-sAma-gAna-paravastu-tradition-gopAla-2015")], archive_audio_item=archive_audio_item, git_remote_origin_basepath="git@github.com:veda-audio", gmusic_client=gmusic_client)
-    repo.reprocess_files(mp3_files=repo.get_unnormalized_files(), update_git=False, dry_run=dry_run, normalize_files=True)
-    repo.delete_unaccounted_for_files(all_files=repo.get_normalized_files(), dry_run=dry_run)
-    # archive_audio_item.update_archive_audio_item(files_in=repo.get_normalized_files(), overwrite_all=False, dry_run=dry_run)
+
+
+def update_gopal_2015(gmusic_client, dry_run=False):
+    repo = Gopal2015RepoBase(repo_paths=[os.path.join("/home/vvasuki/veda-audio/jaiminIya-sAma-paravastu", "jaiminIya-sAma-gAna-paravastu-tradition-gopAla-2015")])
+    archive_audio_item = archive_utility.ArchiveAudioItem(archive_id=NormalizedFilesRepo.archive_id)
+    archive_audio_item.update_metadata(metadata=NormalizedFilesRepo.metadata)
+    normalized_files_repo = audio_repo.NormalizedRepo(base_repo=repo, archive_audio_item=archive_audio_item, gmusic_client=gmusic_client)
+    logging.info(pprint.pformat(normalized_files_repo.reprocess(dry_run=dry_run)))
 
 
 if __name__ == "__main__":

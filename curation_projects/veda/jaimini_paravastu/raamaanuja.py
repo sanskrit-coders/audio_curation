@@ -23,6 +23,8 @@ import logging
 import os
 
 # noinspection PyPep8
+import pprint
+
 from audio_curation import audio_repo, archive_utility, mp3_utility, google_music
 
 # Remove all handlers associated with the root logger object.
@@ -50,7 +52,9 @@ class RamanujaRepoBase(audio_repo.BaseAudioRepo):
             mp3_file.save_metadata()
 
 
-def update_rAmAnuja_1974(gmusic_client, dry_run=False):
+
+
+class NormalizedFilesRepo(audio_repo.NormalizedRepo):
     metadata = {
         "title" : "jaiminIya-sAma-gAna-paravastu-tradition-rAmAnuja",
         "description" : """
@@ -65,14 +69,13 @@ def update_rAmAnuja_1974(gmusic_client, dry_run=False):
     """
     }
     archive_id="jaiminIya-sAma-gAna-paravastu-tradition-rAmAnuja"
-    archive_audio_item = archive_utility.ArchiveAudioItem(archive_id=archive_id)
-    # archive_audio_item.update_metadata(metadata=metadata)
-    repo = RamanujaRepoBase(repo_paths=[os.path.join("/home/vvasuki/veda-audio/jaiminIya-sAma-paravastu", "jaiminIya-sAma-gAna-paravastu-tradition-rAmAnuja")], archive_audio_item=archive_audio_item, git_remote_origin_basepath="git@github.com:veda-audio", gmusic_client=gmusic_client)
-    # archive_audio_item.update_archive_audio_item(files_in=repo.get_normalized_files(), overwrite_all=False, dry_run=dry_run)
-    # return
-    repo.reprocess_files(mp3_files=repo.get_unnormalized_files(), update_git=False, dry_run=dry_run, normalize_files=True)
-    repo.delete_unaccounted_for_files(all_files=repo.get_normalized_files(), dry_run=dry_run)
-    # gmusic_client.upload(mp3_files=repo.get_unnormalized_files(), dry_run=True)
+
+
+def update_rAmAnuja_1974(gmusic_client, dry_run=False):
+    repo = RamanujaRepoBase(repo_paths=[os.path.join("/home/vvasuki/veda-audio/jaiminIya-sAma-paravastu", "jaiminIya-sAma-gAna-paravastu-tradition-rAmAnuja")])
+    archive_audio_item = archive_utility.ArchiveAudioItem(archive_id=NormalizedFilesRepo.archive_id)
+    normalized_files_repo = audio_repo.NormalizedRepo(base_repo=repo, archive_audio_item=archive_audio_item, gmusic_client=gmusic_client)
+    logging.info(pprint.pformat(normalized_files_repo.reprocess(dry_run=dry_run)))
 
 
 if __name__ == "__main__":
