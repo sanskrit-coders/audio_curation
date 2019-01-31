@@ -87,6 +87,7 @@ class Mp3Metadata(object):
         """
 
         """
+        assert file_path.endswith(".mp3")
         # eyed3 seems to fail in case of some files (" I use my iPhone (Voice Memos) to record and then use Apple iTunes to convert to MP3 format...").
         audiofile = EasyID3(file_path)
         if audiofile is None:
