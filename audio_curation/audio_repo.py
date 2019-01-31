@@ -220,7 +220,8 @@ class BaseAudioRepo(DerivativeRepo):
 
     def update_derivative(self, base_file):
         """The derivative, in case of a base repo, is usually the file itself."""
-        self.update_metadata([mp3_utility.Mp3File(file_path=base_file, load_tags_from_file=True)])
+        if base_file.endswith("mp3"):
+            self.update_metadata([mp3_utility.Mp3File(file_path=base_file, load_tags_from_file=True)])
         return base_file
 
     def delete_obsolete_derivatives(self, dry_run=False):
