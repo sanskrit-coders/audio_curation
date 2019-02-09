@@ -96,16 +96,15 @@ class DerivativeRepo(object):
 
     def reprocess(self, dry_run=False):
         files_to_upload = self.update_derivatives(dry_run=dry_run)
-        self.reupload(files=files_to_upload, dry_run=dry_run, overwrite=True)
-        # Some processed files may not have been uploaded earlier. Hence: 
-        self.reupload(files=self.get_files(), dry_run=dry_run, overwrite=False)
+        self.delete_obsolete_derivatives(dry_run=dry_run)
+        self.sync_upload_locations(files=files_to_upload, dry_run=dry_run, overwrite=True)
+        # Some files, processed earlier, may not have been uploaded earlier. Hence: 
+        self.sync_upload_locations(files=self.get_files(), dry_run=dry_run, overwrite=False)
         return files_to_upload
 
-    def reupload(self, files=None, overwrite=False, dry_run=False):
-        if files is None:
-            files = self.get_files()
+    def sync_upload_locations(self, files, overwrite=False, dry_run=False):
         self.delete_obsolete_uploaded_files(dry_run=dry_run)
-        
+
         if self.archive_audio_item is not None:
             self.archive_audio_item.update_archive_item(file_paths=files, overwrite_all=overwrite, dry_run=dry_run)
 
