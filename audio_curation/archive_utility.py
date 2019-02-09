@@ -36,6 +36,7 @@ class ArchiveItem(object):
         """
         self.mirrors_repo_structure = mirrors_repo_structure
         self.archive_id = archive_id
+        self.archive_session = internetarchive.get_session(config_file=config_file_path)
         self.archive_item = internetarchive.get_item(archive_id, config_file=config_file_path)
         logging.info(self.archive_item.identifier)
 
@@ -71,8 +72,7 @@ class ArchiveItem(object):
             logging.info("************************* Deleting the below unaccounted for files: \n" + pprint.pformat(
                 false_original_item_file_names))
         if len(false_original_item_file_names) > 0 and not dry_run:
-                internetarchive.delete(self.archive_item.identifier, files=false_original_item_file_names,
-                                       cascade_delete=True)
+            internetarchive.delete(self.archive_item.identifier, files=false_original_item_file_names, cascade_delete=True, access_key=self.archive_session.access_key, secret_key=self.archive_session.secret_key)
 
     def update_archive_item(self, file_paths, overwrite_all=False, dry_run=False):
         """
