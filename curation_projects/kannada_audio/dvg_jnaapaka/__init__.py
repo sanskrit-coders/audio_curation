@@ -41,7 +41,7 @@ class RepoBase(audio_repo.BaseAudioRepo):
             mp3_file.metadata.title = episode_data.get_title(mp3_file.basename)
             mp3_file.save_metadata()
             
-def upload_volume(title, repo_paths, dry_run, gmusic_client=None):
+def upload_volume(title, repo_paths, dry_run=False, gmusic_client=None, description=None):
     repo = RepoBase(title=title, repo_paths=repo_paths, git_remote_origin_basepath="git@github.com:kannada-audio")
     logging.info(pprint.pformat(repo.reprocess(dry_run=dry_run)))
 
@@ -52,7 +52,7 @@ def upload_volume(title, repo_paths, dry_run, gmusic_client=None):
         archive_audio_item = archive_utility.ArchiveAudioItem(archive_id=archive_id, config_file_path="/home/vvasuki/kannada-audio/ia_nagu.config")
         metadata = {
             "title": title,
-            "description": """
+            "description": description if (description is not None) else """
              DV Gundappa 
              ಡಿ ವಿ ಗುಂಡಪ್ಪ/ ಡಿ ವಿ ಜಿ - ಜ್ಞಾಪಕಚಿತ್ರಶಾಲೆ
              Free Audio book.
