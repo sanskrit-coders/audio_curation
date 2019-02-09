@@ -4,10 +4,6 @@
 .. _Kannada audio project: https://sanskrit.github.io/projects/audio/kannada-audio/
 """
 
-import glob
-import logging
-import os
-
 from audio_curation import audio_repo, archive_utility, mp3_utility
 from audio_curation.episode_data import google_sheets_data
 
@@ -33,8 +29,8 @@ def set_mp3_metadata(mp3_file):
 
 
 class MahaDarshanaRepoBase(audio_repo.BaseAudioRepo):
-    def __init__(self, repo_paths, archive_audio_item=None, git_remote_origin_basepath=None, normalized_file_namer = audio_repo.title_based_normalized_file_namer):
-        super(MahaDarshanaRepoBase, self).__init__(repo_paths=repo_paths, archive_audio_item=archive_audio_item, git_remote_origin_basepath=git_remote_origin_basepath, normalized_file_namer = normalized_file_namer)
+    def __init__(self, repo_paths, archive_audio_item=None, git_remote_origin_basepath=None, normalized_file_namer = audio_repo.title_based_file_namer):
+        super(MahaDarshanaRepoBase, self).__init__(repo_paths=repo_paths, archive_audio_item=archive_audio_item, git_remote_origin_basepath=git_remote_origin_basepath)
 
     def update_metadata_initial(self, mp3_files):
         """
@@ -52,9 +48,3 @@ if __name__ == "__main__":
     archive_id="mahA-darshana-devuDu-narasimha-shAstrI"
     archive_audio_item = archive_utility.ArchiveAudioItem(archive_id=archive_id, config_file_path="/home/vvasuki/kannada-audio/ia_nagu.config")
     repo = MahaDarshanaRepoBase(repo_paths=repo_paths, archive_audio_item=archive_audio_item, git_remote_origin_basepath="git@github.com:kannada-audio")
-    # repo.update_metadata_initial(mp3_files=repo.get_unnormalized_files())
-    # repo.update_git(collapse_history=True, first_push=True)
-    # repo.reprocess_files(mp3_files=repo.get_unnormalized_files())
-    # repo.update_archive_item(mp3_files_in=repo.get_normalized_files())
-    # archive_audio_item.update_metadata(metadata=metadata)
-    archive_audio_item.delete_unaccounted_for_files(all_files=repo.get_normalized_files(), dry_run=False)

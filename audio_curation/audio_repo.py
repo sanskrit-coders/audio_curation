@@ -53,19 +53,16 @@ def _get_repo(repo_path, git_remote_origin_basepath=None):
             raise
 
 
-def title_based_normalized_file_namer(fpath):
+def title_based_file_namer(fpath, dir_name):
     metadata = mp3_utility.Mp3Metadata.from_file(fpath)
     if metadata.title is None:
-        return basename_based_normalized_file_namer(fpath)
+        return basename_based_file_namer(fpath, dir_name=dir_name)
     else:
         new_basename = mp3_utility.filename_from_title(metadata.title)
-        return os.path.join(os.path.dirname(os.path.dirname(fpath)), "normalized_mp3", new_basename)
+        return os.path.join(os.path.dirname(os.path.dirname(fpath)), dir_name, new_basename)
 
-def basename_based_normalized_file_namer(fpath):
-    return os.path.join(os.path.dirname(os.path.dirname(fpath)), "normalized_mp3", os.path.basename(fpath))
-
-def basename_based_speed_file_namer(fpath):
-    return os.path.join(os.path.dirname(os.path.dirname(fpath)), "speed_mp3", os.path.basename(fpath))
+def basename_based_file_namer(fpath, dir_name):
+    return os.path.join(os.path.dirname(os.path.dirname(fpath)), dir_name, os.path.basename(fpath))
 
 
 class DerivativeRepo(object):
@@ -75,20 +72,21 @@ class DerivativeRepo(object):
         self.base_repo = base_repo
         if repo_paths is None:
             repo_paths = []
+        self.dir_name = None
         self.repo_paths = repo_paths
         self.archive_audio_item = archive_audio_item
         self.gmusic_client = gmusic_client
         self.derivative_namer = derivative_namer
 
     def get_files(self):
-        return [self.derivative_namer(file) for file in self.base_repo.get_files() if os.path.exists(file)]
+        return [self.derivative_namer(file, dir_name=self.dir_name) for file in self.base_repo.get_files() if os.path.exists(file)]
 
     def get_derived_files(self):
         """ Get all non-outdated derivative files from this repo. 
     
         :return: List of :py:class:mp3_utility.Mp3File objects
         """
-        derived_files = [self.derivative_namer(file.file_path) for file in self.base_repo.get_files() if
+        derived_files = [self.derivative_namer(file.file_path, dir_name=self.dir_name) for file in self.base_repo.get_files() if
                             not self.is_derivative_file_outdated(file.file_path)]
         if len(derived_files) == 0:
             logging.warning("derivative_files is empty! Out of date? Regenerate them.")
@@ -113,7 +111,7 @@ class DerivativeRepo(object):
 
     def update_derivatives(self, dry_run=False):
         if dry_run:
-            return [self.derivative_namer(file) for file in self.get_underived_files()]
+            return [self.derivative_namer(file, dir_name=self.dir_name) for file in self.get_underived_files()]
         else:
             underived_files = self.get_underived_files()
             return [self.update_derivative(file) for file in underived_files]
@@ -144,7 +142,7 @@ class DerivativeRepo(object):
     
         :return: 
         """
-        derivative_path = self.derivative_namer(base_file_path)
+        derivative_path = self.derivative_namer(base_file_path, dir_name=self.dir_name)
         return (not os.path.isfile(derivative_path)) or os.path.getmtime(base_file_path) >= os.path.getmtime(derivative_path)
 
     def update_metadata(self, mp3_files):
@@ -156,32 +154,34 @@ class DerivativeRepo(object):
 
 
 class NormalizedRepo(DerivativeRepo):
-    def __init__(self, base_repo, derivative_namer=basename_based_normalized_file_namer, archive_audio_item=None, gmusic_client=None, normalization_speed_multiplier=1, repo_paths=None):
+    def __init__(self, base_repo, derivative_namer=basename_based_file_namer, archive_audio_item=None, gmusic_client=None, normalization_speed_multiplier=1, repo_paths=None):
+        self.dir_name = "normalized_mp3"
         self.normalization_speed_multiplier = normalization_speed_multiplier
         if repo_paths is None:
-            repo_paths = [os.path.join(repo_path, "normalized_mp3") for repo_path in base_repo.repo_paths]
+            repo_paths = [os.path.join(repo_path, self.dir_name) for repo_path in base_repo.repo_paths]
         super(NormalizedRepo, self).__init__(base_repo=base_repo, derivative_namer=derivative_namer, archive_audio_item=archive_audio_item, gmusic_client=gmusic_client, repo_paths=repo_paths)
         
     def update_derivative(self, base_file):
         base_mp3 = mp3_utility.Mp3File(file_path=base_file, load_tags_from_file=True)
         # In case of renamed files, observed that the metadata might not get updated (To check). Hence doing the below for good measure.
         self.base_repo.update_derivative(base_file=base_file)
-        base_mp3.save_normalized(overwrite=True, speed_multiplier=self.normalization_speed_multiplier, normalized_file_path=self.derivative_namer(base_file))
-        return self.derivative_namer(base_file)
+        base_mp3.save_normalized(overwrite=True, speed_multiplier=self.normalization_speed_multiplier, normalized_file_path=self.derivative_namer(base_file, dir_name=self.dir_name))
+        return self.derivative_namer(base_file, dir_name=self.dir_name)
 
 
 class SpeedFileRepo(DerivativeRepo):
-    def __init__(self, base_repo, derivative_namer=basename_based_speed_file_namer, archive_audio_item=None,
+    def __init__(self, base_repo, derivative_namer=basename_based_file_namer, archive_audio_item=None,
                  gmusic_client=None, speed_multiplier=1.5, repo_paths=None):
+        self.dir_name = "speed_mp3"
         self.speed_multiplier = speed_multiplier
         if repo_paths is None:
-            repo_paths = [repo_path.replace("normalized_mp3", "speed_mp3") for repo_path in base_repo.repo_paths]
+            repo_paths = [repo_path.replace(base_repo.dir_name, self.dir_name) for repo_path in base_repo.repo_paths]
         super(SpeedFileRepo, self).__init__(base_repo=base_repo, derivative_namer=derivative_namer, archive_audio_item=archive_audio_item, gmusic_client=gmusic_client, repo_paths=repo_paths)
 
     def update_derivative(self, base_file):
-        mp3_utility.Mp3File(file_path=base_file, load_tags_from_file=True).speedup(speed_multiplier=self.speed_multiplier, out_file=self.derivative_namer(base_file))
-        self.update_metadata([mp3_utility.Mp3File(file_path=self.derivative_namer(base_file), load_tags_from_file=True)])
-        return self.derivative_namer(base_file)
+        mp3_utility.Mp3File(file_path=base_file, load_tags_from_file=True).speedup(speed_multiplier=self.speed_multiplier, out_file=self.derivative_namer(base_file, dir_name=self.dir_name))
+        self.update_metadata([mp3_utility.Mp3File(file_path=self.derivative_namer(base_file, dir_name=self.dir_name), load_tags_from_file=True)])
+        return self.derivative_namer(base_file, dir_name=self.dir_name)
 
     def update_metadata(self, mp3_files):
         """ Update mp3 metadata of a bunch of files. Meant to be overridden.
@@ -211,14 +211,15 @@ class BaseAudioRepo(DerivativeRepo):
     def __init__(self, repo_paths,
                  archive_audio_item=None,
                  git_remote_origin_basepath=None,
-                 gmusic_client=None):
+                 gmusic_client=None, dir_name="mp3"):
+        self.dir_name = dir_name
         self.git_repos = [_get_repo(repo_path, git_remote_origin_basepath=git_remote_origin_basepath) for repo_path in repo_paths]
 
         self.base_mp3_file_paths = [item for sublist in
-                                    [sorted(glob.glob(os.path.join(repo_path, "mp3", "*.mp3"))) for repo_path in
+                                    [sorted(glob.glob(os.path.join(repo_path, self.dir_name, "*.mp3"))) for repo_path in
                                      repo_paths] for item in sublist]
         logging.info("Got %d files" % (len(self.base_mp3_file_paths)))
-        super(BaseAudioRepo, self).__init__(base_repo=None, derivative_namer=lambda x: x, repo_paths=repo_paths, archive_audio_item=archive_audio_item, gmusic_client=gmusic_client)
+        super(BaseAudioRepo, self).__init__(base_repo=None, derivative_namer=lambda x, _: x, repo_paths=repo_paths, archive_audio_item=archive_audio_item, gmusic_client=gmusic_client)
 
     def get_files(self):
         return self.base_mp3_file_paths

@@ -4,9 +4,7 @@
 .. _Kannada audio project: https://sanskrit.github.io/projects/audio/kannada-audio/
 """
 
-import glob
 import logging
-import os
 import pprint
 import re
 
@@ -37,7 +35,7 @@ class RepoBase(audio_repo.BaseAudioRepo):
     
         :param mp3_files: 
         """
-        episode_data = google_sheets_data.EpisodeData(spreadhsheet_id="1MvZ9lGzxEpI23O4q938qvwagknF7m3eZZp6SuNxbECk", worksheet_name="DVG-jnApaka", google_key = '/home/vvasuki/sysconf/kunchikA/google/sanskritnlp/service_account_key.json', episode_id_column="original_filename", title_column="new-title", script="en")
+        episode_data = google_sheets_data.EpisodeData(spreadhsheet_id="1MvZ9lGzxEpI23O4q938qvwagknF7m3eZZp6SuNxbECk", worksheet_name="DVG-jnApaka", google_key = '/home/vvasuki/sysconf/kunchikA/google/sanskritnlp/service_account_key.json', episode_id_column="current filename", title_column="new-title", script="en")
         for mp3_file in mp3_files:
             self.set_mp3_metadata(mp3_file)
             mp3_file.metadata.title = episode_data.get_title(mp3_file.basename)
@@ -48,6 +46,7 @@ def upload_volume(title, repo_paths, dry_run, gmusic_client=None):
     logging.info(pprint.pformat(repo.reprocess(dry_run=dry_run)))
 
     archive_id = re.sub("[^a-zA-Z]+", "-", title)
+    archive_id = re.sub("^[^a-zA-Z]+", "", archive_id)
     archive_audio_item = None
     if (not dry_run):
         archive_audio_item = archive_utility.ArchiveAudioItem(archive_id=archive_id, config_file_path="/home/vvasuki/kannada-audio/ia_nagu.config")
@@ -61,7 +60,7 @@ def upload_volume(title, repo_paths, dry_run, gmusic_client=None):
             """
         }
         archive_audio_item.update_metadata(metadata=metadata)
-    normalized_files_repo = audio_repo.NormalizedRepo(base_repo=repo, archive_audio_item=archive_audio_item)
+    normalized_files_repo = audio_repo.NormalizedRepo(base_repo=repo, archive_audio_item=archive_audio_item, derivative_namer=audio_repo.title_based_file_namer)
     logging.info(pprint.pformat(normalized_files_repo.reprocess(dry_run=dry_run)))
 
     archive_id = archive_id + "-1.5x"
@@ -69,6 +68,6 @@ def upload_volume(title, repo_paths, dry_run, gmusic_client=None):
         archive_audio_item = archive_utility.ArchiveAudioItem(archive_id=archive_id, config_file_path="/home/vvasuki/kannada-audio/ia_nagu.config")
         metadata["description"] = metadata["description"] + "\n\n 1.5x speed"
         archive_audio_item.update_metadata(metadata=metadata)
-    speed_file_repo = audio_repo.SpeedFileRepo(base_repo=repo, archive_audio_item=archive_audio_item, gmusic_client=gmusic_client)
+    speed_file_repo = audio_repo.SpeedFileRepo(base_repo=normalized_files_repo, archive_audio_item=archive_audio_item, gmusic_client=gmusic_client)
     logging.info(pprint.pformat(speed_file_repo.reprocess(dry_run=dry_run)))
     
