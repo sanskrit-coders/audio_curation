@@ -57,12 +57,3 @@ class SpeedFileRepo(audio_repo.SpeedFileRepo):
      भवद्योगदानं‌ काङ्क्ष्यते - https://sanskrit.github.io/projects/audio/mbh-audio/index.html
     """
     }
-
-    def update_metadata(self, mp3_files):
-        """ Update mp3 metadata of a bunch of files. Meant to be overridden.
-
-        :param mp3_files: List of :py:class:mp3_utility.Mp3File objects
-        """
-        for mp3_file in mp3_files:
-            mp3_file.metadata.album = mp3_file.metadata.album + " 1.5x speed"
-            mp3_file.save_metadata()

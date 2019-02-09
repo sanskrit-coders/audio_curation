@@ -34,6 +34,12 @@ def check_loudness(mp3_files):
 
 
 def _get_repo(repo_path, git_remote_origin_basepath=None):
+    """
+    
+    :param repo_path: 
+    :param git_remote_origin_basepath: Example: "git@github.com:kannada-audio" 
+    :return: 
+    """
     try:
         return git.Repo(repo_path)
     except git.InvalidGitRepositoryError:
@@ -177,6 +183,15 @@ class SpeedFileRepo(DerivativeRepo):
         self.update_metadata([mp3_utility.Mp3File(file_path=self.derivative_namer(base_file), load_tags_from_file=True)])
         return self.derivative_namer(base_file)
 
+    def update_metadata(self, mp3_files):
+        """ Update mp3 metadata of a bunch of files. Meant to be overridden.
+
+        :param mp3_files: List of :py:class:mp3_utility.Mp3File objects
+        """
+        for mp3_file in mp3_files:
+            mp3_file.metadata.album = mp3_file.metadata.album + " 1.5x speed"
+            mp3_file.save_metadata()
+
 
 class BaseAudioRepo(DerivativeRepo):
     """ An Audio file repository.
@@ -283,12 +298,13 @@ class BaseAudioRepo(DerivativeRepo):
                         logging.info(git_repo.git.branch("-m", "master"))
             
             logging.debug("git_repo.remotes %s", git_repo.remotes)
-            if len(git_repo.remotes) > 0:
+            if (not dry_run) and len(git_repo.remotes) > 0:
                 if collapse_history:
                     logging.info(git_repo.git.push("-f", "origin", "master"))
                 else:
-                    commits_behind = list(git_repo.iter_commits('origin/master..master'))
-                    if len(commits_behind) > 0:
-                        logging.info(git_repo.git.push("-u", "origin", "master"))
-                # The below would only work if the remote branch is set.
-                # git_repo.remote("origin").push() 
+                    # We don't do the below so as to be able to deal with uninitialized repositories.
+                    # commits_behind = list(git_repo.iter_commits('origin/master..master'))
+                    # if len(commits_behind) > 0:
+                    logging.info(git_repo.git.push("-u", "origin", "master"))
+                    # The below would only work if the remote branch is set.
+                    # git_repo.remote("origin").push()
