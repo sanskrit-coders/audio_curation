@@ -251,8 +251,10 @@ class BaseAudioRepo(DerivativeRepo):
         :returns The list of :py:class:mp3_utility.Mp3File objects which were ultimately processed (could be same as mp3_files, or could be their normalized counterparts).
         """
         self.update_derivatives(dry_run=dry_run)
+        reprocessed_files = super(BaseAudioRepo, self).reprocess(dry_run=dry_run)
+        # update_git should be called last - to account for files changed by other steps.
         self.update_git(dry_run=dry_run)
-        return super(BaseAudioRepo, self).reprocess(dry_run=dry_run)
+        return reprocessed_files
 
     def update_git(self, collapse_history=False, dry_run=False):
         """ Update git repos associated with this item.
