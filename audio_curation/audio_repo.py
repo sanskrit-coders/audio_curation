@@ -116,11 +116,14 @@ class DerivativeRepo(object):
 
 
     def update_derivatives(self, dry_run=False):
+        underived_files = self.get_underived_files()
+        return self.regenerate_derivatives(files=underived_files, dry_run=dry_run)
+
+    def regenerate_derivatives(self, files, dry_run=False):
         if dry_run:
-            return [self.derivative_namer(file, dir_name=self.dir_name) for file in self.get_underived_files()]
+            return [self.derivative_namer(file, dir_name=self.dir_name) for file in files]
         else:
-            underived_files = self.get_underived_files()
-            return [self.update_derivative(file) for file in underived_files]
+            return [self.update_derivative(file) for file in files]
 
     def delete_obsolete_derivatives(self, dry_run=False):
         derivatives_retainable = self.get_files()

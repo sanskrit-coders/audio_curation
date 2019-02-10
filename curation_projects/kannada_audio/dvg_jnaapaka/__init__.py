@@ -41,6 +41,7 @@ class RepoBase(audio_repo.BaseAudioRepo):
             
 def upload_volume(title, repo_paths, dry_run=False, gmusic_client=None, description=None):
     repo = RepoBase(title=title, repo_paths=repo_paths, git_remote_origin_basepath="git@github.com:kannada-audio")
+    logging.info(pprint.pformat(repo.regenerate_derivatives(files=repo.get_files(), dry_run=dry_run)))
     logging.info(pprint.pformat(repo.reprocess(dry_run=dry_run)))
 
     archive_id = re.sub("[^a-zA-Z]+", "-", title)
