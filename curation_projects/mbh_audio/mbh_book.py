@@ -1,6 +1,6 @@
 import os
 
-from audio_curation import mp3_utility
+from audio_utils import mp3_utility
 
 
 def get_parva_adhyaaya_id(file_path):

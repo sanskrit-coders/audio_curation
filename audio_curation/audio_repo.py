@@ -5,7 +5,7 @@ import os
 
 import git
 
-from audio_curation import mp3_utility
+from audio_utils import mp3_utility
 
 for handler in logging.root.handlers[:]:
     logging.root.removeHandler(handler)

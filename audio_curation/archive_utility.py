@@ -10,7 +10,7 @@ import pprint
 import internetarchive
 
 # Remove all handlers associated with the root logger object.
-from audio_curation import mp3_utility
+from audio_utils import mp3_utility
 
 for handler in logging.root.handlers[:]:
     logging.root.removeHandler(handler)
