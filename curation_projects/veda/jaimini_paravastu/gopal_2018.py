@@ -23,7 +23,9 @@ import logging
 import os
 
 # noinspection PyPep8
-from audio_curation import audio_repo, archive_utility, mp3_utility, google_music
+from audio_curation import audio_repo, archive_utility, google_music
+
+from audio_utils import mp3_utility
 
 # Remove all handlers associated with the root logger object.
 for handler in logging.root.handlers[:]:
