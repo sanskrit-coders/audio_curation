@@ -274,7 +274,8 @@ class BaseAudioRepo(DerivativeRepo):
             """
             changed_files = get_changed_files(repo_x=repo_x)
             if len(changed_files) > 0:
-                assert (False not in set(map(lambda file: file.endswith(".mp3") or file.endswith("md") or os.path.basename(file) in [".gitignore"], changed_files)))
+                for fpath in changed_files:
+                    assert fpath.endswith(".mp3") or fpath.endswith("md") or os.path.basename(fpath) in [".gitignore"], fpath
                 for fpath in changed_files:
                     if os.path.exists(os.path.join(repo_x.working_tree_dir, fpath)):
                         logging.info("Adding %s", fpath)
