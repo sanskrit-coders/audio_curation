@@ -36,7 +36,7 @@ class MbhRepoBase(audio_repo.BaseAudioRepo):
     """
     }
 
-    episode_data = google_sheets_data.EpisodeData(spreadhsheet_id="1sNH1AWhhoa5VATqMdLbF652s7srTG0Raa6K-sCwDR-8", worksheet_name="कार्यावली", google_key = '/home/vvasuki/sysconf/kunchikA/google/sanskritnlp/service_account_key.json', episode_id_column="पर्व-अध्यायः", recorder_column="पठिता")
+    episode_data = google_sheets_data.EpisodeData(spreadhsheet_id="1sNH1AWhhoa5VATqMdLbF652s7srTG0Raa6K-sCwDR-8", worksheet_name="कार्यावली", google_key = '/home/vvasuki/sysconf/kunchikA/google/sanskritnlp/service_account_key.json', episode_id_column="पर्व-अध्यायः", recorder_column="पठिता", title_column="शीर्षिका")
 
     def update_metadata(self, mp3_files):
         """
@@ -44,8 +44,7 @@ class MbhRepoBase(audio_repo.BaseAudioRepo):
         :param mp3_files: 
         """
         for mp3_file in mp3_files:
-            mbh_book.set_mp3_metadata(mp3_file)
-            mp3_file.metadata.artist = MbhRepoBase.episode_data.get_recorder(mbh_book.get_parva_adhyaaya_id(file_path=mp3_file.file_path))
+            mbh_book.set_mp3_metadata(mp3_file=mp3_file, episode_data=MbhRepoBase.episode_data)
             mp3_file.save_metadata()
 
 
