@@ -24,7 +24,7 @@ logging.info(pprint.pformat(base_repo.reprocess(dry_run=dry_run)))
 
 archive_id="mahAbhArata-mUla-paThanam-GP"
 archive_audio_item = archive_utility.ArchiveAudioItem(archive_id=archive_id)
-# [archive_audio_item.update_mp3_metadata(mp3_file=file) for file in glob.glob("/home/vvasuki/mahabharata-audio-2018/parva01-101-233/normalized_mp3/001-137p0*.mp3")]
+# [archive_audio_item.update_mp3_metadata(mp3_file=file) for file in glob.glob("/home/vvasuki/mahabharata-audio-2018/parva01-001-100/normalized_mp3/*.mp3")]
 # exit()
 normalized_files_repo = audio_repo.NormalizedRepo(base_repo=base_repo, archive_audio_item=archive_audio_item)
 logging.info(pprint.pformat(normalized_files_repo.reprocess(dry_run=dry_run)))
@@ -32,5 +32,7 @@ logging.info(pprint.pformat(normalized_files_repo.reprocess(dry_run=dry_run)))
 archive_id="mahAbhArata-mUla-paThanam-GP-150p-speed"
 archive_audio_item = archive_utility.ArchiveAudioItem(archive_id=archive_id)
 # archive_audio_item.update_metadata(metadata=mbh_audio.SpeedFileRepo.metadata)
+# [archive_audio_item.update_mp3_metadata(mp3_file=file) for file in glob.glob("/home/vvasuki/mahabharata-audio-2018/parva01-001-100/speed_mp3/*.mp3")]
+# exit()
 speed_files_repo = mbh_audio.SpeedFileRepo(base_repo=normalized_files_repo, archive_audio_item=archive_audio_item)
 logging.info(pprint.pformat(speed_files_repo.reprocess(dry_run=dry_run)))
