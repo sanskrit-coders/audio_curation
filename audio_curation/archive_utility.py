@@ -45,6 +45,9 @@ class ArchiveItem(object):
                 "name"].startswith ("_"), self.archive_item.files))
         self.original_item_file_names = sorted(map(lambda x: x["name"], self.original_item_files))
 
+    def __str__(self, *args, **kwargs):
+        return self.archive_id
+
     def update_metadata(self, metadata):
         self.archive_item.modify_metadata(metadata=metadata)
 
@@ -69,7 +72,7 @@ class ArchiveItem(object):
         false_original_item_file_names = list(
             filter(lambda x: x not in local_basenames, self.original_item_file_names))
         if len(false_original_item_file_names) > 0:
-            logging.info("************************* Deleting the below unaccounted for files: \n" + pprint.pformat(
+            logging.info("************************* Deleting %s the below unaccounted for files: \n%s", self, pprint.pformat(
                 false_original_item_file_names))
         if len(false_original_item_file_names) > 0 and not dry_run:
             internetarchive.delete(self.archive_item.identifier, files=false_original_item_file_names, cascade_delete=True, access_key=self.archive_session.access_key, secret_key=self.archive_session.secret_key)
@@ -82,7 +85,13 @@ class ArchiveItem(object):
         :param overwrite_all: Boolean.
         :param dry_run: Boolean.
         """
-        logging.info("************************* Now uploading")
+        if len(file_paths) == 0:
+            logging.debug("file_paths is empty.")
+            import traceback
+            # for line in traceback.format_stack():
+            #     logging.debug(line.strip())
+            return 
+        logging.info("************************* Now uploading to %s from %s", self, os.path.dirname(file_paths[0]))
         remote_names = list(map(lambda file_path: self.get_remote_name(file_path), file_paths))
         remote_name_to_file_path = dict(
             zip(remote_names, file_paths))

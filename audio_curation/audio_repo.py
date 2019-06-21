@@ -77,6 +77,9 @@ class DerivativeRepo(object):
         self.gmusic_client = gmusic_client
         self.derivative_namer = derivative_namer
 
+    def __str__(self, *args, **kwargs): # real signature unknown
+        return "%s: %s" % (self.dir_name, self.repo_paths)
+
     def get_files(self):
         return [self.derivative_namer(file, dir_name=self.dir_name) for file in self.base_repo.get_files() if os.path.exists(file)]
 
@@ -95,6 +98,7 @@ class DerivativeRepo(object):
         return [file for file in self.base_repo.get_files() if self.is_derivative_file_outdated(file)]
 
     def reprocess(self, dry_run=False):
+        logging.info("************************* Reprocessing %s", self)
         files_to_upload = self.update_derivatives(dry_run=dry_run)
         self.delete_obsolete_derivatives(dry_run=dry_run)
         self.sync_upload_locations(files=files_to_upload, dry_run=dry_run, overwrite=True)
