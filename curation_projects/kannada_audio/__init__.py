@@ -8,11 +8,14 @@ import logging
 import pprint
 import re
 
-from audio_curation import audio_repo, archive_utility, mp3_utility
+from audio_curation import audio_repo, archive_utility
 from audio_curation.episode_data import google_sheets_data
+from audio_utils import mp3_utility
+
 
 class RepoBase(audio_repo.BaseAudioRepo):
-    def __init__(self, title, author, reader, episode_data, repo_paths,
+    def __init__(self, title, author, reader, repo_paths,
+                 episode_data=None,
                  archive_audio_item=None,
                  git_remote_origin_basepath=None,
                  gmusic_client=None):
@@ -34,13 +37,15 @@ class RepoBase(audio_repo.BaseAudioRepo):
     
         :param mp3_files: 
         """
+        if not self.episode_data:
+            return 
         for mp3_file in mp3_files:
             self.set_mp3_metadata(mp3_file)
             mp3_file.metadata.title = self.episode_data.get_title(mp3_file.basename)
             mp3_file.save_metadata()
 
 
-def upload_volume(title, repo_paths, author, reader, episode_data, archive_id=None, dry_run=False, gmusic_client=None, description=None):
+def upload_volume(title, repo_paths, author, reader, episode_data=None, archive_id=None, dry_run=False, gmusic_client=None, description=None):
 
     repo = RepoBase(title=title, author=author, reader=reader, episode_data=episode_data, repo_paths=repo_paths, git_remote_origin_basepath="git@github.com:kannada-audio")
     logging.info(pprint.pformat(repo.reprocess(dry_run=dry_run)))

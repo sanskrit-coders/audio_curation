@@ -5,9 +5,11 @@ from curation_projects import kannada_audio
 gmusic_client = None
 gmusic_client = google_music.GMusicClient(oauth_file_path="/home/vvasuki/sysconf/kunchikA/google/sanskritnlp/oauth_access_token_gmusic.json", username="vishvas.vasuki@gmail.com")
 
+kannada_audio.upload_volume(title ="havyaka hADugaLu ಹವ್ಯಕ ಹಾಡುಗಳು", archive_id="havyaka_hADugaLu", author="ಹವ್ಯಕರು", reader="ಸುಭದ್ರಾ", repo_paths=["/home/vvasuki/kannada-audio/" + "havyaka-hadu-by-subhadra"], gmusic_client=gmusic_client, dry_run=False)
+
 # rangapriya svAmI\
-episode_data = google_sheets_data.EpisodeData(spreadhsheet_id="1MvZ9lGzxEpI23O4q938qvwagknF7m3eZZp6SuNxbECk", worksheet_name="habba", google_key = '/home/vvasuki/sysconf/kunchikA/google/sanskritnlp/service_account_key.json', episode_id_column="current filename", title_column="new title", script="en")
-kannada_audio.upload_volume(title ="ಭಾರತೀಯ-ಹಬ್ಬ-ಆಚರಣೆಗಳು bhAratIya habba AcharaNegaLu", archive_id="bhAratIya-habba-AcharaNegaLu-rangapriya-swamy", reader="ವಾಸುಕಿ-ನಾಗರತ್ನಾ vAsuki-nAgaratnA", author="ರಂಗಪ್ರಿಯ-ಸ್ವಾಮಿ rangapriya-svAmI", episode_data=episode_data, repo_paths=["/home/vvasuki/kannada-audio/" + "bhAratIya-habba-AcharaNegaLu-rangapriya-swamy"], gmusic_client=gmusic_client, dry_run=False)
+# episode_data = google_sheets_data.EpisodeData(spreadhsheet_id="1MvZ9lGzxEpI23O4q938qvwagknF7m3eZZp6SuNxbECk", worksheet_name="habba", google_key = '/home/vvasuki/sysconf/kunchikA/google/sanskritnlp/service_account_key.json', episode_id_column="current filename", title_column="new title", script="en")
+# kannada_audio.upload_volume(title ="ಭಾರತೀಯ-ಹಬ್ಬ-ಆಚರಣೆಗಳು bhAratIya habba AcharaNegaLu", archive_id="bhAratIya-habba-AcharaNegaLu-rangapriya-swamy", reader="ವಾಸುಕಿ-ನಾಗರತ್ನಾ vAsuki-nAgaratnA", author="ರಂಗಪ್ರಿಯ-ಸ್ವಾಮಿ rangapriya-svAmI", episode_data=episode_data, repo_paths=["/home/vvasuki/kannada-audio/" + "bhAratIya-habba-AcharaNegaLu-rangapriya-swamy"], gmusic_client=gmusic_client, dry_run=False)
 
 
 # gorur
