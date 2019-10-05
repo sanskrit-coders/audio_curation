@@ -4,12 +4,11 @@
 .. _kAvya audio project: https://sanskrit.github.io/projects/audio/kaavya-audio/
 """
 
-import glob
 import logging
-import os
 import pprint
 
-from audio_curation import audio_repo, mp3_utility, archive_utility, google_music
+from audio_curation import audio_repo, archive_utility, google_music
+from audio_utils import mp3_utility
 
 repo_paths = ["/home/vvasuki/kAvya-audio/raghuvamsha"]
 

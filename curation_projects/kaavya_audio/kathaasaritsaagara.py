@@ -8,7 +8,8 @@ import glob
 import logging
 import os
 
-from audio_curation import audio_repo, mp3_utility
+from audio_curation import audio_repo
+from audio_utils import mp3_utility
 from audio_curation.episode_data import google_sheets_data
 
 LOCAL_REPO_BASE_PATH = "/home/vvasuki/kAvya-audio/kathAsaritsAgara"

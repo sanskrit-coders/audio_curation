@@ -8,7 +8,8 @@ import glob
 import logging
 import os
 
-from audio_curation import audio_repo, mp3_utility
+from audio_curation import audio_repo
+from audio_utils import mp3_utility
 
 repo_paths = ["/home/vvasuki/kAvya-audio/meghadUta"]
 
