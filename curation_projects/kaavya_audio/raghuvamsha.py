@@ -24,6 +24,17 @@ def set_mp3_metadata(mp3_file):
 
 
 class RaghuvamshaRepoBase(audio_repo.BaseAudioRepo):
+    def update_metadata(self, mp3_files):
+        """
+    
+        :param mp3_files: 
+        """
+        for mp3_file in mp3_files:
+            set_mp3_metadata(mp3_file)
+            mp3_file.save_metadata()
+
+
+class NormalizedFilesRepo(audio_repo.NormalizedRepo):
 
     metadata = {
         "title": "raghuvaMsham रघुवंशम्",
@@ -44,23 +55,17 @@ class RaghuvamshaRepoBase(audio_repo.BaseAudioRepo):
          भवद्योगदानं‌ काङ्क्ष्यते - https://sanskrit.github.io/projects/audio/kaavya-audio/index.html
         """
     }
+    archive_id="Raghuvamsha-mUlam-vedabhoomi.org"
 
-    def update_metadata(self, mp3_files):
-        """
-    
-        :param mp3_files: 
-        """
-        for mp3_file in mp3_files:
-            set_mp3_metadata(mp3_file)
-            mp3_file.save_metadata()
+
 
 def update_raghuvaMsha(gmusic_client, dry_run):
     repo = RaghuvamshaRepoBase(repo_paths=repo_paths)
     logging.info(pprint.pformat(repo.reprocess(dry_run=dry_run)))
     
-    archive_id="Raghuvamsha-mUlam-vedabhoomi.org"
-    archive_audio_item = archive_utility.ArchiveAudioItem(archive_id=archive_id)
-    normalized_files_repo = audio_repo.NormalizedRepo(base_repo=repo, archive_audio_item=archive_audio_item)
+    archive_audio_item = archive_utility.ArchiveAudioItem(archive_id=NormalizedFilesRepo.archive_id)
+    # archive_audio_item.update_metadata(metadata=NormalizedFilesRepo.metadata)
+    normalized_files_repo = NormalizedFilesRepo(base_repo=repo, archive_audio_item=archive_audio_item, gmusic_client=gmusic_client)
     logging.info(pprint.pformat(normalized_files_repo.reprocess(dry_run=dry_run)))
 
 
