@@ -23,7 +23,8 @@ class RepoBase(audio_repo.BaseAudioRepo):
             mp3_file.metadata = mp3_utility.Mp3Metadata(
                 title=mp3_file.title_from_filename(),
                 album="durgA-saptashatI दुर्गासप्तशती",
-                artist="MH brAhmaNas ब्राह्मणाः"
+                artist="MH brAhmaNas ब्राह्मणाः",
+                album_artist="MH brAhmaNas ब्राह्मणाः"
             )
             mp3_file.save_metadata()
 
