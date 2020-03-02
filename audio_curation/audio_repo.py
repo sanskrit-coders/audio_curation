@@ -1,3 +1,30 @@
+"""
+This package contains some Repository classes used for transforming and curating audio files. One repository may be derived from others.
+
+Also, some utility functions are defined.
+
+
+Common use-case
+---------------
+
+The local repository, by default, is assumed to be a collection of git
+repository working directories (self.repo_paths) with two subfolders:
+
+::
+
+   - mp3: Containing mp3-s for every "episode" in the repository. This collection is programmatically represented by a BaseRepo.
+   - normalized_mp3: Automatically generated from mp3/*.mp3. This collection is represented by a NormalizedRepo.
+
+Remote staging/ storage can happen via git remotes and an archive item with a given id.
+
+Current recommendations regarding git repos:
+
+::
+
+   - be mindful of Github repo size limits (1GB as of 2018)
+   - setup .gitignore in the repo so as to ignore contents of normalized_mp3
+   - periodically collapse git history (using update_git()) so as to avoid wasted space. 
+"""
 import glob
 import logging
 import os
@@ -60,12 +87,16 @@ def title_based_file_namer(fpath, dir_name):
         new_basename = mp3_utility.filename_from_title(metadata.title)
         return os.path.join(os.path.dirname(os.path.dirname(fpath)), dir_name, new_basename)
 
+
 def basename_based_file_namer(fpath, dir_name):
     return os.path.join(os.path.dirname(os.path.dirname(fpath)), dir_name, os.path.basename(fpath))
 
 
 class DerivativeRepo(object):
-    """A repo whose files are derived from another DerivativeRepo or AudioRepo"""
+    """A repo whose files are derived from another DerivativeRepo or AudioRepo.
+    
+    The major point of entry is reprocess().
+    """
     def __init__(self, base_repo, derivative_namer, dir_name, repo_paths=None, archive_audio_item=None, gmusic_client=None):
         self.base_repo = base_repo
         self.dir_name = dir_name
@@ -83,7 +114,7 @@ class DerivativeRepo(object):
         return [self.derivative_namer(file, dir_name=self.dir_name) for file in self.base_repo.get_files() if os.path.exists(file)]
 
     def get_derived_files(self):
-        """ Get all non-outdated derivative files from this repo. 
+        """ Get all non-outdated derivative files from this repo.
     
         :return: List of :py:class:mp3_utility.Mp3File objects
         """
@@ -201,18 +232,6 @@ class SpeedFileRepo(DerivativeRepo):
 
 class BaseAudioRepo(DerivativeRepo):
     """ An Audio file repository.
-    The local repository, by default, is assumed to be a collection of git repository working directories (self.repo_paths) with two subfolders:
-
-        - mp3: Containing mp3-s for every "episode" in the repository. 
-        - normalized_mp3: Automatically generated from mp3/*.mp3.
-    
-    Remote staging/ storage can happen via git remotes and an archive item with a given id.
-    
-    Current recommendations regarding git repos:
-
-        - be mindful of Github repo size limits (1GB as of 2018)
-        - setup .gitignore in the repo so as to ignore contents of normalized_mp3
-        - periodically collapse git history (using update_git()) so as to avoid wasted space. 
     """
     def __init__(self, repo_paths,
                  archive_audio_item=None,
