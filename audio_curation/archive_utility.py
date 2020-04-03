@@ -27,7 +27,7 @@ class ArchiveItem(object):
     """
     Represents an archive.org item.
     """
-    def __init__(self, archive_id, config_file_path=None, mirrors_repo_structure=False):
+    def __init__(self, archive_id, metadata=None, config_file_path=None, mirrors_repo_structure=False):
         """
         
         :param archive_id: 
@@ -38,6 +38,7 @@ class ArchiveItem(object):
         self.archive_id = archive_id
         self.archive_session = internetarchive.get_session(config_file=config_file_path)
         self.archive_item = internetarchive.get_item(archive_id, config_file=config_file_path)
+        self.metadata = metadata
         logging.info(self.archive_item.identifier)
 
         self.original_item_files = list(filter(
@@ -49,7 +50,11 @@ class ArchiveItem(object):
         return self.archive_id
 
     def update_metadata(self, metadata):
-        self.archive_item.modify_metadata(metadata=metadata)
+        self.metadata = metadata
+        if not self.archive_item.exists:
+            logging.error("Archive item ought to exist for this to work, but it does not.")
+        else:
+            self.archive_item.modify_metadata(metadata=self.metadata)
 
     def get_remote_name(self, file_path):
         """
@@ -105,8 +110,7 @@ class ArchiveItem(object):
         else:
             if len(remote_name_to_file_path_filtered) > 0:
                 # checksum=True seems to not avoid frequent reuploads. Archive item mp3 checksum end up varying because of metadata changes? 
-                responses = self.archive_item.upload(remote_name_to_file_path_filtered, verbose=False, checksum=False,
-                                                     verify=False)
+                responses = self.archive_item.upload(remote_name_to_file_path_filtered, verbose=False, checksum=False, verify=False, metadata=self.metadata)
                 logging.info(pprint.pformat(dict(zip(remote_name_to_file_path_filtered.keys(), responses))))
                 # It is futile to do the below as archive.org says that the file does not exist for newly uploaded files.
                 # for basename in remote_name_to_file_path_filtered.keys():
@@ -122,14 +126,14 @@ class ArchiveAudioItem(ArchiveItem):
     Represents an archive.org audio item.
     """
 
-    def __init__(self, archive_id, config_file_path=None, mirrors_repo_structure=False):
+    def __init__(self, archive_id, metadata=None, config_file_path=None, mirrors_repo_structure=False):
         """
         
         :param archive_id: 
         :param config_file_path:
         :param mirrors_repo_structure: In archive item, place each file in a folder mirroring its local location.
         """
-        super(ArchiveAudioItem, self).__init__(archive_id=archive_id, config_file_path=config_file_path, mirrors_repo_structure=mirrors_repo_structure)
+        super(ArchiveAudioItem, self).__init__(archive_id=archive_id, metadata=metadata, config_file_path=config_file_path, mirrors_repo_structure=mirrors_repo_structure)
         self.item_files_mp3 = list(filter(lambda x: x["name"].endswith("mp3"), self.archive_item.files))
         self.item_filenames_mp3 = sorted(map(lambda x: x["name"], self.item_files_mp3))
         self.item_files_dict = dict(zip(self.item_filenames_mp3, self.item_files_mp3))
