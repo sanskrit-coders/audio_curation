@@ -69,14 +69,12 @@ def _get_repo(repo_path, git_remote_origin_basepath=None):
     try:
         return git.Repo(repo_path)
     except git.InvalidGitRepositoryError:
+        repo = git.Repo.init(repo_path)
         if git_remote_origin_basepath is not None:
-            repo = git.Repo.init(repo_path)
             remote_origin_path = "%s/%s" % (git_remote_origin_basepath, os.path.basename(repo_path))
             remote_origin_path = remote_origin_path.replace("//", "/")
             repo.create_remote("origin", remote_origin_path)
-            return repo
-        else:
-            raise
+        return repo
 
 
 def title_based_file_namer(fpath, dir_name):
