@@ -1,12 +1,8 @@
 import logging
 
-import pprint
-
-import pandas
-
-import gspread
-from oauth2client.service_account import ServiceAccountCredentials
 from indic_transliteration import xsanscript
+
+from curation_utils.google import google_sheets_index
 
 # Remove all handlers associated with the root logger object.
 for handler in logging.root.handlers[:]:
@@ -15,56 +11,18 @@ logging.basicConfig(
     level=logging.DEBUG,
     format="%(levelname)s:%(asctime)s:%(module)s:%(lineno)d %(message)s"
 )
-logging.getLogger('gspread').setLevel(logging.INFO)
-logging.getLogger('oauth2client').setLevel(logging.INFO)
 
 
-def get_sheet(spreadhsheet_id, worksheet_name, google_key):
-    """
-
-    :param spreadhsheet_id: 
-    :param worksheet_name: 
-    :param google_key: 
-    :return: 
-    """
-    scopes = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
-    creds = ServiceAccountCredentials.from_json_keyfile_name(google_key, scopes)
-
-    client = gspread.authorize(creds)
-    logging.debug(pprint.pformat(client.list_spreadsheet_files()))
-    sheet_book = client.open_by_key(spreadhsheet_id)
-    logging.debug(sheet_book.worksheets())
-    return sheet_book.worksheet(worksheet_name)
-
-
-class EpisodeData(object):
+class EpisodeData(google_sheets_index.IndexSheet):
     """
     Represents episode data stored in a Google spreadsheet.
     """
     def __init__(self, spreadhsheet_id, worksheet_name, google_key,
                  episode_id_column, recorder_column=None, title_column=None, script=xsanscript.DEVANAGARI):
-        """
-    
-        :return: 
-        """
-        # noinspection PyPep8Naming
-        self.data_sheet = get_sheet(spreadhsheet_id=spreadhsheet_id, worksheet_name=worksheet_name, google_key=google_key)
-        self.episode_id_column = episode_id_column
+        super(EpisodeData, self).__init__(spreadhsheet_id=spreadhsheet_id, worksheet_name=worksheet_name, google_key=google_key, id_column=episode_id_column)
         self.recorder_column = recorder_column
         self.title_column = title_column
         self.script = script
-        self.episode_df = None
-        self._set_episode_df()
-
-    def _set_episode_df(self):
-        """
-        
-        :return: 
-        """
-        episode_sheet_values = self.data_sheet.get_all_values()
-        episode_df = pandas.DataFrame(episode_sheet_values[1:], columns=episode_sheet_values.pop(0))
-        episode_df = episode_df.set_index(self.episode_id_column)
-        self.episode_df = episode_df
 
     def get_recorder(self, episode_id):
         """
@@ -74,11 +32,11 @@ class EpisodeData(object):
         :return: 
         """
         if self.script == xsanscript.DEVANAGARI:
-            artist_devanaagarii = self.episode_df.loc[episode_id, self.recorder_column]
+            artist_devanaagarii = self._df.loc[episode_id, self.recorder_column]
             return "%s %s" % (
             xsanscript.transliterate(artist_devanaagarii, xsanscript.DEVANAGARI, xsanscript.OPTITRANS), artist_devanaagarii)
         else:
-            return self.episode_df.loc[episode_id, self.recorder_column]
+            return self._df.loc[episode_id, self.recorder_column]
 
     def get_title(self, episode_id):
         """
@@ -87,10 +45,10 @@ class EpisodeData(object):
         :param episode_id: 
         :return: 
         """
-        if self.episode_df.index.name == self.title_column:
+        if self._df.index.name == self.title_column:
             title_base = episode_id
         else:
-            title_base = self.episode_df.loc[episode_id, self.title_column]
+            title_base = self._df.loc[episode_id, self.title_column]
         if self.script == xsanscript.DEVANAGARI:
             title_devanaagarii = title_base
             return "%s %s" % (
