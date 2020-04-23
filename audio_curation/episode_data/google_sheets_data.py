@@ -2,7 +2,7 @@ import logging
 
 from indic_transliteration import xsanscript
 
-from curation_utils.google import google_sheets_index
+from curation_utils.google import sheets
 
 # Remove all handlers associated with the root logger object.
 for handler in logging.root.handlers[:]:
@@ -13,7 +13,7 @@ logging.basicConfig(
 )
 
 
-class EpisodeData(google_sheets_index.IndexSheet):
+class EpisodeData(sheets.IndexSheet):
     """
     Represents episode data stored in a Google spreadsheet.
     """
