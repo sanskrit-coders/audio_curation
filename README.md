@@ -1,3 +1,4 @@
+^[![Build status](https://github.com/sanskrit-coders/audio_curation/workflows/Python%20package/badge.svg)](https://github.com/sanskrit-coders/audio_curation/actions)
 [![Build Status](https://travis-ci.org/sanskrit-coders/audio_curation.svg?branch=master)](https://travis-ci.org/sanskrit-coders/audio_curation)
 [![Documentation Status](https://readthedocs.org/projects/audio_curation/badge/?version=latest)](http://audio_curation.readthedocs.io/en/latest/?badge=latest)
 
