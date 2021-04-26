@@ -4,10 +4,8 @@
 .. _Veda audio project: https://sanskrit.github.io/projects/audio/veda-audio/
 """
 
-import glob
 import logging
 import os
-
 # noinspection PyPep8
 import pprint
 
