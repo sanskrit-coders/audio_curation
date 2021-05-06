@@ -138,7 +138,7 @@ class DerivativeRepo(object):
         self.delete_obsolete_uploaded_files(dry_run=dry_run)
 
         if self.archive_audio_item is not None:
-            self.archive_audio_item.update_archive_item(file_paths=files, overwrite_all=overwrite, dry_run=dry_run)
+            self.archive_audio_item.update_with_files(file_paths=files, overwrite_all=overwrite, dry_run=dry_run)
 
         # In case of dry_run, the derivative mp3 files are not generated, but gmusic_client needs them.
         if self.gmusic_client is not None and len(files) > 0 and not dry_run:

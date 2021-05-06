@@ -29,14 +29,14 @@ class ArchiveAudioItem(ArchiveItem):
     Represents an archive.org audio item.
     """
 
-    def __init__(self, archive_id, metadata=None, config_file_path=None, mirrors_repo_structure=False):
+    def __init__(self, archive_id, metadata=None, config_file_path=None, repo_base=None):
         """
         
         :param archive_id: 
         :param config_file_path:
-        :param mirrors_repo_structure: In archive item, place each file in a folder mirroring its local location.
+        :param repo_base: In archive item, place each file in a folder mirroring its local location.
         """
-        super(ArchiveAudioItem, self).__init__(archive_id=archive_id, metadata=metadata, config_file_path=config_file_path, mirrors_repo_structure=mirrors_repo_structure)
+        super(ArchiveAudioItem, self).__init__(archive_id=archive_id, metadata=metadata, config_file_path=config_file_path, repo_base=repo_base)
         self.item_files_mp3 = list(filter(lambda x: x["name"].endswith("mp3"), self.archive_item.files))
         self.item_filenames_mp3 = sorted(map(lambda x: x["name"], self.item_files_mp3))
         self.item_files_dict = dict(zip(self.item_filenames_mp3, self.item_files_mp3))
@@ -49,7 +49,7 @@ class ArchiveAudioItem(ArchiveItem):
         :param overwrite_all: Boolean.
         :param dry_run: Boolean.
         """
-        self.update_archive_item(file_paths=list(map(lambda file: file.file_path, files_in)), overwrite_all=overwrite_all, dry_run=dry_run)
+        self.update_with_files(file_paths=list(map(lambda file: file.file_path, files_in)), overwrite_all=overwrite_all, dry_run=dry_run)
 
     def update_mp3_metadata(self, mp3_file):
         """
