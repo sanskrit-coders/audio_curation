@@ -6,3 +6,4 @@ curation_utils
 GitPython
 oauth2client
 indic_transliteration
+vosk
