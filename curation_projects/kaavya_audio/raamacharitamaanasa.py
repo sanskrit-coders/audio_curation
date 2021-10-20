@@ -1,7 +1,7 @@
 """
 `kAvya audio project`_ : Raghuvamsha
 
-.. _kAvya audio project: https://sanskrit.github.io/projects/audio/kaavya-audio/
+.. _kAvya audio project: https://sanskrit.github.io/groups/dyuganga/projects/audio/kaavya-audio/
 """
 import logging
 import pprint
@@ -21,7 +21,7 @@ class Ramcharitmanas(audio_repo.BaseAudioRepo):
         Ramcharitmanas version of Ramayan complete by All India Radio.
         Derived from https://archive.org/details/EPI63 to fix file ordering; and with replacement recordings for missing and duplicated files.
         
-        Contributions welcome: https://sanskrit.github.io/projects/audio/kAvya-audio/
+        Contributions welcome: https://sanskrit.github.io/groups/dyuganga/projects/audio/kAvya-audio/
         """
     }
     archive_id="rAmcharitmAnas-AIR"

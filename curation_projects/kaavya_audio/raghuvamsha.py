@@ -1,7 +1,7 @@
 """
 `kAvya audio project`_ : Raghuvamsha
 
-.. _kAvya audio project: https://sanskrit.github.io/projects/audio/kaavya-audio/
+.. _kAvya audio project: https://sanskrit.github.io/groups/dyuganga/projects/audio/kaavya-audio/
 """
 
 import logging
@@ -54,7 +54,7 @@ class NormalizedFilesRepo(audio_repo.NormalizedRepo):
     
         About the recording: 
         With commentary by Sri Mallinatha Suri, the Mahakavya of Raghu Vamsha was recorded by Sri V.Aditya, Dr.K.V.Chandrashekhar, Dr. K. Neela Kantham and Sri N.C.T.Acharyulu.We would like to express gratitude to our co-ordinators Sri K. Aravinda Rao, Sri S. Srinivasa Charya, Sri A. Yagnaramulu and Sri B. Ashok Reddy and sponsors Sri Pallampati Venkateswarulu, the Srini Raju Foundation, Sri J.A.Chowdhary and Sri Goka Raju Laila Ganga Raju Charitable Trust who provided support and encouragement towards this endeavor.
-         भवद्योगदानं‌ काङ्क्ष्यते - https://sanskrit.github.io/projects/audio/kaavya-audio/index.html
+         भवद्योगदानं‌ काङ्क्ष्यते - https://sanskrit.github.io/groups/dyuganga/projects/audio/kaavya-audio/index.html
         """
     }
     archive_id="Raghuvamsha-mUlam-vedabhoomi.org"

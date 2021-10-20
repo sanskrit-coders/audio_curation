@@ -1,7 +1,7 @@
 """
 `Kannada audio project`_.
 
-.. _Kannada audio project: https://sanskrit.github.io/projects/audio/kannada-audio/
+.. _Kannada audio project: https://sanskrit.github.io/groups/dyuganga/projects/audio/kannada-audio/
 """
 
 import logging
@@ -61,7 +61,7 @@ def upload_volume(title, repo_paths, author, reader, episode_data=None, archive_
             "description": description if (description is not None) else """
              {}
              Audio book recorded by volunteers.
-             भवद्योगदानं‌ काङ्क्ष्यते - https://sanskrit.github.io/projects/audio/kannada-audio/index.html
+             भवद्योगदानं‌ काङ्क्ष्यते - https://sanskrit.github.io/groups/dyuganga/projects/audio/kannada-audio/index.html
             """.format(author)
         }
         archive_audio_item.update_metadata(metadata=metadata)

@@ -1,7 +1,7 @@
 """
 `kAvya audio project`_ : kirAtArjunIyam
 
-.. _kAvya audio project: https://sanskrit.github.io/projects/audio/kaavya-audio/
+.. _kAvya audio project: https://sanskrit.github.io/groups/dyuganga/projects/audio/kaavya-audio/
 """
 
 import logging
@@ -49,7 +49,7 @@ Kiratarjuneeyam by MahaKavi Bharavi is one of the six Sanskrit Mahakavya named a
 This metrical composition describes the journey of Arjuna to the mountain Indrakila, part of Himalayas, for the propitiation of the gods Indra and Siva and the final obtainment of the divine weapons Pasupata and others from the gods.
 The Kiratarjuneeyam«ya predominantly features the vIra rasa, or the mood of valour.
 
-         भवद्योगदानं‌ काङ्क्ष्यते - https://sanskrit.github.io/projects/audio/kaavya-audio/index.html
+         भवद्योगदानं‌ काङ्क्ष्यते - https://sanskrit.github.io/groups/dyuganga/projects/audio/kaavya-audio/index.html
         """
     }
     archive_id="kirAtArjunIya-mUlam-vedabhoomi.org"

@@ -1,7 +1,7 @@
 """
 `kAvya audio project`_ : meghadUtam
 
-.. _kAvya audio project: https://sanskrit.github.io/projects/audio/kaavya-audio/
+.. _kAvya audio project: https://sanskrit.github.io/groups/dyuganga/projects/audio/kaavya-audio/
 """
 
 import logging
@@ -48,7 +48,7 @@ class NormalizedFilesRepo(audio_repo.NormalizedRepo):
 Written in the 4th century by India's greatest Sanskrit poet Mahakavi Kalidasa, Megha Sandesha (The Cloud Messenger) is considered to be one of the greatest Mahakavyas set to the 'mandakranta' meter known for its lyrical sweetness.
 Megha Sandesha tells the tale of a young demigod, banished to earth, who sends a message (sandesha) to his beloved wife in the heavens through a passing rain cloud (megha).
 As the Megha travels across India to deliver his message, Kalidasa's poetry describes the glorious beauty of his country.
-         भवद्योगदानं‌ काङ्क्ष्यते - https://sanskrit.github.io/projects/audio/kaavya-audio/index.html
+         भवद्योगदानं‌ काङ्क्ष्यते - https://sanskrit.github.io/groups/dyuganga/projects/audio/kaavya-audio/index.html
         """
     }
     archive_id="meghadUta-mUlam-vedabhoomi.org"

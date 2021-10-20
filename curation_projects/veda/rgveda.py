@@ -1,7 +1,7 @@
 """
 `Veda audio project`_.
 
-.. _Veda audio project: https://sanskrit.github.io/projects/audio/veda-audio/
+.. _Veda audio project: https://sanskrit.github.io/groups/dyuganga/projects/audio/veda-audio/
 """
 
 import glob
@@ -36,7 +36,7 @@ def update_rgveda_sriranga():
     Reciters: Sri Shyama Sundara Sharma, Sri Satya Krishna Bhatta
     via aurobindo.ru, by Sriranga Technologies Pvt. Ltd. (2012)
     Sharing permitted by shrI Arjun Kashyap of Sriranga Technologies Pvt. Ltd. ( 20181023 - https://imgur.com/a/ftlYJ79 )
-    Tech details- see  https://sanskrit.github.io/projects/audio/veda-audio/index.html
+    Tech details- see  https://sanskrit.github.io/groups/dyuganga/projects/audio/veda-audio/index.html
     """
     }
 
@@ -58,7 +58,7 @@ def update_rgveda_auro():
     ऋग्वेदः। शकल-संहिता।
     
     via aurobindo.ru
-    Tech details- see  https://sanskrit.github.io/projects/audio/veda-audio/index.html
+    Tech details- see  https://sanskrit.github.io/groups/dyuganga/projects/audio/veda-audio/index.html
     """
     }
 

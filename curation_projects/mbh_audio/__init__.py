@@ -1,7 +1,7 @@
 """
 `Mahabharata audio project`_.
 
-.. _Mahabharata audio project: https://sanskrit.github.io/projects/audio/mbh-audio/
+.. _Mahabharata audio project: https://sanskrit.github.io/groups/dyuganga/projects/audio/mbh-audio/
 """
 
 import glob
@@ -32,7 +32,7 @@ class MbhRepoBase(audio_repo.BaseAudioRepo):
         "description": """
      महाभारत-मूल-पठनम्।
 
-     भवद्योगदानं‌ काङ्क्ष्यते - https://sanskrit.github.io/projects/audio/mbh-audio/index.html
+     भवद्योगदानं‌ काङ्क्ष्यते - https://sanskrit.github.io/groups/dyuganga/projects/audio/mbh-audio/index.html
     """
     }
 
@@ -54,6 +54,6 @@ class SpeedFileRepo(audio_repo.SpeedFileRepo):
         "description": """
      महाभारत-मूल-पठनम्।
 
-     भवद्योगदानं‌ काङ्क्ष्यते - https://sanskrit.github.io/projects/audio/mbh-audio/index.html
+     भवद्योगदानं‌ काङ्क्ष्यते - https://sanskrit.github.io/groups/dyuganga/projects/audio/mbh-audio/index.html
     """
     }

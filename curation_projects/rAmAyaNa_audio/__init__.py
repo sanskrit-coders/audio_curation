@@ -1,7 +1,7 @@
 """
 `Ramayana audio project`_.
 
-.. _Ramayana audio project: https://sanskrit.github.io/projects/audio/ramayana-audio/
+.. _Ramayana audio project: https://sanskrit.github.io/groups/dyuganga/projects/audio/ramayana-audio/
 """
 
 import glob
@@ -40,6 +40,6 @@ metadata = {
 
 गृहसङ्केतः - Sri Shankara gurukula veda pathashala, Veda Bhavan, Road no.1, Chandragiri colony, Neredmet, Hyderabad - 500056
 
-Tech details- see  https://sanskrit.github.io/projects/audio/ramayana-audio/index.html
+Tech details- see  https://sanskrit.github.io/groups/dyuganga/projects/audio/ramayana-audio/index.html
 """
 }

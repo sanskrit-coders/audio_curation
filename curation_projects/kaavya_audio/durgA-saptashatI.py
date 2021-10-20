@@ -1,7 +1,7 @@
 """
 `kAvya audio project`_ : durgA-saptashatI
 
-.. _kAvya audio project: https://sanskrit.github.io/projects/audio/kaavya-audio/
+.. _kAvya audio project: https://sanskrit.github.io/groups/dyuganga/projects/audio/kaavya-audio/
 """
 
 import logging
@@ -36,7 +36,7 @@ class NormalizedFilesRepo(audio_repo.NormalizedRepo):
           दुर्गासप्तशती मार्कण्डेयपुराणात्। durgAsaptashatI from mArkaNDeyapurANa.  
           Chanted by brAhmaNas from MH, likely. Obtained via puja.net.
           Aka ChaNDI-pAThaH.
-          भवद्योगदानं‌ काङ्क्ष्यते - https://sanskrit.github.io/projects/audio/kaavya-audio/index.html
+          भवद्योगदानं‌ काङ्क्ष्यते - https://sanskrit.github.io/groups/dyuganga/projects/audio/kaavya-audio/index.html
     """
     }
     archive_id="durgA-saptashatI"
@@ -49,7 +49,7 @@ class SpeedFileRepo(audio_repo.SpeedFileRepo):
           दुर्गासप्तशती मार्कण्डेयपुराणात्। durgAsaptashatI from mArkaNDeyapurANa.  
           Chanted by brAhmaNas from MH, likely. Obtained via puja.net.
           Aka ChaNDI-pAThaH. 1.5x speed.
-          भवद्योगदानं‌ काङ्क्ष्यते - https://sanskrit.github.io/projects/audio/kaavya-audio/index.html
+          भवद्योगदानं‌ काङ्क्ष्यते - https://sanskrit.github.io/groups/dyuganga/projects/audio/kaavya-audio/index.html
     """
     }
 

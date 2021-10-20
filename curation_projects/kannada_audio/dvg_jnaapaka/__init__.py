@@ -1,7 +1,7 @@
 """
 `Kannada audio project`_.
 
-.. _Kannada audio project: https://sanskrit.github.io/projects/audio/kannada-audio/
+.. _Kannada audio project: https://sanskrit.github.io/groups/dyuganga/projects/audio/kannada-audio/
 """
 
 import logging
@@ -55,7 +55,7 @@ def upload_volume(title, repo_paths, dry_run=False, gmusic_client=None, descript
              DV Gundappa 
              ಡಿ ವಿ ಗುಂಡಪ್ಪ/ ಡಿ ವಿ ಜಿ - ಜ್ಞಾಪಕಚಿತ್ರಶಾಲೆ
              Free Audio book.
-             भवद्योगदानं‌ काङ्क्ष्यते - https://sanskrit.github.io/projects/audio/kannada-audio/index.html
+             भवद्योगदानं‌ काङ्क्ष्यते - https://sanskrit.github.io/groups/dyuganga/projects/audio/kannada-audio/index.html
             """
         }
         archive_audio_item.update_metadata(metadata=metadata)

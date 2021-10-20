@@ -1,7 +1,7 @@
 """
 `Veda audio project`_.
 
-.. _Veda audio project: https://sanskrit.github.io/projects/audio/veda-audio/
+.. _Veda audio project: https://sanskrit.github.io/groups/dyuganga/projects/audio/veda-audio/
 
 Audio items:
 https://archive.org/details/jaiminIya-sAma-gAna-paravastu-tradition-santhA
@@ -59,7 +59,7 @@ class NormalizedFilesRepo(audio_repo.NormalizedRepo):
     Generations ago from ALwarthirunagari.
     
     Details: https://sanskritdocuments.org/sites/pssramanujaswamy/#audios
-    Tech details- see  https://sanskrit.github.io/projects/audio/veda-audio/index.html
+    Tech details- see  https://sanskrit.github.io/groups/dyuganga/projects/audio/veda-audio/index.html
     """
     }
     archive_id="jaiminIya-sAma-gAna-paravastu-tradition-anuvachanam-gopAla-vishvAsa-2018"
@@ -76,7 +76,7 @@ class SpeedFileRepo(audio_repo.SpeedFileRepo):
     Generations ago from ALwarthirunagari.
     
     Details: https://sanskritdocuments.org/sites/pssramanujaswamy/#audios
-    Tech details- see  https://sanskrit.github.io/projects/audio/veda-audio/index.html
+    Tech details- see  https://sanskrit.github.io/groups/dyuganga/projects/audio/veda-audio/index.html
     """
     }
     archive_id="jaiminIya-sAma-gAna-paravastu-tradition-anuvachanam-gopAla-vishvAsa-2018-150p-speed"

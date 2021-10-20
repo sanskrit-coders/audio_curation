@@ -1,7 +1,7 @@
 """
 `Veda audio project`_.
 
-.. _Veda audio project: https://sanskrit.github.io/projects/audio/veda-audio/
+.. _Veda audio project: https://sanskrit.github.io/groups/dyuganga/projects/audio/veda-audio/
 """
 
 import logging
@@ -30,7 +30,7 @@ class VedaRepoBase(audio_repo.BaseAudioRepo):
         "description" : """
     अथर्व-वेदः। शौनक-संहिता।
     Courtsey : IGNCA and Indian taxpayers.
-    Tech details- see  https://sanskrit.github.io/projects/audio/veda-audio/index.html
+    Tech details- see  https://sanskrit.github.io/groups/dyuganga/projects/audio/veda-audio/index.html
     """
     }
 

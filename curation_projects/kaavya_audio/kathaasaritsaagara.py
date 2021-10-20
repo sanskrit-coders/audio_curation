@@ -1,7 +1,7 @@
 """
 `kAvya audio project`_.
 
-.. _kAvya audio project: https://sanskrit.github.io/projects/audio/kaavya-audio/
+.. _kAvya audio project: https://sanskrit.github.io/groups/dyuganga/projects/audio/kaavya-audio/
 """
 
 import glob
@@ -46,7 +46,7 @@ class KathasaritsagaraRepoBase(audio_repo.BaseAudioRepo):
      guNADhya.  गुणाढ्य-कृत-कथासरित्-सागरः
 
 
-     भवद्योगदानं‌ काङ्क्ष्यते - https://sanskrit.github.io/projects/audio/kAvya-audio/
+     भवद्योगदानं‌ काङ्क्ष्यते - https://sanskrit.github.io/groups/dyuganga/projects/audio/kAvya-audio/
     """
     }
 
@@ -68,7 +68,7 @@ class SpeedFileRepo(audio_repo.SpeedFileRepo):
      कथासरित्सागरः।
      guNADhya.  गुणाढ्य-कृत-कथासरित्-सागरः
 
-     भवद्योगदानं‌ काङ्क्ष्यते - https://sanskrit.github.io/projects/audio/kAvya-audio/index.html
+     भवद्योगदानं‌ काङ्क्ष्यते - https://sanskrit.github.io/groups/dyuganga/projects/audio/kAvya-audio/index.html
     """
     }
 

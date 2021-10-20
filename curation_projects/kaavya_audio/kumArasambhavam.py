@@ -1,7 +1,7 @@
 """
 `kAvya audio project`_ : kumArasambhavam
 
-.. _kAvya audio project: https://sanskrit.github.io/projects/audio/kaavya-audio/
+.. _kAvya audio project: https://sanskrit.github.io/groups/dyuganga/projects/audio/kaavya-audio/
 """
 
 import logging

@@ -1,7 +1,7 @@
 """
 `Veda audio project`_.
 
-.. _Veda audio project: https://sanskrit.github.io/projects/audio/veda-audio/
+.. _Veda audio project: https://sanskrit.github.io/groups/dyuganga/projects/audio/veda-audio/
 
 Audio items:
 https://archive.org/details/jaiminIya-sAma-gAna-paravastu-tradition-santhA
@@ -64,7 +64,7 @@ def update_gopal_2018(gmusic_client, dry_run=False):
     Generations ago from ALwarthirunagari.
     
     Details: https://sanskritdocuments.org/sites/pssramanujaswamy/#audios
-    Tech details- see  https://sanskrit.github.io/projects/audio/veda-audio/index.html
+    Tech details- see  https://sanskrit.github.io/groups/dyuganga/projects/audio/veda-audio/index.html
     """
     }
     archive_id="jaiminIya-sAma-gAna-paravastu-tradition-gopAla-2018"
