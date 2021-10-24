@@ -8,7 +8,7 @@ import logging
 import os
 import pprint
 
-from audio_curation import audio_repo, archive_utility, google_music
+from audio_curation import audio_repo, archive_utility
 from audio_utils import mp3_utility
 
 
@@ -69,17 +69,17 @@ class SpeedFileRepo(audio_repo.SpeedFileRepo):
             mp3_file.save_metadata()
 
 
-def update_repo(gmusic_client, dry_run=False):
+def update_repo(dry_run=False):
     repo = RepoBase(repo_paths=[os.path.join("/home/vvasuki/kAvya-audio/durgA-saptashatI")])
     archive_audio_item = archive_utility.ArchiveAudioItem(archive_id=NormalizedFilesRepo.archive_id)
     archive_audio_item.update_metadata(metadata=NormalizedFilesRepo.metadata)
     logging.info(pprint.pformat(repo.reprocess(dry_run=dry_run)))
-    normalized_files_repo = audio_repo.NormalizedRepo(base_repo=repo, archive_audio_item=archive_audio_item, gmusic_client=gmusic_client)
+    normalized_files_repo = audio_repo.NormalizedRepo(base_repo=repo, archive_audio_item=archive_audio_item)
     logging.info(pprint.pformat(normalized_files_repo.reprocess(dry_run=dry_run)))
 
 
 if __name__ == "__main__":
-    gmusic_client = None
-    gmusic_client = google_music.GMusicClient(oauth_file_path="/home/vvasuki/sysconf/kunchikA/google/sanskritnlp/oauth_access_token_gmusic.json", username="vishvas.vasuki@gmail.com")
-    update_repo(gmusic_client=gmusic_client, dry_run=False)
+    
+    
+    update_repo(gmusic_client=dry_run=False)
     pass

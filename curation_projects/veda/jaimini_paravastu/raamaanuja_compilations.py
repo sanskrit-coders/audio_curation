@@ -25,7 +25,7 @@ import os
 # noinspection PyPep8
 import pprint
 
-from audio_curation import audio_repo, archive_utility, google_music
+from audio_curation import audio_repo, archive_utility
 
 from audio_utils import mp3_utility
 
@@ -72,16 +72,16 @@ class NormalizedFilesRepo(audio_repo.NormalizedRepo):
     }
     archive_id="jaiminIya-sAma-gAna-paravastu-tradition"
 
-def update_raamaanuja_compilation(gmusic_client, dry_run=False):
+def update_raamaanuja_compilation(dry_run=False):
     repo = RaamaanujaCompilationRepoBase(repo_paths=[os.path.join("/home/vvasuki/veda-audio/jaiminIya-sAma-paravastu", "jaiminIya-sAma-gAna-paravastu-tradition-rAmAnuja-compilation")])
     archive_audio_item = archive_utility.ArchiveAudioItem(archive_id=NormalizedFilesRepo.archive_id)
-    normalized_files_repo = audio_repo.NormalizedRepo(base_repo=repo, archive_audio_item=archive_audio_item, gmusic_client=gmusic_client)
+    normalized_files_repo = audio_repo.NormalizedRepo(base_repo=repo, archive_audio_item=archive_audio_item)
     logging.info(pprint.pformat(normalized_files_repo.reprocess(dry_run=dry_run)))
 
 
 if __name__ == "__main__":
-    gmusic_client = None
-    gmusic_client = google_music.GMusicClient(oauth_file_path="/home/vvasuki/sysconf/kunchikA/google/sanskritnlp/oauth_access_token_gmusic.json", username="vishvas.vasuki@gmail.com")
-    # gmusic_client = None
-    update_raamaanuja_compilation(gmusic_client=gmusic_client, dry_run=False)
+    
+    
+    # 
+    update_raamaanuja_compilation(gmusic_client=dry_run=False)
     pass

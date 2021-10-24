@@ -19,7 +19,7 @@ class RepoBase(audio_repo.BaseAudioRepo):
                  archive_audio_item=None,
                  git_remote_origin_basepath=None,
                  gmusic_client=None):
-        super(RepoBase, self).__init__(repo_paths=repo_paths, archive_audio_item=archive_audio_item, git_remote_origin_basepath=git_remote_origin_basepath, gmusic_client=gmusic_client)
+        super(RepoBase, self).__init__(repo_paths=repo_paths, archive_audio_item=archive_audio_item, git_remote_origin_basepath=git_remote_origin_basepath)
         self.title = title
 
     def set_mp3_metadata(self, mp3_file):
@@ -67,6 +67,6 @@ def upload_volume(title, repo_paths, dry_run=False, gmusic_client=None, descript
         archive_audio_item = archive_utility.ArchiveAudioItem(archive_id=archive_id, config_file_path="/home/vvasuki/kannada-audio/ia_nagu.config")
         metadata["description"] = metadata["description"] + "\n\n 1.5x speed"
         archive_audio_item.update_metadata(metadata=metadata)
-    speed_file_repo = audio_repo.SpeedFileRepo(base_repo=normalized_files_repo, archive_audio_item=archive_audio_item, gmusic_client=gmusic_client)
+    speed_file_repo = audio_repo.SpeedFileRepo(base_repo=normalized_files_repo, archive_audio_item=archive_audio_item)
     logging.info(pprint.pformat(speed_file_repo.reprocess(dry_run=dry_run)))
     

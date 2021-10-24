@@ -7,7 +7,7 @@
 import logging
 import pprint
 
-from audio_curation import audio_repo, archive_utility, google_music
+from audio_curation import audio_repo, archive_utility
 from audio_utils import mp3_utility
 
 repo_paths = ["/home/vvasuki/kAvya-audio/meghadUtam"]
@@ -55,19 +55,19 @@ As the Megha travels across India to deliver his message, Kalidasa's poetry desc
 
 
 
-def update_kAvya(gmusic_client, dry_run):
+def update_kAvya(dry_run):
     repo = RepoBase(repo_paths=repo_paths)
     logging.info(pprint.pformat(repo.reprocess(dry_run=dry_run)))
 
     archive_audio_item = archive_utility.ArchiveAudioItem(archive_id=NormalizedFilesRepo.archive_id)
     # archive_audio_item.update_metadata(metadata=NormalizedFilesRepo.metadata)
-    normalized_files_repo = NormalizedFilesRepo(base_repo=repo, archive_audio_item=archive_audio_item, gmusic_client=gmusic_client)
+    normalized_files_repo = NormalizedFilesRepo(base_repo=repo, archive_audio_item=archive_audio_item)
     logging.info(pprint.pformat(normalized_files_repo.reprocess(dry_run=dry_run)))
 
 
 
 if __name__ == "__main__":
-    gmusic_client = None
-    gmusic_client = google_music.GMusicClient(oauth_file_path="/home/vvasuki/sysconf/kunchikA/google/sanskritnlp/oauth_access_token_gmusic.json", username="vishvas.vasuki@gmail.com")
-    update_kAvya(gmusic_client=gmusic_client, dry_run=False)
+    
+    
+    update_kAvya(gmusic_client=dry_run=False)
     pass

@@ -16,7 +16,7 @@ import os
 # noinspection PyPep8
 import pprint
 
-from audio_curation import audio_repo, archive_utility, google_music
+from audio_curation import audio_repo, archive_utility
 
 from audio_curation.audio_repo import SpeedFileRepo
 
@@ -96,27 +96,27 @@ class SpeedFileRepo(audio_repo.SpeedFileRepo):
             mp3_file.save_metadata()
 
 
-def update_gopal_2018(gmusic_client, dry_run=False):
+def update_gopal_2018(dry_run=False):
     repo = GopalVishvAsa2018RepoBase(repo_paths=[os.path.join("/home/vvasuki/veda-audio/jaiminIya-sAma-paravastu", "jaiminIya-sAma-gAna-paravastu-tradition-anuvachanam-gopAla-vishvAsa")], git_remote_origin_basepath="git@github.com:veda-audio")
     logging.info(pprint.pformat(repo.reprocess(dry_run=dry_run)))
     
     archive_audio_item = None
     archive_audio_item = archive_utility.ArchiveAudioItem(archive_id=NormalizedFilesRepo.archive_id)
     # archive_audio_item.update_metadata(metadata=NormalizedFilesRepo.metadata)
-    normalized_files_repo = audio_repo.NormalizedRepo(base_repo=repo, archive_audio_item=archive_audio_item, gmusic_client=gmusic_client)
+    normalized_files_repo = audio_repo.NormalizedRepo(base_repo=repo, archive_audio_item=archive_audio_item)
     logging.info(pprint.pformat(normalized_files_repo.reprocess(dry_run=dry_run)))
 
     archive_audio_item = None
     archive_audio_item = archive_utility.ArchiveAudioItem(archive_id=SpeedFileRepo.archive_id)
     # archive_audio_item.update_metadata(metadata=SpeedFilesRepo.metadata)
-    speed_files_repo = SpeedFileRepo(base_repo=normalized_files_repo, archive_audio_item=archive_audio_item, gmusic_client=gmusic_client)
+    speed_files_repo = SpeedFileRepo(base_repo=normalized_files_repo, archive_audio_item=archive_audio_item)
     logging.info(pprint.pformat(speed_files_repo.reprocess(dry_run=dry_run)))
 
     # archive_audio_item.update_archive_audio_item(files_in=repo.get_normalized_files(), overwrite_all=False, dry_run=dry_run)
 
 
 if __name__ == "__main__":
-    gmusic_client = None
-    gmusic_client = google_music.GMusicClient(oauth_file_path="/home/vvasuki/sysconf/kunchikA/google/sanskritnlp/oauth_access_token_gmusic.json", username="vishvas.vasuki@gmail.com")
-    update_gopal_2018(gmusic_client=gmusic_client, dry_run=False)
+    
+    
+    update_gopal_2018(gmusic_client=dry_run=False)
     pass

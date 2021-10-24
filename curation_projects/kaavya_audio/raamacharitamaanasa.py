@@ -28,16 +28,16 @@ class Ramcharitmanas(audio_repo.BaseAudioRepo):
     pass
 
 
-def update(gmusic_client, dry_run):
+def update(dry_run):
     archive_audio_item = archive_utility.ArchiveAudioItem(archive_id=Ramcharitmanas.archive_id, metadata=Ramcharitmanas.metadata)
-    repo = Ramcharitmanas(repo_paths=repo_paths, archive_audio_item=archive_audio_item, gmusic_client=gmusic_client)
+    repo = Ramcharitmanas(repo_paths=repo_paths, archive_audio_item=archive_audio_item)
     logging.info(pprint.pformat(repo.reprocess(dry_run=dry_run)))
     # archive_audio_item.update_metadata(metadata=Ramcharitmanas.metadata)
 
 
 
 if __name__ == "__main__":
-    gmusic_client = None
-    # gmusic_client = yt_music.Client()
-    update(gmusic_client=gmusic_client, dry_run=False)
+    
+    # 
+    update(gmusic_client=dry_run=False)
     pass

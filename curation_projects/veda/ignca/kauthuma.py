@@ -11,7 +11,7 @@ import os
 # noinspection PyPep8
 import pprint
 
-from audio_curation import audio_repo, google_music, archive_utility
+from audio_curation import audio_repo, archive_utility
 
 # Remove all handlers associated with the root logger object.
 for handler in logging.root.handlers[:]:
@@ -40,12 +40,12 @@ class VedaRepoBase(audio_repo.BaseAudioRepo):
     pass
 
 
-def update_repos(gmusic_client, dry_run=False):
+def update_repos(dry_run=False):
     archive_audio_item = archive_utility.ArchiveAudioItem(archive_id=VedaRepoBase.archive_id, metadata=VedaRepoBase.metadata)
-    repo = VedaRepoBase(repo_paths=[os.path.join("/home/vvasuki/Music/git-curation/veda-audio", "kauthuma_ignca")], archive_audio_item=archive_audio_item, git_remote_origin_basepath=None, gmusic_client=gmusic_client)
+    repo = VedaRepoBase(repo_paths=[os.path.join("/home/vvasuki/Music/git-curation/veda-audio", "kauthuma_ignca")], archive_audio_item=archive_audio_item, git_remote_origin_basepath=None)
     logging.info(pprint.pformat(repo.reprocess(dry_run=dry_run)))
 
 
 if __name__ == "__main__":
-    gmusic_client = google_music.GMusicClient(oauth_file_path="/home/vvasuki/sysconf/kunchikA/google/sanskritnlp/oauth_access_token_gmusic.json", username="vishvas.vasuki@gmail.com")
-    update_repos(gmusic_client=gmusic_client, dry_run=False)
+    
+    update_repos(gmusic_client=dry_run=False)
