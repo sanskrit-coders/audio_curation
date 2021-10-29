@@ -325,7 +325,10 @@ class BaseAudioRepo(DerivativeRepo):
             
             logging.debug("git_repo.remotes %s", git_repo.remotes)
             if (not dry_run) and len(git_repo.remotes) > 0:
-                logging.info(git_repo.git.pull())
+                try:
+                    logging.info(git_repo.git.pull())
+                except e:
+                    logging.warning("Git pull failed - probably remote repo doesn't yet exist?")
                 if collapse_history:
                     logging.info(git_repo.git.push("-f", "origin", "master"))
                 else:
