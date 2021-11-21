@@ -72,5 +72,5 @@ def update_kAvya(dry_run):
 if __name__ == "__main__":
     
     
-    update_kAvya(gmusic_client=dry_run=False)
+    update_kAvya(dry_run=False)
     pass

@@ -39,5 +39,5 @@ def update(dry_run):
 if __name__ == "__main__":
     
     # 
-    update(gmusic_client=dry_run=False)
+    update(dry_run=False)
     pass

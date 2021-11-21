@@ -46,4 +46,4 @@ def update_repos(dry_run=False):
 
 if __name__ == "__main__":
     
-    update_repos(gmusic_client=dry_run=False)
+    update_repos(dry_run=False)

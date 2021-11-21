@@ -83,5 +83,5 @@ if __name__ == "__main__":
     
     
     # 
-    update_raamaanuja_compilation(gmusic_client=dry_run=False)
+    update_raamaanuja_compilation(dry_run=False)
     pass

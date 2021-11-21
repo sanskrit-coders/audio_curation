@@ -295,7 +295,7 @@ class BaseAudioRepo(DerivativeRepo):
             changed_files = get_changed_files(repo_x=repo_x)
             if len(changed_files) > 0:
                 for fpath in changed_files:
-                    assert fpath.endswith(".mp3") or fpath.endswith("md") or os.path.basename(fpath) in [".gitignore"], fpath
+                    assert fpath.endswith(".mp3") or fpath.endswith("md") or os.path.basename(fpath) in [".gitignore"] or fpath.endswith("ytdl-archive.txt"), fpath
                 for fpath in changed_files:
                     if os.path.exists(os.path.join(repo_x.working_tree_dir, fpath)):
                         logging.info("Adding %s", fpath)
@@ -326,7 +326,7 @@ class BaseAudioRepo(DerivativeRepo):
             logging.debug("git_repo.remotes %s", git_repo.remotes)
             if (not dry_run) and len(git_repo.remotes) > 0:
                 try:
-                    logging.info(git_repo.git.pull())
+                    logging.info(git_repo.git.pull(rebase=True))
                 except e:
                     logging.warning("Git pull failed - probably remote repo doesn't yet exist?")
                 if collapse_history:

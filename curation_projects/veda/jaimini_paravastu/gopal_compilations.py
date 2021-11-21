@@ -79,5 +79,5 @@ def update_gopal_compilation(dry_run=False):
 if __name__ == "__main__":
     
     # 
-    update_gopal_compilation(gmusic_client=dry_run=False)
+    update_gopal_compilation(dry_run=False)
     pass

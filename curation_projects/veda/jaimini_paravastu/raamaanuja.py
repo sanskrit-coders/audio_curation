@@ -83,5 +83,5 @@ def update_rAmAnuja_1974(dry_run=False):
 if __name__ == "__main__":
     
     
-    update_rAmAnuja_1974(gmusic_client=dry_run=False)
+    update_rAmAnuja_1974(dry_run=False)
     pass

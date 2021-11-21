@@ -81,5 +81,5 @@ def update_repo(dry_run=False):
 if __name__ == "__main__":
     
     
-    update_repo(gmusic_client=dry_run=False)
+    update_repo(dry_run=False)
     pass

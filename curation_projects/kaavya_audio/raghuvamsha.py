@@ -75,5 +75,5 @@ def update_raghuvaMsha(dry_run):
 if __name__ == "__main__":
     
     
-    update_raghuvaMsha(gmusic_client=dry_run=False)
+    update_raghuvaMsha(dry_run=False)
     pass
