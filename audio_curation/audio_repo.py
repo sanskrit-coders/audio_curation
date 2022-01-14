@@ -327,7 +327,7 @@ class BaseAudioRepo(DerivativeRepo):
             if (not dry_run) and len(git_repo.remotes) > 0:
                 try:
                     logging.info(git_repo.git.pull(rebase=True))
-                except e:
+                except Exception as e:
                     logging.warning("Git pull failed - probably remote repo doesn't yet exist?")
                 if collapse_history:
                     logging.info(git_repo.git.push("-f", "origin", "master"))
