@@ -7,3 +7,4 @@ GitPython
 oauth2client
 indic_transliteration
 vosk
+sanskrit_tts

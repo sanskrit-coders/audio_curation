@@ -7,6 +7,7 @@ dist/
 *.py[cod]
 __pycache__/
 *.so
+*.local
 *~
 
 # due to using tox and pytest
