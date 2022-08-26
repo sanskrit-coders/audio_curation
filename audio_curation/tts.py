@@ -1,26 +1,37 @@
 import sanskrit_tts
-import toml
-from sanskrit_tts import bhashini
+import toml, regex
+from sanskrit_tts import bhashini_tts
+import  os
+from indic_transliteration.sanscript.schemes import VisargaApproximation
 
 config = None
+bhashini = bhashini_tts.BhashiniTTS()
+bhashini.voice =  bhashini_tts.BhashiniVoice.FEMALE2
 if config is None:
   with open("/home/vvasuki/sysconf/homedir/tts.toml", "r") as f:
     config = toml.load(f)
+    bhashini.api_key = config["bhashini_api_key"]
 
 
-def audio_from_text(text, mp3_path, synthesizer=bhashini.synthesize_sentence_kn, *args, **kwargs):
-  md_file = MdFile(file_path=md_path)
-  if synthesizer in [bhashini.synthesize_sentence_kn]:
-    kwargs["api_key"] = config["bhashini_api_key"]
-  audio = sanskrit_tts.synthesize_text(text=text, synthesizer=synthesizer, *args, **kwargs)
+def save_audio(audio, mp3_path):
+  os.makedirs(os.path.dirname(mp3_path), exist_ok=True)
   _ = audio.export(mp3_path)
 
 
-def audio_from_md(md_path, mp3_path, synthesizer=bhashini.synthesize_sentence_kn, *args, **kwargs):
+def audio_from_text(text, mp3_path, synthesizer=bhashini, *args, **kwargs):
+  if synthesizer == bhashini:
+    from indic_transliteration import sanscript
+    
+    text = sanscript.transliterate(text, _to=sanscript.KANNADA)
+    # TODO: Numbers like ३. १४.
+    text = regex.sub("[೦-೯\.]+", "", text)
+    text = regex.sub("[।॥]+|\n\n+", ".\n\n", text)
+  audio = synthesizer.synthesize(text=text, visarga_approximation=VisargaApproximation.H, *args, **kwargs)
+  save_audio(audio, mp3_path)
+
+def audio_from_md(md_path, mp3_path, synthesizer=bhashini, *args, **kwargs):
   from doc_curation.md.file import MdFile
   md_file = MdFile(file_path=md_path)
   [metadata, content] = md_file.read()
-  if synthesizer in [bhashini.synthesize_sentence_kn]:
-    kwargs["api_key"] = config["bhashini_api_key"]
-  audio = sanskrit_tts.synthesize_text(text=content, synthesizer=synthesizer, *args, **kwargs)
-  _ = audio.export(mp3_path)
+  audio = synthesizer.synthesize(text=content, visarga_approximation=False, *args, **kwargs)
+  save_audio(audio, mp3_path)
