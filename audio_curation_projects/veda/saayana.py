@@ -25,4 +25,4 @@ def generate_audios(title="सायण-भाष्यम्", overwrite=False)
 
 
 if __name__ == '__main__':
-  generate_audios(overwrite=False)
+  generate_audios(overwrite=True)

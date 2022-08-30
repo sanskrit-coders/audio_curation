@@ -26,7 +26,7 @@ def audio_from_text(text, mp3_path, synthesizer=bhashini, *args, **kwargs):
     # TODO: Numbers like ३. १४.
     text = regex.sub("[೦-೯\.]+", "", text)
     text = regex.sub("[।॥]+|\n\n+", ".\n\n", text)
-  audio = synthesizer.synthesize(text=text, visarga_approximation=VisargaApproximation.H, *args, **kwargs)
+  audio = synthesizer.synthesize(text=text, visarga_approximation=VisargaApproximation.AHA, *args, **kwargs)
   save_audio(audio, mp3_path)
 
 def audio_from_md(md_path, mp3_path, synthesizer=bhashini, *args, **kwargs):
