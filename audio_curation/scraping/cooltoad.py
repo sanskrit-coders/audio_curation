@@ -37,8 +37,13 @@ def get_logged_in_browser(headless=True):
 
 
 def get_song(browser, url, download_time=6):
-  browser.get(url)
-  WebDriverWait(browser, 20).until(presence_of_element_located((By.CSS_SELECTOR, "#bbContent")))
+  for i in range(0, 3):
+    browser.get(url)
+    try:
+      WebDriverWait(browser, 20).until(presence_of_element_located((By.CSS_SELECTOR, "#bbContent")))
+      break
+    except TimeoutException:
+      continue
   song_details = browser.find_element_by_css_selector("#bbContent").get_attribute('innerText')
   logging.info(f"From {url}: \n{song_details}")
   try:
@@ -70,7 +75,7 @@ def get_all(start_url, start_item_url=None, browser=None, download_time=5):
 
   if start_item_url is not None and start_item_url in urls:
     from itertools import dropwhile
-    urls = dropwhile(lambda x: x!=start_item_url, urls)
+    urls = list(dropwhile(lambda x: x!=start_item_url, urls))
   logging.info(f"Getting {len(urls)} urls in {start_url}")
   for url in urls:
     get_song(browser=browser, url=url, download_time=download_time)
