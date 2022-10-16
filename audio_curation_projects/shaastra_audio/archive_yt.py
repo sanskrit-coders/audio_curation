@@ -12,6 +12,5 @@ YT_BASE = "/mnt/vmedia/audio/curation/archive/yt-curation"
 
 
 if __name__ == "__main__":
-  archive_audio_item = archive_utility.ArchiveAudioItem(archive_id="GIPA_gokhale-institute-talks", repo_base=os.path.join(YT_BASE, "GIPA"))
-  archive_audio_item.update_from_dir()
+  archive_utility.update_item(item_id="GIPA_gokhale-institute-talks", dir_path=os.path.join(YT_BASE, "GIPA"))
   pass
