@@ -15,7 +15,7 @@ from audio_curation.episode_data import google_sheets_data
 
 LOCAL_REPO_BASE_PATH = "/home/vvasuki/Music/git-curation/kAvya-audio/kathAsaritsAgara"
 repo_paths = [LOCAL_REPO_BASE_PATH]
-episode_data = google_sheets_data.EpisodeData(spreadhsheet_id="1K8cuRtvTLQKntE7r9Kn5gOqg_ciGlwYWao4RX9Wx-TQ", worksheet_name="कार्यावलिः", google_key = '/home/vvasuki/sysconf/kunchikA/google/sanskritnlp/service_account_key.json', episode_id_column="सञ्चिकाशीर्षिका", recorder_column="पठिता")
+episode_data = google_sheets_data.EpisodeData(spreadhsheet_id="1K8cuRtvTLQKntE7r9Kn5gOqg_ciGlwYWao4RX9Wx-TQ", worksheet_name="कार्यावलिः", google_key = '/home/vvasuki/gitland/vvasuki-git/sysconf/kunchikA/google/sanskritnlp/service_account_key.json', episode_id_column="सञ्चिकाशीर्षिका", recorder_column="पठिता")
 
 
 def get_taranga_id(file_path):

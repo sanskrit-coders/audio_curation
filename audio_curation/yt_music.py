@@ -19,7 +19,7 @@ class Client(object):
     
     TODO: Figure out how to use this. As of 202012, this fails at the "paste headers" step.
     """
-    def __init__(self, auth_file_path="/home/vvasuki/sysconf/kunchikA/google/vishvas/yt_music.json"):
+    def __init__(self, auth_file_path="/home/vvasuki/gitland/vvasuki-git/sysconf/kunchikA/google/vishvas/yt_music.json"):
         YTMusic.setup(filepath=auth_file_path)
         # Returns a list of dictionaries, one for each audio track, each with the following keys: ('browseId', 'title', 'album', 'album_artist', 'artist', 'track_number', 'track_size', 'disc_number', 'total_disc_count').
         self.uploaded_tracks = YTMusic.get_library_upload_songs(limit = 50000)

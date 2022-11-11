@@ -36,7 +36,7 @@ class MbhRepoBase(audio_repo.BaseAudioRepo):
     """
     }
 
-    episode_data = google_sheets_data.EpisodeData(spreadhsheet_id="1sNH1AWhhoa5VATqMdLbF652s7srTG0Raa6K-sCwDR-8", worksheet_name="कार्यावली", google_key = '/home/vvasuki/sysconf/kunchikA/google/sanskritnlp/service_account_key.json', episode_id_column="पर्व-अध्यायः", recorder_column="पठिता", title_column="शीर्षिका")
+    episode_data = google_sheets_data.EpisodeData(spreadhsheet_id="1sNH1AWhhoa5VATqMdLbF652s7srTG0Raa6K-sCwDR-8", worksheet_name="कार्यावली", google_key = '/home/vvasuki/gitland/vvasuki-git/sysconf/kunchikA/google/sanskritnlp/service_account_key.json', episode_id_column="पर्व-अध्यायः", recorder_column="पठिता", title_column="शीर्षिका")
 
     def update_metadata(self, mp3_files):
         """

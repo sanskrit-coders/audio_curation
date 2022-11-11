@@ -12,7 +12,7 @@ from audio_curation import audio_repo, archive_utility, mp3_utility
 from audio_curation.episode_data import google_sheets_data
 
 
-episode_data = google_sheets_data.EpisodeData(spreadhsheet_id="1MvZ9lGzxEpI23O4q938qvwagknF7m3eZZp6SuNxbECk", worksheet_name="DVG-jnApaka", google_key = '/home/vvasuki/sysconf/kunchikA/google/sanskritnlp/service_account_key.json', episode_id_column="current filename", title_column="new-title", script="en")
+episode_data = google_sheets_data.EpisodeData(spreadhsheet_id="1MvZ9lGzxEpI23O4q938qvwagknF7m3eZZp6SuNxbECk", worksheet_name="DVG-jnApaka", google_key = '/home/vvasuki/gitland/vvasuki-git/sysconf/kunchikA/google/sanskritnlp/service_account_key.json', episode_id_column="current filename", title_column="new-title", script="en")
 
 class RepoBase(audio_repo.BaseAudioRepo):
     def __init__(self, title, repo_paths,
