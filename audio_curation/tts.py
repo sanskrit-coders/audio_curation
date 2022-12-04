@@ -8,7 +8,7 @@ config = None
 bhashini = bhashini_tts.BhashiniTTS()
 bhashini.voice =  bhashini_tts.BhashiniVoice.FEMALE2
 if config is None:
-  with open("/home/vvasuki/sysconf/homedir/tts.toml", "r") as f:
+  with open("/home/vvasuki/gitland/vvasuki-git/sysconf/homedir/tts.toml", "r") as f:
     config = toml.load(f)
     bhashini.api_key = config["bhashini_api_key"]
 
@@ -26,6 +26,7 @@ def audio_from_text(text, mp3_path, synthesizer=bhashini, *args, **kwargs):
     # TODO: Numbers like ३. १४.
     text = regex.sub("[೦-೯\.]+", "", text)
     text = regex.sub("[।॥]+|\n\n+", ".\n\n", text)
+    text = text.replace("\n", "\\n")
   audio = synthesizer.synthesize(text=text, visarga_approximation=VisargaApproximation.AHA, *args, **kwargs)
   save_audio(audio, mp3_path)
 
