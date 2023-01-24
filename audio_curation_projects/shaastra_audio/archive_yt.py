@@ -9,7 +9,7 @@ from audio_utils import mp3_utility
 
 
 
-YT_BASE = "/mnt/vmedia/audio/curation/archive/yt-curation"
+YT_BASE = "/run/media/vvasuki/vData/audio/curation/archive/yt-curation"
 
 
 def shrii_vaishnava():
@@ -19,6 +19,8 @@ def shrii_vaishnava():
 
 
 if __name__ == "__main__":
-  archive_utility.update_item(item_id="GIPA_gokhale-institute-talks", dir_path=os.path.join(YT_BASE, "GIPA"))
-  shrii_vaishnava()
+  # archive_utility.update_item(item_id="GIPA_gokhale-institute-talks", dir_path=os.path.join(YT_BASE, "GIPA"))
+  archive_utility.update_item(item_id="vyAsarAja-maTha-lectures", dir_path=os.path.join(YT_BASE, "vyAsarAjamaTha"))
+  # archive_utility.update_item(item_id="viShNu-purANa-taylor", dir_path=os.path.join(YT_BASE, "../viShNu-purANa-taylor"))
+  # shrii_vaishnava()
   pass
