@@ -13,22 +13,26 @@ ydl_opts_base = {
     'key': 'FFmpegExtractAudio',
     'preferredcodec': 'm4a',
   }],
+  'verbose': True,
   'playlistreverse': True,
   'restrictfilenames': True,
   "nooverwrites": True,
-  "continuedl": True
+  "continuedl": True,
+  "outtmpl": {"default": "ST_%(upload_date)s_%(title).50s.mp3"}
 }
 
 
-def get_all(url, dest_dir, albumartist=None):
+def get_all(url, dest_dir, options_dict={}, postprocessor_args={}):
   ydl_opts = copy(ydl_opts_base)
+  ydl_opts.update(options_dict)
   ydl_opts["paths"] = {"home": dest_dir}
   ydl_opts["download_archive"] = os.path.join(dest_dir, "ytdl-archive.txt")
-  if albumartist is not None:
-    ydl_opts['postprocessor_args'] = {"metadata": {"albumartist": albumartist}}
+  if postprocessor_args is not None:
+    ydl_opts['postprocessor_args'] = postprocessor_args
   with yt_dlp.YoutubeDL(ydl_opts) as ydl:
     error_code = ydl.download([url])
   return error_code
+
 
 """
     username:          Username for authentication purposes.
