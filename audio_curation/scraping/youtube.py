@@ -13,7 +13,7 @@ ydl_opts_base = {
     'key': 'FFmpegExtractAudio',
     'preferredcodec': 'm4a',
   }],
-  'verbose': True,
+  'verbose': True, # Useful for checking if we have the latest version.
   'playlistreverse': True,
   'restrictfilenames': True,
   "nooverwrites": True,
