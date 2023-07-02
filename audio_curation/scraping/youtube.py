@@ -11,14 +11,15 @@ ydl_opts_base = {
   # ℹ️ See help(yt_dlp.postprocessor) for a list of available Postprocessors and their arguments
   'postprocessors': [{  # Extract audio using ffmpeg
     'key': 'FFmpegExtractAudio',
-    'preferredcodec': 'm4a',
+    'preferredcodec': 'mp3',
+    'preferredquality': '32',
   }],
   'verbose': True, # Useful for checking if we have the latest version.
   'playlistreverse': True,
   'restrictfilenames': True,
   "nooverwrites": True,
   "continuedl": True,
-  "outtmpl": {"default": "ST_%(upload_date)s_%(title).50s.mp3"}
+  "outtmpl": {"default": "ST_%(upload_date)s_%(title).50s"}
 }
 
 
