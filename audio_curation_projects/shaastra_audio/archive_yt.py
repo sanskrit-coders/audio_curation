@@ -18,13 +18,15 @@ DESCRIPTION_BASE = """
 def shrii_vaishnava():
   # archive_utility.update_item(item_id="duShyanth-shrIdhar-talks", dir_path=os.path.join(YT_BASE, "duShyanth-shrIdhar-talks"))
   # archive_utility.update_item(item_id="gspk_stotra-pArAyaNa-kainkaryam", dir_path=os.path.join(YT_BASE, "gspk_stotra-pArAyaNa-kainkaryam"))
-  # archive_utility.update_item(item_id="rAmAnuja-dayA-audio", dir_path=os.path.join(YT_BASE, "rAmAnuja-dayA"))
+
+  # youtube.get_all(url="https://www.youtube.com/@ramanujadaya8750/videos", dest_dir=os.path.join(YT_BASE, "rAmAnuja-dayA"), postprocessor_args={"metadata": {"albumartist": "rAmAnuja-dayA"}})
+  archive_utility.update_item(item_id="rAmAnuja-dayA-audio", dir_path=os.path.join(YT_BASE, "rAmAnuja-dayA"))
   # archive_utility.update_item(item_id="tattva-muktA-kalApaH_ALvAr", dir_path=os.path.join(YT_BASE, "tattva-muktA-kalApaH_ALvAr"), metadata={"title": "tattva-muktA-kalApaH - ALvAr", "description": "तत्त्व-मुक्ता-कलापः - आळ्वार्-पाठः\n\n" + DESCRIPTION_BASE})
 
   # youtube.get_all(url="https://www.youtube.com/@parankushacharinstituteofvedic/videos", dest_dir=os.path.join(YT_BASE, "PISV"), postprocessor_args={"metadata": {"albumartist": "pisvTalks"}})
-  archive_utility.update_item(item_id="pisvTalks", dir_path=os.path.join(YT_BASE, "PISV"), metadata={"title": "PISV Talks", "description": "पराङ्कुशाचार्य-वैदिक-शोध-संस्था-धारा-भाषणानि\n\n" + DESCRIPTION_BASE})
-
+  # archive_utility.update_item(item_id="pisvTalks", dir_path=os.path.join(YT_BASE, "PISV"), metadata={"title": "PISV Talks", "description": "पराङ्कुशाचार्य-वैदिक-शोध-संस्था-धारा-भाषणानि\n\n" + DESCRIPTION_BASE})
   pass
+
 
 def dhaarmika_lectures():
   pass
