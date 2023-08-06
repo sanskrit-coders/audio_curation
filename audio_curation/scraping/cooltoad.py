@@ -61,7 +61,7 @@ def get_all(start_url, start_item_url=None, browser=None, download_time=5):
   song_anchors_box = WebDriverWait(browser, 20).until(
     presence_of_element_located((By.CSS_SELECTOR, "#songsBox"))
   )
-  song_anchors = browser.find_elements_by_css_selector("#songsBox a")
+  song_anchors = browser.find_elements(by=By.CSS_SELECTOR, value="#songsBox a")
   urls = [urljoin("https://cooltoad.com/", song_anchor.get_attribute("href")) for song_anchor in song_anchors]
   logging.info(f"{len(urls)} urls in {start_url}")
   
