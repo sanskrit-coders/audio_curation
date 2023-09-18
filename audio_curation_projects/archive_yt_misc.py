@@ -21,6 +21,8 @@ def misc():
   pass
   # youtube.get_all(url="https://www.youtube.com/@TheRoyalInstitution/videos", dest_dir=os.path.join(YT_BASE, "royal-inst-yt-talks"), postprocessor_args={"metadata": {"albumartist": "Royal Institutution"}})
   # archive_utility.update_item(item_id="royal-inst-yt-talks", dir_path=os.path.join(YT_BASE, "royal-inst-yt-talks") , metadata={"title": "Royal Institution Public talks", "description": "Royal Institution Public talks - stored here for listening convenience.\n\n" + DESCRIPTION_BASE})
+  # youtube.get_all(url="https://www.youtube.com/@Bhakthamrutham", dest_dir=os.path.join(YT_BASE, "bhaktAmRtam"), postprocessor_args={"metadata": {"albumartist": "paravastu-varadarAjaH"}})
+  archive_utility.update_item(item_id="bhaktAmRtam-yt", dir_path=os.path.join(YT_BASE, "bhaktAmRtam") , metadata={"title": "bhaktAmRtam talks", "description": "bhaktAmRtam talks - stored here for listening convenience.\n\n" + DESCRIPTION_BASE})
 
 
 if __name__ == "__main__":
