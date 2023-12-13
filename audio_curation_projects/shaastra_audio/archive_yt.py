@@ -17,7 +17,7 @@ DESCRIPTION_BASE = """
 
 def shrii_vaishnava():
   # youtube.get_all(url="https://www.youtube.com/@Ramayanaforus/videos", dest_dir=os.path.join(YT_BASE, "duShyanth-shrIdhar-talks"), postprocessor_args={"metadata": {"albumartist": "dushyanth shrIdhar"}})
-  archive_utility.update_item(item_id="duShyanth-shrIdhar-talks", dir_path=os.path.join(YT_BASE, "duShyanth-shrIdhar-talks"))
+  # archive_utility.update_item(item_id="duShyanth-shrIdhar-talks", dir_path=os.path.join(YT_BASE, "duShyanth-shrIdhar-talks"))
   # archive_utility.update_item(item_id="gspk_stotra-pArAyaNa-kainkaryam", dir_path=os.path.join(YT_BASE, "gspk_stotra-pArAyaNa-kainkaryam"))
 
   # youtube.get_all(url="https://www.youtube.com/@ramanujadaya8750/videos", dest_dir=os.path.join(YT_BASE, "rAmAnuja-dayA"), postprocessor_args={"metadata": {"albumartist": "rAmAnuja-dayA"}})
@@ -32,10 +32,13 @@ def shrii_vaishnava():
   # archive_utility.update_item(item_id="deshika-daily", dir_path=os.path.join(YT_BASE, "deshika-daily"), metadata={"title": "deshika-daily talks", "description": "देशिक-दैनिक-धारा-भाषणानि\n\n" + DESCRIPTION_BASE})
 
   # youtube.get_all(url="https://www.youtube.com/playlist?list=PLFLowj4VMohUI_zCFA0ZadHDEARgm8J7B", dest_dir=os.path.join(YT_BASE, "nArAyaNAchArya/mbh"), postprocessor_args={"metadata": {"albumartist": "KS nArAyaNAchArya"}})
+
+  # youtube.get_all(url="https://www.youtube.com/@acharyapaduka/videos", dest_dir=os.path.join(YT_BASE, "acharyapaduka"), postprocessor_args={"metadata": {"albumartist": "AchArya-pAdukA"}})
+  archive_utility.update_item(item_id="AchAryapAdukA_YT", dir_path=os.path.join(YT_BASE, "acharyapaduka"), metadata={"title": "acharyapaduka talks", "description": "आचार्य-पादुका-धारा-भाषणानि\n\n" + DESCRIPTION_BASE})
   pass
 
 
-def dhaarmika_lectures():
+def dhaarmika_lectureicts():
   pass
   # archive_utility.update_item(item_id="GIPA_gokhale-institute-talks", dir_path=os.path.join(YT_BASE, "GIPA"))
   # archive_utility.update_item(item_id="pparikh-talks", dir_path=os.path.join(YT_BASE, "prashAnt-pArikh"), metadata={"title": "P Parikh interviews", "description": "Source: Prashant Parikh's YT channel\n\n" + DESCRIPTION_BASE})
