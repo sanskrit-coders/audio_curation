@@ -4,11 +4,12 @@ import os
 import pprint
 
 from audio_curation import audio_repo
+from audio_curation import archive_utility as audio_archive_utility
 from curation_utils import archive_utility
 from audio_utils import mp3_utility
 from audio_curation.scraping import youtube
 
-
+UPANYASA_BASE = "/run/media/vvasuki/vData/audio/learning/upanyAsAH"
 YT_BASE = "/run/media/vvasuki/vData/audio/curation/archive/yt-curation"
 DESCRIPTION_BASE = """
 श्रवणसौकर्याय-रक्ष्यमाणम् अत्र।  
@@ -34,9 +35,15 @@ def shrii_vaishnava():
   # youtube.get_all(url="https://www.youtube.com/playlist?list=PLFLowj4VMohUI_zCFA0ZadHDEARgm8J7B", dest_dir=os.path.join(YT_BASE, "nArAyaNAchArya/mbh"), postprocessor_args={"metadata": {"albumartist": "KS nArAyaNAchArya"}})
 
   # youtube.get_all(url="https://www.youtube.com/@acharyapaduka/videos", dest_dir=os.path.join(YT_BASE, "acharyapaduka"), postprocessor_args={"metadata": {"albumartist": "AchArya-pAdukA"}})
-  archive_utility.update_item(item_id="AchAryapAdukA_YT", dir_path=os.path.join(YT_BASE, "acharyapaduka"), metadata={"title": "acharyapaduka talks", "description": "आचार्य-पादुका-धारा-भाषणानि\n\n" + DESCRIPTION_BASE})
+  # archive_utility.update_item(item_id="AchAryapAdukA_YT", dir_path=os.path.join(YT_BASE, "acharyapaduka"), metadata={"title": "acharyapaduka talks", "description": "आचार्य-पादुका-धारा-भाषणानि\n\n" + DESCRIPTION_BASE})
+  
   pass
 
+
+def naaTTeri():
+  item = audio_archive_utility.ArchiveAudioItem(archive_id="natteri-guru-paramparA_tamiL") 
+  base_dir = os.path.join(UPANYASA_BASE, "nATTeri")
+  item.download_original_files(destination_dir=base_dir)
 
 def dhaarmika_lectureicts():
   pass
@@ -53,6 +60,7 @@ def misc():
 
 
 if __name__ == "__main__":
-  shrii_vaishnava()
+  # shrii_vaishnava()
+  naaTTeri()
   # dhaarmika_lectures()
   pass
