@@ -41,7 +41,7 @@ class NormalizedFilesRepo(audio_repo.NormalizedRepo):
 
 
 def update_repo(dry_run=False):
-  repo = RepoBase(repo_paths=["/run/media/vvasuki/vData/audio/curation/git/shAstra-audio/sthAneshvara-shaivism"])
+  repo = RepoBase(repo_paths=["/media/vvasuki/vData/audio/curation/git/shAstra-audio/sthAneshvara-shaivism"])
   archive_audio_item = archive_utility.ArchiveAudioItem(archive_id=NormalizedFilesRepo.archive_id)
   # archive_audio_item.update_metadata(metadata=NormalizedFilesRepo.metadata)
   logging.info(pprint.pformat(repo.reprocess(dry_run=dry_run)))

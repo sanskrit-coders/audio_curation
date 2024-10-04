@@ -9,8 +9,8 @@ from curation_utils import archive_utility
 from audio_utils import mp3_utility
 from audio_curation.scraping import youtube
 
-UPANYASA_BASE = "/run/media/vvasuki/vData/audio/learning/upanyAsAH"
-YT_BASE = "/run/media/vvasuki/vData/audio/curation/archive/yt-curation"
+UPANYASA_BASE = "/media/vvasuki/vData/audio/learning/upanyAsAH"
+YT_BASE = "/media/vvasuki/vData/audio/curation/archive/yt-curation"
 DESCRIPTION_BASE = """
 श्रवणसौकर्याय-रक्ष्यमाणम् अत्र।  
 भवद्योगदानं‌ काङ्क्ष्यते - https://sanskrit.github.io/groups/dyuganga/projects/audio/
@@ -55,12 +55,14 @@ def dhaarmika_lectureicts():
 
 def misc():
   pass
+  archive_utility.update_item(item_id="paNDita-parichayaH", dir_path=os.path.join(YT_BASE, "../paNDita-parichayaH"))
   # archive_utility.update_item(item_id="vyAsarAja-maTha-lectures", dir_path=os.path.join(YT_BASE, "vyAsarAjamaTha"))
   # archive_utility.update_item(item_id="viShNu-purANa-taylor", dir_path=os.path.join(YT_BASE, "../viShNu-purANa-taylor"))
 
 
 if __name__ == "__main__":
   # shrii_vaishnava()
-  naaTTeri()
+  # naaTTeri()
   # dhaarmika_lectures()
+  misc()
   pass

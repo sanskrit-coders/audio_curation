@@ -8,7 +8,7 @@ from curation_utils import archive_utility
 from audio_utils import mp3_utility
 
 
-BASE_DIR = "/run/media/vvasuki/vData/audio/curation/git/shAstra-audio/sthAneshvara"
+BASE_DIR = "/media/vvasuki/vData/audio/curation/git/shAstra-audio/sthAneshvara"
 GENERIC_DESCRIPTION = """
 Talks by sthAneshvar timalsIna.  
 श्रवणसौकर्याय-रक्ष्यमाणम् अत्र।  
