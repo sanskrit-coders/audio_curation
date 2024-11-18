@@ -53,8 +53,15 @@ def rts():
   repo.archive_audio_item.update_from_dir(file_patterns=["*.mp3"], overwrite_all=False)
 
 
+def tirukkural():
+  repo = RepoBase(archive_id="laxmI-narasiMhaH_RTS", dir_path=os.path.join(BASE_DIR, "tiruk-kuraL"), album_id="tiruk-kuraL तिरुक्-कुरळ्", desc=f"{GENERIC_DESCRIPTION}\n\nतिरुक्-कुरळ्।")
+  repo.update_derivatives(dry_run=False)
+  # archive_audio_item.update_metadata(metadata=NormalizedFilesRepo.metadata)
+  repo.archive_audio_item.update_from_dir(file_patterns=["*.mp3"], overwrite_all=False)
+
+
 def bs():
-  repo = RepoBase(archive_id="laxmI-narasiMhaH_BS", dir_path=os.path.join(BASE_DIR, "brahma-sUtram"), album_id="rahasya-traya-sAraH ब्रह्म-सूत्राणि", desc=f"{GENERIC_DESCRIPTION}\n\nब्रह्म-सूत्राणि।")
+  repo = RepoBase(archive_id="laxmI-narasiMhaH_BS", dir_path=os.path.join(BASE_DIR, "brahma-sUtram"), album_id="brahma-sUtrANi ब्रह्म-सूत्राणि", desc=f"{GENERIC_DESCRIPTION}\n\nब्रह्म-सूत्राणि।")
   repo.update_derivatives(dry_run=False)
   # archive_audio_item.update_metadata(metadata=NormalizedFilesRepo.metadata)
   repo.archive_audio_item.update_from_dir(file_patterns=["*.mp3"], overwrite_all=False)
@@ -62,7 +69,7 @@ def bs():
 
 
 def misc():
-  repo = RepoBase(archive_id="laxmI-narasiMha-bodhanAni", dir_path=os.path.join(BASE_DIR, "misc"), album_id="rahasya-traya-sAraH ब्रह्म-सूत्राणि", desc=f"{GENERIC_DESCRIPTION}\n\nप्रकीर्ण-बोधनानि।")
+  repo = RepoBase(archive_id="laxmI-narasiMha-bodhanAni", dir_path=os.path.join(BASE_DIR, "misc"), album_id="misc प्रकीर्ण-बोधनानि", desc=f"{GENERIC_DESCRIPTION}\n\nप्रकीर्ण-बोधनानि।")
   repo.update_derivatives(dry_run=False)
   # archive_audio_item.update_metadata(metadata=NormalizedFilesRepo.metadata)
   repo.archive_audio_item.update_from_dir(file_patterns=["*.mp3"], overwrite_all=False)
@@ -71,7 +78,8 @@ def misc():
 
 if __name__ == '__main__':
   # bhagavad_vishayam()
-  # rts()
+  rts()
+  # tirukkural()
   # bs()
   # misc()
   # archive_utility.update_item(item_id="laxmI-narasiMhaH_BS", dir_path=os.path.join(BASE_DIR, "brahma-sUtram"), metadata={"description":GENERIC_DESCRIPTION})
