@@ -54,7 +54,7 @@ def rts():
 
 
 def tirukkural():
-  repo = RepoBase(archive_id="laxmI-narasiMhaH_RTS", dir_path=os.path.join(BASE_DIR, "tiruk-kuraL"), album_id="tiruk-kuraL तिरुक्-कुरळ्", desc=f"{GENERIC_DESCRIPTION}\n\nतिरुक्-कुरळ्।")
+  repo = RepoBase(archive_id="laxmI-narasiMhaH_tirukkuraL", dir_path=os.path.join(BASE_DIR, "tiruk-kuraL"), album_id="tiruk-kuraL तिरुक्-कुरळ्", desc=f"{GENERIC_DESCRIPTION}\n\nतिरुक्-कुरळ्।")
   repo.update_derivatives(dry_run=False)
   # archive_audio_item.update_metadata(metadata=NormalizedFilesRepo.metadata)
   repo.archive_audio_item.update_from_dir(file_patterns=["*.mp3"], overwrite_all=False)
@@ -78,7 +78,7 @@ def misc():
 
 if __name__ == '__main__':
   # bhagavad_vishayam()
-  rts()
+  # rts()
   # tirukkural()
   # bs()
   # misc()

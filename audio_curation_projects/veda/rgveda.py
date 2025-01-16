@@ -46,7 +46,7 @@ def update_rgveda_sriranga():
     # repo.update_git(collapse_history=False, first_push=True)
     # exit(1)
     repo.archive_item.update_metadata(metadata=metadata)
-    # repo.archive_item.delete_unaccounted_for_files(all_files=repo.get_unnormalized_files())
+    # repo.archive_item.delete_unaccounted_for_files(all_files_or_dir=repo.get_unnormalized_files())
     # repo.update_archive_item(mp3_files_in=repo.get_unnormalized_files(), overwrite_all=False)
 
 
@@ -68,7 +68,7 @@ def update_rgveda_auro():
     # repo.update_git(collapse_history=False, first_push=True)
     # exit(1)
     # repo.archive_item.update_metadata(metadata=metadata)
-    # repo.archive_item.delete_unaccounted_for_files(all_files=repo.get_unnormalized_files())
+    # repo.archive_item.delete_unaccounted_for_files(all_files_or_dir=repo.get_unnormalized_files())
 
 
 if __name__ == "__main__":

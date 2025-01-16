@@ -72,7 +72,7 @@ def update_gopal_compilation(dry_run=False):
     archive_audio_item.update_metadata(metadata=metadata)
     repo = GopalcompilationRepoBase(repo_paths=[os.path.join("/home/vvasuki/veda-audio/jaiminIya-sAma-paravastu", "jaiminIya-sAma-gAna-paravastu-tradition-gopAla-compilation")], archive_audio_item=archive_audio_item, git_remote_origin_basepath="git@github.com:veda-audio")
     repo.reprocess_files(mp3_files=repo.get_unnormalized_files(), update_git=False, dry_run=dry_run, normalize_files=False)
-    repo.delete_unaccounted_for_files(all_files=repo.get_unnormalized_files(), dry_run=dry_run)
+    repo.delete_unaccounted_for_files(all_files_or_dir=repo.get_unnormalized_files(), dry_run=dry_run)
     # gmusic_client.upload(mp3_files=repo.get_unnormalized_files(), dry_run=True)
 
 

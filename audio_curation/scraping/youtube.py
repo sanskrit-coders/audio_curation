@@ -19,7 +19,8 @@ ydl_opts_base = {
   'restrictfilenames': True,
   "nooverwrites": True,
   "continuedl": True,
-  "outtmpl": {"default": "ST_%(upload_date)s_%(title).50s"}
+  "outtmpl": {"default": "ST_%(upload_date)s_%(title).50s"},
+  'ignoreerrors': True
 }
 
 

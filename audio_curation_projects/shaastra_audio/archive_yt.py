@@ -9,7 +9,7 @@ from curation_utils import archive_utility
 from audio_utils import mp3_utility
 from audio_curation.scraping import youtube
 
-UPANYASA_BASE = "/media/vvasuki/vData/audio/learning/upanyAsAH"
+ARCHIVE_BASE = "/media/vvasuki/vData/audio/curation/archive"
 YT_BASE = "/media/vvasuki/vData/audio/curation/archive/yt-curation"
 DESCRIPTION_BASE = """
 श्रवणसौकर्याय-रक्ष्यमाणम् अत्र।  
@@ -19,10 +19,15 @@ DESCRIPTION_BASE = """
 def shrii_vaishnava():
   # youtube.get_all(url="https://www.youtube.com/@Ramayanaforus/videos", dest_dir=os.path.join(YT_BASE, "duShyanth-shrIdhar-talks"), postprocessor_args={"metadata": {"albumartist": "dushyanth shrIdhar"}})
   # archive_utility.update_item(item_id="duShyanth-shrIdhar-talks", dir_path=os.path.join(YT_BASE, "duShyanth-shrIdhar-talks"))
+
+
+  # youtube.get_all(url="https://www.youtube.com/@gspk/videos", dest_dir=os.path.join(YT_BASE, "gspk_stotra-pArAyaNa-kainkaryam"), postprocessor_args={"metadata": {"albumartist": "GSPK"}})
   # archive_utility.update_item(item_id="gspk_stotra-pArAyaNa-kainkaryam", dir_path=os.path.join(YT_BASE, "gspk_stotra-pArAyaNa-kainkaryam"))
 
   # youtube.get_all(url="https://www.youtube.com/@ramanujadaya8750/videos", dest_dir=os.path.join(YT_BASE, "rAmAnuja-dayA"), postprocessor_args={"metadata": {"albumartist": "rAmAnuja-dayA"}})
   # archive_utility.update_item(item_id="rAmAnuja-dayA-audio", dir_path=os.path.join(YT_BASE, "rAmAnuja-dayA"))
+
+
   # archive_utility.update_item(item_id="tattva-muktA-kalApaH_ALvAr", dir_path=os.path.join(YT_BASE, "tattva-muktA-kalApaH_ALvAr"), metadata={"title": "tattva-muktA-kalApaH - ALvAr", "description": "तत्त्व-मुक्ता-कलापः - आळ्वार्-पाठः\n\n" + DESCRIPTION_BASE})
 
   # youtube.get_all(url="https://www.youtube.com/@parankushacharinstituteofvedic/videos", dest_dir=os.path.join(YT_BASE, "PISV"), postprocessor_args={"metadata": {"albumartist": "pisvTalks"}})
@@ -30,7 +35,7 @@ def shrii_vaishnava():
 
 
   # youtube.get_all(url="https://www.youtube.com/@desikadaily/videos", dest_dir=os.path.join(YT_BASE, "deshika-daily"), postprocessor_args={"metadata": {"albumartist": "deshika-daily"}})
-  # archive_utility.update_item(item_id="deshika-daily", dir_path=os.path.join(YT_BASE, "deshika-daily"), metadata={"title": "deshika-daily talks", "description": "देशिक-दैनिक-धारा-भाषणानि\n\n" + DESCRIPTION_BASE})
+  archive_utility.update_item(item_id="deshika-daily", dir_path=os.path.join(YT_BASE, "deshika-daily"), metadata={"title": "deshika-daily talks", "description": "देशिक-दैनिक-धारा-भाषणानि\n\n" + DESCRIPTION_BASE})
 
   # youtube.get_all(url="https://www.youtube.com/playlist?list=PLFLowj4VMohUI_zCFA0ZadHDEARgm8J7B", dest_dir=os.path.join(YT_BASE, "nArAyaNAchArya/mbh"), postprocessor_args={"metadata": {"albumartist": "KS nArAyaNAchArya"}})
 
@@ -40,10 +45,15 @@ def shrii_vaishnava():
   pass
 
 
-def naaTTeri():
-  item = audio_archive_utility.ArchiveAudioItem(archive_id="natteri-guru-paramparA_tamiL") 
-  base_dir = os.path.join(UPANYASA_BASE, "nATTeri")
-  item.download_original_files(destination_dir=base_dir)
+def naaTTeri(dry_run=False):
+  archive_id = "natteri-guru-paramparA_tamiL"
+  base_dir = os.path.join(ARCHIVE_BASE, "nATTeri")
+  item = audio_archive_utility.ArchiveAudioItem(archive_id=archive_id, repo_base=base_dir)
+  # archive_audio_item.update_metadata(metadata=metadata)
+  # item.download_original_files(destination_dir=base_dir)
+  item.update_from_dir(dry_run=dry_run)
+  item.delete_unaccounted_for_files(all_files_or_dir=base_dir, dry_run=dry_run)
+
 
 def dhaarmika_lectureicts():
   pass
@@ -55,14 +65,15 @@ def dhaarmika_lectureicts():
 
 def misc():
   pass
-  archive_utility.update_item(item_id="paNDita-parichayaH", dir_path=os.path.join(YT_BASE, "../paNDita-parichayaH"))
+  # archive_utility.update_item(item_id="paNDita-parichayaH", dir_path=os.path.join(YT_BASE, "../paNDita-parichayaH"))
+  archive_utility.update_item(item_id="MA-lakShmI-tAtAchAryaH", dir_path=os.path.join(YT_BASE, "../paNDita-parichayaH/laxmI-tAtAryaH"))
   # archive_utility.update_item(item_id="vyAsarAja-maTha-lectures", dir_path=os.path.join(YT_BASE, "vyAsarAjamaTha"))
   # archive_utility.update_item(item_id="viShNu-purANa-taylor", dir_path=os.path.join(YT_BASE, "../viShNu-purANa-taylor"))
 
 
 if __name__ == "__main__":
   # shrii_vaishnava()
-  # naaTTeri()
+  naaTTeri(dry_run=False)
   # dhaarmika_lectures()
-  misc()
+  # misc()
   pass
