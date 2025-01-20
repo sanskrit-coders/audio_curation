@@ -22,7 +22,7 @@ def shrii_vaishnava():
 
 
   # youtube.get_all(url="https://www.youtube.com/@gspk/videos", dest_dir=os.path.join(YT_BASE, "gspk_stotra-pArAyaNa-kainkaryam"), postprocessor_args={"metadata": {"albumartist": "GSPK"}})
-  # archive_utility.update_item(item_id="gspk_stotra-pArAyaNa-kainkaryam", dir_path=os.path.join(YT_BASE, "gspk_stotra-pArAyaNa-kainkaryam"))
+  archive_utility.update_item(item_id="gspk_stotra-pArAyaNa-kainkaryam", dir_path=os.path.join(YT_BASE, "gspk_stotra-pArAyaNa-kainkaryam"))
 
   # youtube.get_all(url="https://www.youtube.com/@ramanujadaya8750/videos", dest_dir=os.path.join(YT_BASE, "rAmAnuja-dayA"), postprocessor_args={"metadata": {"albumartist": "rAmAnuja-dayA"}})
   # archive_utility.update_item(item_id="rAmAnuja-dayA-audio", dir_path=os.path.join(YT_BASE, "rAmAnuja-dayA"))
@@ -35,7 +35,7 @@ def shrii_vaishnava():
 
 
   # youtube.get_all(url="https://www.youtube.com/@desikadaily/videos", dest_dir=os.path.join(YT_BASE, "deshika-daily"), postprocessor_args={"metadata": {"albumartist": "deshika-daily"}})
-  archive_utility.update_item(item_id="deshika-daily", dir_path=os.path.join(YT_BASE, "deshika-daily"), metadata={"title": "deshika-daily talks", "description": "देशिक-दैनिक-धारा-भाषणानि\n\n" + DESCRIPTION_BASE})
+  # archive_utility.update_item(item_id="deshika-daily", dir_path=os.path.join(YT_BASE, "deshika-daily"), metadata={"title": "deshika-daily talks", "description": "देशिक-दैनिक-धारा-भाषणानि\n\n" + DESCRIPTION_BASE})
 
   # youtube.get_all(url="https://www.youtube.com/playlist?list=PLFLowj4VMohUI_zCFA0ZadHDEARgm8J7B", dest_dir=os.path.join(YT_BASE, "nArAyaNAchArya/mbh"), postprocessor_args={"metadata": {"albumartist": "KS nArAyaNAchArya"}})
 
@@ -72,8 +72,8 @@ def misc():
 
 
 if __name__ == "__main__":
-  # shrii_vaishnava()
-  naaTTeri(dry_run=False)
+  shrii_vaishnava()
+  # naaTTeri(dry_run=False)
   # dhaarmika_lectures()
   # misc()
   pass
