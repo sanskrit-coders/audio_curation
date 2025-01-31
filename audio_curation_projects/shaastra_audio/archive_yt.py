@@ -22,7 +22,7 @@ def shrii_vaishnava():
 
 
   # youtube.get_all(url="https://www.youtube.com/@gspk/videos", dest_dir=os.path.join(YT_BASE, "gspk_stotra-pArAyaNa-kainkaryam"), postprocessor_args={"metadata": {"albumartist": "GSPK"}})
-  archive_utility.update_item(item_id="gspk_stotra-pArAyaNa-kainkaryam", dir_path=os.path.join(YT_BASE, "gspk_stotra-pArAyaNa-kainkaryam"))
+  # archive_utility.update_item(item_id="gspk_stotra-pArAyaNa-kainkaryam", dir_path=os.path.join(YT_BASE, "gspk_stotra-pArAyaNa-kainkaryam"))
 
   # youtube.get_all(url="https://www.youtube.com/@ramanujadaya8750/videos", dest_dir=os.path.join(YT_BASE, "rAmAnuja-dayA"), postprocessor_args={"metadata": {"albumartist": "rAmAnuja-dayA"}})
   # archive_utility.update_item(item_id="rAmAnuja-dayA-audio", dir_path=os.path.join(YT_BASE, "rAmAnuja-dayA"))
@@ -40,7 +40,7 @@ def shrii_vaishnava():
   # youtube.get_all(url="https://www.youtube.com/playlist?list=PLFLowj4VMohUI_zCFA0ZadHDEARgm8J7B", dest_dir=os.path.join(YT_BASE, "nArAyaNAchArya/mbh"), postprocessor_args={"metadata": {"albumartist": "KS nArAyaNAchArya"}})
 
   # youtube.get_all(url="https://www.youtube.com/@acharyapaduka/videos", dest_dir=os.path.join(YT_BASE, "acharyapaduka"), postprocessor_args={"metadata": {"albumartist": "AchArya-pAdukA"}})
-  # archive_utility.update_item(item_id="AchAryapAdukA_YT", dir_path=os.path.join(YT_BASE, "acharyapaduka"), metadata={"title": "acharyapaduka talks", "description": "आचार्य-पादुका-धारा-भाषणानि\n\n" + DESCRIPTION_BASE})
+  archive_utility.update_item(item_id="AchAryapAdukA_YT", dir_path=os.path.join(YT_BASE, "acharyapaduka"), metadata={"title": "acharyapaduka talks", "description": "आचार्य-पादुका-धारा-भाषणानि\n\n" + DESCRIPTION_BASE})
   
   pass
 
@@ -52,7 +52,8 @@ def naaTTeri(dry_run=False):
   # archive_audio_item.update_metadata(metadata=metadata)
   # item.download_original_files(destination_dir=base_dir)
   item.update_from_dir(dry_run=dry_run)
-  item.delete_unaccounted_for_files(all_files_or_dir=base_dir, dry_run=dry_run)
+  # item.delete_unaccounted_for_files(all_files_or_dir=base_dir, dry_run=dry_run)
+  # item.delete_matching(pattern=".*.mp3.*", dry_run=dry_run)
 
 
 def dhaarmika_lectureicts():

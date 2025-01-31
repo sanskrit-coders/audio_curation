@@ -3,6 +3,8 @@ from copy import copy
 
 import yt_dlp
 
+## Update frequently to thwart YT blockage attempts.
+
 # yt-dlp --continue --no-overwrites --extract-audio --audio-format mp3 -o "ST_%(upload_date)s_%(title).50s.%(ext)s" https://www.youtube.com/channel/UCYt3jqP4rRP2rr5Ye8fs0LQ/videos --playlist-reverse --restrict-filenames   --add-metadata --postprocessor-args "-metadata albumartist=rAmAnuja-dayA" --download-archive ./ytdl-archive.txt --dateafter 
 
 # Options at https://github.com/yt-dlp/yt-dlp/blob/master/yt_dlp/YoutubeDL.py#L191
@@ -14,13 +16,18 @@ ydl_opts_base = {
     'preferredcodec': 'mp3',
     'preferredquality': '32',
   }],
-  'verbose': True, # Useful for checking if we have the latest version.
+  'quiet': True,  # Suppress download messages
+#  'verbose': True, # Useful for checking if we have the latest version.
   'playlistreverse': True,
   'restrictfilenames': True,
   "nooverwrites": True,
   "continuedl": True,
   "outtmpl": {"default": "ST_%(upload_date)s_%(title).50s"},
-  'ignoreerrors': True
+  'ignoreerrors': True,
+  "sleep_interval_requests": 1.5,
+  "sleep_interval": 60,
+  "max_sleep_interval": 90,
+  'cookiefile': '/home/vvasuki/gitland/sanskrit-coders/audio_curation/audio_curation/scraping/.yt_cookies.local',  # Path to your cookies.txt, exported to netscape format using Cookie-Editor extension. https://www.reddit.com/r/youtubedl/comments/1e6bzu4/ytdlp_error_sign_in_to_confirm_youre_not_a_bot/
 }
 
 
