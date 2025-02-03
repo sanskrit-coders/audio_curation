@@ -16,8 +16,8 @@ ydl_opts_base = {
     'preferredcodec': 'mp3',
     'preferredquality': '32',
   }],
-  'quiet': True,  # Suppress download messages
-#  'verbose': True, # Useful for checking if we have the latest version.
+  # 'quiet': True,  # Suppress download messages
+  'verbose': True, # Useful for checking if we have the latest version.
   'playlistreverse': True,
   'restrictfilenames': True,
   "nooverwrites": True,
