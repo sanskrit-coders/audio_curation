@@ -1,13 +1,9 @@
-
-import logging
 import os
-import pprint
 
-from audio_curation import audio_repo
-from audio_curation import archive_utility as archive_utility_audio
-from curation_utils import archive_utility
 from audio_utils import mp3_utility
 
+from audio_curation import archive_utility as archive_utility_audio
+from audio_curation import audio_repo
 
 BASE_DIR = "/media/vvasuki/vData/audio/curation/archive/shAstra-audio/palaveri-laxmI-narasiMhaH/"
 GENERIC_DESCRIPTION = """
@@ -78,10 +74,10 @@ def misc():
 
 if __name__ == '__main__':
   # bhagavad_vishayam()
-  # rts()
+  rts()
   # tirukkural()
   # bs()
-  # misc()
+  misc()
   # archive_utility.update_item(item_id="laxmI-narasiMhaH_BS", dir_path=os.path.join(BASE_DIR, "brahma-sUtram"), metadata={"description":GENERIC_DESCRIPTION})
   # archive_utility.update_item(item_id="laxmI-narasiMhaH_AhAra-niyamaH", dir_path=os.path.join(BASE_DIR, "AhAra-niyamaH"), metadata={"description":GENERIC_DESCRIPTION})
   # archive_utility.update_item(item_id="laxmI-narasiMhaH_rAmAyaNam_2023", dir_path=os.path.join(BASE_DIR, "rAmAyaNam_2023"), metadata={"description":GENERIC_DESCRIPTION})
