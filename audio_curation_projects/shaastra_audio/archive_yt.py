@@ -3,6 +3,8 @@ import logging
 import os
 import pprint
 
+import regex
+
 from audio_curation import audio_repo
 from audio_curation import archive_utility as audio_archive_utility
 from curation_utils import archive_utility
@@ -16,32 +18,61 @@ DESCRIPTION_BASE = """
 भवद्योगदानं‌ काङ्क्ष्यते - https://sanskrit.github.io/groups/dyuganga/projects/audio/
 """
 
-def shrii_vaishnava():
-  # youtube.get_all(url="https://www.youtube.com/@Ramayanaforus/videos", dest_dir=os.path.join(YT_BASE, "duShyanth-shrIdhar-talks"), postprocessor_args={"metadata": {"albumartist": "dushyanth shrIdhar"}})
-  # archive_utility.update_item(item_id="duShyanth-shrIdhar-talks", dir_path=os.path.join(YT_BASE, "duShyanth-shrIdhar-talks"))
+def shrii_vaishnava(actions=["download", "upload"], channel_pattern=".*"):
+
+  if regex.match(channel_pattern, "@parankushacharinstituteofvedic"):
+    if "download" in actions:
+      youtube.get_all(url="https://www.youtube.com/@parankushacharinstituteofvedic/videos", dest_dir=os.path.join(YT_BASE, "PISV"), postprocessor_args={"metadata": {"albumartist": "pisvTalks"}})
+    if "upload" in actions:
+      archive_utility.update_item(item_id="pisvTalks", dir_path=os.path.join(YT_BASE, "PISV"), metadata={"title": "PISV Talks", "description": "पराङ्कुशाचार्य-वैदिक-शोध-संस्था-धारा-भाषणानि\n\n" + DESCRIPTION_BASE})
 
 
-  # youtube.get_all(url="https://www.youtube.com/@gspk/videos", dest_dir=os.path.join(YT_BASE, "gspk_stotra-pArAyaNa-kainkaryam"), postprocessor_args={"metadata": {"albumartist": "GSPK"}})
-  # archive_utility.update_item(item_id="gspk_stotra-pArAyaNa-kainkaryam", dir_path=os.path.join(YT_BASE, "gspk_stotra-pArAyaNa-kainkaryam"))
+  if regex.match(channel_pattern, "@desikadaily"):
+    if "download" in actions:
+      youtube.get_all(url="https://www.youtube.com/@desikadaily/videos", dest_dir=os.path.join(YT_BASE, "deshika-daily"), postprocessor_args={"metadata": {"albumartist": "deshika-daily"}})
+    if "upload" in actions:
+      archive_utility.update_item(item_id="deshika-daily", dir_path=os.path.join(YT_BASE, "deshika-daily"), metadata={"title": "deshika-daily talks", "description": "देशिक-दैनिक-धारा-भाषणानि\n\n" + DESCRIPTION_BASE})
 
-  # youtube.get_all(url="https://www.youtube.com/@ramanujadaya8750/videos", dest_dir=os.path.join(YT_BASE, "rAmAnuja-dayA"), postprocessor_args={"metadata": {"albumartist": "rAmAnuja-dayA"}})
-  # archive_utility.update_item(item_id="rAmAnuja-dayA-audio", dir_path=os.path.join(YT_BASE, "rAmAnuja-dayA"))
+  if regex.match(channel_pattern, "@Ramayanaforus"):
+    if "download" in actions:
+      pass
+      # youtube.get_all(url="https://www.youtube.com/@Ramayanaforus/videos", dest_dir=os.path.join(YT_BASE, "duShyanth-shrIdhar-talks"), postprocessor_args={"metadata": {"albumartist": "dushyanth shrIdhar"}})
+    if "upload" in actions:
+      archive_utility.update_item(item_id="duShyanth-shrIdhar-talks", dir_path=os.path.join(YT_BASE, "duShyanth-shrIdhar-talks"))
+
+
+  if regex.match(channel_pattern, "@gspk"):
+    if "download" in actions:
+      youtube.get_all(url="https://www.youtube.com/@gspk/videos", dest_dir=os.path.join(YT_BASE, "gspk_stotra-pArAyaNa-kainkaryam"), postprocessor_args={"metadata": {"albumartist": "GSPK"}})
+    if "upload" in actions:
+      archive_utility.update_item(item_id="gspk_stotra-pArAyaNa-kainkaryam", dir_path=os.path.join(YT_BASE, "gspk_stotra-pArAyaNa-kainkaryam"))
+
+  if regex.match(channel_pattern, "@ramanujadaya8750"):
+    if "download" in actions:
+      youtube.get_all(url="https://www.youtube.com/@ramanujadaya8750/videos", dest_dir=os.path.join(YT_BASE, "rAmAnuja-dayA"), postprocessor_args={"metadata": {"albumartist": "rAmAnuja-dayA"}})
+    if "upload" in actions:
+      archive_utility.update_item(item_id="rAmAnuja-dayA-audio", dir_path=os.path.join(YT_BASE, "rAmAnuja-dayA"))
 
 
   # archive_utility.update_item(item_id="tattva-muktA-kalApaH_ALvAr", dir_path=os.path.join(YT_BASE, "tattva-muktA-kalApaH_ALvAr"), metadata={"title": "tattva-muktA-kalApaH - ALvAr", "description": "तत्त्व-मुक्ता-कलापः - आळ्वार्-पाठः\n\n" + DESCRIPTION_BASE})
 
-  # youtube.get_all(url="https://www.youtube.com/@parankushacharinstituteofvedic/videos", dest_dir=os.path.join(YT_BASE, "PISV"), postprocessor_args={"metadata": {"albumartist": "pisvTalks"}})
-  # archive_utility.update_item(item_id="pisvTalks", dir_path=os.path.join(YT_BASE, "PISV"), metadata={"title": "PISV Talks", "description": "पराङ्कुशाचार्य-वैदिक-शोध-संस्था-धारा-भाषणानि\n\n" + DESCRIPTION_BASE})
+  if regex.match(channel_pattern, "@nArAyaNAchArya"):
+    if "download" in actions:
+      youtube.get_all(url="https://www.youtube.com/playlist?list=PLFLowj4VMohUI_zCFA0ZadHDEARgm8J7B", dest_dir=os.path.join(YT_BASE, "nArAyaNAchArya/mbh"), postprocessor_args={"metadata": {"albumartist": "KS nArAyaNAchArya"}})
+    if "upload" in actions:
+      archive_utility.update_item(item_id="nArAyaNAchArya_mbh", dir_path=os.path.join(YT_BASE, "nArAyaNAchArya/mbh"), metadata={"title": "nArAyaNAchArya MBh talks", "description": "नारायणाचार्य-भाषणानि\n\n" + DESCRIPTION_BASE})
 
+  if regex.match(channel_pattern, "@acharyapaduka"):
+    if "download" in actions:
+      youtube.get_all(url="https://www.youtube.com/@acharyapaduka/videos", dest_dir=os.path.join(YT_BASE, "acharyapaduka"), postprocessor_args={"metadata": {"albumartist": "AchArya-pAdukA"}})
+    if "upload" in actions:
+      archive_utility.update_item(item_id="AchAryapAdukA_YT", dir_path=os.path.join(YT_BASE, "acharyapaduka"), metadata={"title": "acharyapaduka talks", "description": "आचार्य-पादुका-धारा-भाषणानि\n\n" + DESCRIPTION_BASE})
 
-  # youtube.get_all(url="https://www.youtube.com/@desikadaily/videos", dest_dir=os.path.join(YT_BASE, "deshika-daily"), postprocessor_args={"metadata": {"albumartist": "deshika-daily"}})
-  # archive_utility.update_item(item_id="deshika-daily", dir_path=os.path.join(YT_BASE, "deshika-daily"), metadata={"title": "deshika-daily talks", "description": "देशिक-दैनिक-धारा-भाषणानि\n\n" + DESCRIPTION_BASE})
-
-  # youtube.get_all(url="https://www.youtube.com/playlist?list=PLFLowj4VMohUI_zCFA0ZadHDEARgm8J7B", dest_dir=os.path.join(YT_BASE, "nArAyaNAchArya/mbh"), postprocessor_args={"metadata": {"albumartist": "KS nArAyaNAchArya"}})
-
-  youtube.get_all(url="https://www.youtube.com/@acharyapaduka/videos", dest_dir=os.path.join(YT_BASE, "acharyapaduka"), postprocessor_args={"metadata": {"albumartist": "AchArya-pAdukA"}})
-  # archive_utility.update_item(item_id="AchAryapAdukA_YT", dir_path=os.path.join(YT_BASE, "acharyapaduka"), metadata={"title": "acharyapaduka talks", "description": "आचार्य-पादुका-धारा-भाषणानि\n\n" + DESCRIPTION_BASE})
-  
+  if regex.match(channel_pattern, "@Bhakthamrutham"):
+    if "download" in actions:
+      youtube.get_all(url="https://www.youtube.com/@Bhakthamrutham/videos", dest_dir=os.path.join(YT_BASE, "bhaktAmRtam"), postprocessor_args={"metadata": {"albumartist": "bhaktAmRta-shrInidhiH"}})
+    if "upload" in actions:
+      archive_utility.update_item(item_id="bhaktAmRtam_YT", dir_path=os.path.join(YT_BASE, "bhaktAmRtam"), metadata={"title": "bhaktAmRtam talks", "description": "भक्तामृत-धारा-भाषणानि\n\n" + DESCRIPTION_BASE})
   pass
 
 
@@ -74,6 +105,7 @@ def misc():
 
 if __name__ == "__main__":
   shrii_vaishnava()
+  # shrii_vaishnava(actions=["upload"])
   # naaTTeri(dry_run=False)
   # dhaarmika_lectures()
   # misc()
