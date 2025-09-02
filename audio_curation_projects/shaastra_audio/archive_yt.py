@@ -33,6 +33,12 @@ def shrii_vaishnava(actions=["download", "upload"], channel_pattern=".*"):
     if "upload" in actions:
       archive_utility.update_item(item_id="deshika-daily", dir_path=os.path.join(YT_BASE, "deshika-daily"), metadata={"title": "deshika-daily talks", "description": "देशिक-दैनिक-धारा-भाषणानि\n\n" + DESCRIPTION_BASE})
 
+  if regex.match(channel_pattern, "@SriNrusimhaPriya"):
+    if "download" in actions:
+      youtube.get_all(url="https://www.youtube.com/@SriNrusimhaPriya/videos", dest_dir=os.path.join(YT_BASE, "nRsiMha-priya"), postprocessor_args={"metadata": {"albumartist": "nRsiMha-priya"}})
+    if "upload" in actions:
+      archive_utility.update_item(item_id="nRsiMha-priya", dir_path=os.path.join(YT_BASE, "nRsiMha-priya"), metadata={"title": "nRsiMha-priya talks", "description": "नृसिंह-प्रिय-धारा-भाषणानि\n\n" + DESCRIPTION_BASE})
+
   if regex.match(channel_pattern, "@Ramayanaforus"):
     if "download" in actions:
       pass
