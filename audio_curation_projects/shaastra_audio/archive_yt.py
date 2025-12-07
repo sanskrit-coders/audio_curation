@@ -20,6 +20,19 @@ DESCRIPTION_BASE = """
 
 def shrii_vaishnava(actions=["download", "upload"], channel_pattern=".*"):
 
+  # https://www.youtube.com/@DesikanAdiyar
+  if regex.match(channel_pattern, "@DesikanAdiyar"):
+    if "download" in actions:
+      youtube.get_all(url="https://www.youtube.com/@DesikanAdiyar/videos", dest_dir=os.path.join(YT_BASE, "DesikanAdiyar"), postprocessor_args={"metadata": {"albumartist": "देशिक-दासाः"}})
+    if "upload" in actions:
+      archive_utility.update_item(item_id="DesikanAdiyar_YT", dir_path=os.path.join(YT_BASE, "DesikanAdiyar"), metadata={"title": "DesikanAdiyar talks", "description": "DesikanAdiyar-भाषणानि\n\n" + DESCRIPTION_BASE})
+
+  if regex.match(channel_pattern, "@APNSWAMI"):
+    if "download" in actions:
+      youtube.get_all(url="https://www.youtube.com/@APNSWAMI/videos", dest_dir=os.path.join(YT_BASE, "APN"), postprocessor_args={"metadata": {"albumartist": "अनन्त-पद्माचार्यः"}})
+    if "upload" in actions:
+      archive_utility.update_item(item_id="APN_YT", dir_path=os.path.join(YT_BASE, "APN"), metadata={"title": "APN talks", "description": "अनन्त-पद्मनाभाचार्य-भाषणानि\n\n" + DESCRIPTION_BASE})
+
   if regex.match(channel_pattern, "@parankushacharinstituteofvedic"):
     if "download" in actions:
       youtube.get_all(url="https://www.youtube.com/@parankushacharinstituteofvedic/videos", dest_dir=os.path.join(YT_BASE, "PISV"), postprocessor_args={"metadata": {"albumartist": "pisvTalks"}})
@@ -81,6 +94,8 @@ def shrii_vaishnava(actions=["download", "upload"], channel_pattern=".*"):
       archive_utility.update_item(item_id="bhaktAmRtam_YT", dir_path=os.path.join(YT_BASE, "bhaktAmRtam"), metadata={"title": "bhaktAmRtam talks", "description": "भक्तामृत-धारा-भाषणानि\n\n" + DESCRIPTION_BASE})
   pass
 
+
+  pass
 
 def naaTTeri(dry_run=False):
   archive_id = "natteri-guru-paramparA_tamiL"

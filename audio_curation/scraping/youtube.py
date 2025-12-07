@@ -27,7 +27,11 @@ ydl_opts_base = {
   "sleep_interval_requests": 1.5,
   "sleep_interval": 60,
   "max_sleep_interval": 90,
-  'cookiefile': '/home/vvasuki/gitland/sanskrit-coders/audio_curation/audio_curation/scraping/.yt_cookies.local',  # Path to your cookies.txt, exported to netscape format using Cookie-Editor extension. https://www.reddit.com/r/youtubedl/comments/1e6bzu4/ytdlp_error_sign_in_to_confirm_youre_not_a_bot/
+  
+  # https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp
+  # Quit chrome before using this.
+  "cookies-from-browser": "chrome",
+  # 'cookies': '/home/vvasuki/gitland/sanskrit-coders/audio_curation/audio_curation/scraping/.yt_cookies.local',
 }
 
 
