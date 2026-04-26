@@ -95,7 +95,14 @@ def shrii_vaishnava(actions=["download", "upload"], channel_pattern=".*"):
   pass
 
 
-  pass
+def shrii_vaishnava_playlists(actions=["download", "upload"], playlist_pattern=".*"):
+  if regex.match(playlist_pattern, "sahasra-nAma_venkaTesh"):
+    if "download" in actions:
+      youtube.get_all(url="https://www.youtube.com/playlist?list=PLZOtgrSp1tzDpF-yqTRcib5F_dlMwccZ8", dest_dir=os.path.join(YT_BASE, "venkaTesh/sahasranAma"), postprocessor_args={"metadata": {"albumartist": "venkaTesh", "albuma": "sahasra-nAma"}})
+    if "upload" in actions:
+      archive_utility.update_item(item_id="sahasra-nAma_venkaTesh", dir_path=os.path.join(YT_BASE, "venkaTesh/sahasranAma"), metadata={"title": "venkaTesh on sahasra-nAma", "description": "सहस्रनामसु वेङ्कटेशः\n\n" + DESCRIPTION_BASE})
+
+
 
 def naaTTeri(dry_run=False):
   archive_id = "natteri-guru-paramparA_tamiL"
@@ -125,7 +132,8 @@ def misc():
 
 
 if __name__ == "__main__":
-  shrii_vaishnava()
+  # shrii_vaishnava()
+  shrii_vaishnava_playlists()
   # shrii_vaishnava(actions=["upload"])
   # naaTTeri(dry_run=False)
   # dhaarmika_lectures()
