@@ -20,6 +20,13 @@ DESCRIPTION_BASE = """
 
 def shrii_vaishnava(actions=["download", "upload"], channel_pattern=".*"):
 
+  if regex.match(channel_pattern, "@Noolaatti"):
+    if "download" in actions:
+      youtube.get_all(url="https://www.youtube.com/@Noolaatti/videos", dest_dir=os.path.join(YT_BASE, "Noolaatti"), postprocessor_args={"metadata": {"albumartist": "Noolaatti"}})
+    if "upload" in actions:
+      archive_utility.update_item(item_id="APN_YT", dir_path=os.path.join(YT_BASE, "Noolaatti"), metadata={"title": "Noolaatti talks", "description": "Noolaatti-भाषणानि\n\n" + DESCRIPTION_BASE})
+
+
   # https://www.youtube.com/@DesikanAdiyar
   if regex.match(channel_pattern, "@DesikanAdiyar"):
     if "download" in actions:
@@ -132,8 +139,8 @@ def misc():
 
 
 if __name__ == "__main__":
-  # shrii_vaishnava()
-  shrii_vaishnava_playlists()
+  shrii_vaishnava()
+  # shrii_vaishnava_playlists()
   # shrii_vaishnava(actions=["upload"])
   # naaTTeri(dry_run=False)
   # dhaarmika_lectures()

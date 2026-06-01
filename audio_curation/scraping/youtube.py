@@ -27,6 +27,9 @@ ydl_opts_base = {
   "sleep_interval_requests": 1.5,
   "sleep_interval": 60,
   "max_sleep_interval": 90,
+
+  # Suggested in https://github.com/yt-dlp/yt-dlp/issues/12482
+  "extractor-args": "youtube:player-client=tv_embedded",
   
   # https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp
   # Quit chrome before using this.
