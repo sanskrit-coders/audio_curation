@@ -33,8 +33,8 @@ ydl_opts_base = {
   
   # https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp
   # Quit chrome before using this.
-  "cookies-from-browser": "chrome",
-  # 'cookies': '/home/vvasuki/gitland/sanskrit-coders/audio_curation/audio_curation/scraping/.yt_cookies.local',
+  # "cookies-from-browser": "chrome",
+  'cookies': '/home/vvasuki/gitland/sanskrit-coders/audio_curation/audio_curation/scraping/.yt_cookies.local',
 }
 
 
